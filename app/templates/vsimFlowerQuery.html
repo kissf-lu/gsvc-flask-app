@@ -1,0 +1,210 @@
+{% extends "main_base.html" %}
+
+
+{% block title %}流量查询应用{% endblock %}
+
+{% block head %}
+{{ super() }}
+    {% assets "vsimFlowerQuery_css" %}
+    <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}" xmlns="http://www.w3.org/1999/html">
+    {% endassets %}
+    <script type="text/javascript">
+        var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    </script>
+{% endblock %}
+
+{% block breadcrumb %}
+<li class="active">
+    <a href="#">
+        <strong>流量查询应用</strong>
+    </a>
+</li>
+{% endblock %}
+
+
+{% block row %}
+<div id="country-alert"></div>
+
+<!--Notifications-->
+
+<div id="FlowerQueryNotification">
+    <div id="FlowerQueryNotificationContent">
+
+    </div>
+</div>
+
+<div id="container">
+
+</div>
+
+<!--告警修饰器-->
+
+<div class="row">
+    <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>
+                        <i class="fa fa-cogs"></i>&nbsp; &nbsp;
+                        查询参数设置
+                    </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-md-4"  id="vsimTimeDim">
+                            <p class="font-bold">
+                                <i class="fa fa-info-circle"></i>
+                                时间颗粒：小时(48小时内)，天(3个月内)。必填项
+                            </p>
+                            <div class="form-group">
+                                <div class="input-group" >
+                                    <span class="input-group-addon"><strong>Time</strong></span>
+                                    <select class="input-sm form-control" id="timeDim" style="width:200px;">
+                                        <option value="hours">hours</option>
+                                        <option value="days">days</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4" id="vsimFlowerTimeSet" style="width:500px;">
+                            <p class="font-bold">
+                                <i class="fa fa-info-circle"></i>
+                                时间：begin起始时间，end截止时间(逻辑：begin<=t<=end)。必填项
+                            </p>
+                            <div class="form-group">
+                                <div class="input-group" style="width:500px;">
+                                    <span class="input-group-addon"><strong>时间</strong></span>
+                                    <span class="input-group-addon"><strong>begin</strong></span>
+                                    <input type="text" class="input-sm form-control" name="start" id="input-daterange-start"/>
+                                    <span class="input-group-addon"><strong>end</strong></span>
+                                    <input type="text" class="input-sm form-control" name="end" id="input-daterange-end"/>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4"  id="vsimFlowerMCC">
+                            <p class="font-bold">
+                                <i class="fa fa-info-circle"></i>
+                                mcc/plmn：规范：单个值，如460/46001 ,可不填
+                            </p>
+                            <div class="form-group">
+                                <div class="input-group" >
+                                    <span class="input-group-addon" ><strong>mcc</strong></span>
+                                    <input type="text" class="input-sm form-control" name="mcc" id="FlowerQueryMCC"/>
+                                    <span class="input-group-addon" ><strong>plmn</strong></span>
+                                    <input type="text" class="input-sm form-control" name="plmn" id="FlowerQueryPlmn"/>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4"  id="vsimFlowerImsi" style="width:550px;">
+                            <p class="font-bold">
+                                <i class="fa fa-info-circle"></i>
+                                支持单张或多张卡查询。规范：460110269273517,234201801273050。必填项
+                            </p>
+                            <div class="form-group">
+                                <div class="input-group" style="width:500px;">
+                                    <span class="input-group-addon"><strong>IMSI</strong></span>
+                                    <input type="text" class="input-sm form-control" name="IMSI" id="inputimsi">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="font-bold">
+                                <i class="fa fa-info-circle"></i>
+                                附加聚合项：添加后输出结果会添加相应列
+                            </p>
+                            <div class="form-group" style="width:300px;">
+                                <div>
+                                    <select data-placeholder="please chose key!" multiple class="chosen-select" style="width:300px;" id="chosenFlowerQueryKey">
+                                        <option value="mcc">mcc</option>
+                                        <option value="plmn">plmn</option>
+                                        <option value="time">time</option>
+                                    </select>
+                                </div>
+                            </div>
+                </div>
+            </div>
+    </div>
+
+</div>
+<div id="queryQlert"></div>
+<div id="QueryingQueryjqxNotification">
+    <div id="QueryingNotificationContent">
+    </div>
+</div>
+<div id="Querycontainer">
+</div>
+<!--国家峰值用户统计-->
+<div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>
+                        <i class="fa fa-table"></i>&nbsp; &nbsp;
+                        查询结果
+                    </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-5 m-b-xs">
+                        </div>
+                        <div class="col-sm-4 m-b-xs">
+                                <div data-toggle="buttons" class="btn-group">
+                                     <button id="FlowerQuery_dataGet" type="button" class="btn btn-default ">
+                                         查询
+                                         <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                     </button>
+                                    <button id="FlowerQueryFlash" type="button" class="btn btn-default ">
+                                        刷新
+                                        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                                    </button>
+                                    <button id="FlowerQueryExcelExport" type="button" class="btn btn-default">
+                                        导出
+                                        <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
+                                    </button>
+                                </div>
+                        </div>
+                        <div class="col-sm-3">
+                                <div id='jqxDropDownList'>
+                                </div>
+                                <!--div id="jqxlistbox"></div-->
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <div id='FlojqxGrid'>
+                            <div id="FlowerQueryjqxGrid"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+    {% assets "jqwidgets_globle_js" %}
+    <script src="{{ ASSET_URL }}" type="text/javascript"></script>
+    {% endassets %}
+    {% assets "vsimFlowerQuery_js" %}
+    <script src="{{ ASSET_URL }}" type="text/javascript"></script>
+    {% endassets %}
+{% endblock %}

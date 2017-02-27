@@ -1,0 +1,26 @@
+<div class="container">
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th bgcolor="#ABABAB">imsi</th>
+                <th bgcolor="#ABABAB">name</th>
+                <th bgcolor="#ABABAB">country</th>
+                <th bgcolor="#ABABAB">country_cn</th>
+                <th bgcolor="#ABABAB">operator</th>
+                <th bgcolor="#ABABAB">iccid</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for vsim in srcvsim %}
+            <tr>
+                <td > {{ vsim.imsi }}</td>
+                <td > {{ vsim.person_gsvc }}</td>
+                <td > {{ vsim.country_iso }}</td>
+                <td > {{ vsim.country_cn }}</td>
+                <td > {{ vsim.operator }}</td>
+                <td > {{ vsim.iccid }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+</div>

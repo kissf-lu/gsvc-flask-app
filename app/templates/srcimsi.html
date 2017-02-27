@@ -1,0 +1,97 @@
+{% extends "main_base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}VSIMSOURCE{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <!-- Bootstrap  CSS -->
+    <link href="{{ url_for('static', filename='css/main/plugins/jQueryUI/jquery-ui.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='css/main/plugins/jqGrid/ui.jqgrid.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='css/main/plugins/jqGrid/ui.jqgrid-bootstrap.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='css/main/plugins/selectForm/select2.min.css') }}" rel="stylesheet" type="text/css" >
+    <!-- Ajax Flask config-->
+    <script type="text/javascript">
+        var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    </script>
+{% endblock %}
+
+{% block ibox_content %}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>查询条件</h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <!--form role="form" class="form-inline"-->
+                <!--筛选告警栏-->
+                <div class="anp" id="app-growl"></div>
+                <div class="input-group">
+                    <select class="form-country" name="country" style="width:120px;">
+                        <option ></option>
+                    </select>
+                    &nbsp;&nbsp;
+                    <select class="form-person" name="person" style="width:120px;">
+                        <option ></option>
+                    </select>
+                    &nbsp;&nbsp;
+                    <button id="SrcVsimDataGet" type="button" class="btn btn-default " style="height:30px; background:#24ceab;" onclick="queryfunction()">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </button>
+                    &nbsp;&nbsp;
+                    <button id="SelectVsimDataGet" type="button" class="btn btn-default " style="height:35px;" onclick="getSelectedRows()">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>&nbsp;&nbsp;删除所选数据
+                    </button>
+                </div>
+
+            <div class="jqGrid_wrapper">
+                <table id="jqGrid"></table>
+                <div id="jqGridPager"></div>
+            </div>
+    <div class="contextMenu row" id="contextMenu" style="display:none;">
+           <ul >
+               <li id="add">
+                   <span class="glyphicon glyphicon-plus" style="float:left"></span>
+                   <span style="font-size:100%; font-family:Verdana;margin-left:10px;">Add Row</span>
+               </li>
+
+               <li id="edit">
+                   <span class="glyphicon glyphicon-pencil" style="float:left"></span>
+                   <span style="font-size:100%; font-family:Verdana;margin-left:10px;">Edit Row</span>
+               </li>
+               <li id="del">
+                   <span class="glyphicon glyphicon-trash" style="float:left"></span>
+                   <span style="font-size:100%; font-family:Verdana;margin-left:10px;">Delete Row</span>
+               </li>
+           </ul>
+       </div>
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+    <!-- jqgrid -->
+    <script src="{{ url_for('static', filename='js/main/plugins/jqGrid/i18n/grid.locale-cn.js') }}" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='js/main/plugins/jqGrid/jquery.jqGrid.min.js') }}" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='js/main/plugins/jqGrid/jquery.contextmenu.js') }}" type="text/javascript"></script>
+
+    <!-- 下拉筛选扩展 -->
+    <script src="{{ url_for('static', filename='js/main/plugins/select2/select2.min.js') }}" type="text/javascript"></script>
+    <!-- 卡资源表js 脚本模块 -->
+    <script src="{{ url_for('static', filename='js/main/demo/srcvsim-demo.js') }}" type="text/javascript"></script>
+
+{% endblock %}
+

@@ -1,0 +1,265 @@
+{% extends "main_base.html" %}
+
+
+{% block title %}问题卡初诊应用{% endblock %}
+
+{% block head %}
+{{ super() }}
+    {% assets "probVsimFirstDict_css" %}
+    <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}" xmlns="http://www.w3.org/1999/html">
+    {% endassets %}
+    <script type="text/javascript">
+        var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    </script>
+{% endblock %}
+
+{% block breadcrumb %}
+<li class="active">
+    <a href="#">
+        <strong>问题卡初诊模块</strong>
+    </a>
+</li>
+{% endblock %}
+
+
+{% block row %}
+<div id="country-alert"></div>
+
+<!--Notifications-->
+
+<div id="ProbDic-jqxNotification">
+    <div id="ProbDic-notificationContent">
+
+    </div>
+</div>
+
+
+<div id="container">
+</div>
+
+<!--告警修饰器-->
+<div class="row">
+    <!-- 单排双画布 -->
+    <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>
+                        <i class="fa fa-cogs"></i>&nbsp; &nbsp;
+                        查询参数设置
+                    </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    &nbsp; &nbsp; &nbsp;
+                    <input type="checkbox" class="js-switch" checked />
+                    <strong>
+                    &nbsp;点击按钮选择维度：imsi维度/国家维度查.
+                    </strong>
+                    <br/>
+                    <br/>
+                    &nbsp; &nbsp; &nbsp;<strong>
+                    <i class="fa fa-info-circle"></i>
+                    &nbsp;时间为北京时间.时间范围不超过24小时.begin为起始时间，end为截止时间.</strong>
+                    <br/>
+                    <br/>
+                    <div class="col-sm-5 m-b-xs" style="width:500px;">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><strong>时间</strong></span>
+                                <span class="input-group-addon"><strong>begin</strong></span>
+                                <input type="text" class="input-sm form-control" name="start" id="input-daterange-start"/>
+                                <span class="input-group-addon"><strong>end</strong></span>
+                                <input type="text" class="input-sm form-control" name="end" id="input-daterange-end"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-5 m-b-xs" style="width:500px;  display:none;" id="countryImsiDisplay">
+                        <br/>
+                        <strong>
+                        <i class="fa fa-info-circle"></i>
+                        &nbsp; &nbsp;支持单张/多张imsi查询:
+                        <br/>
+                        &nbsp; &nbsp; &nbsp; &nbsp;输入规范：'460110269273517','234201801273050'</strong>
+                        <br/>
+                        <div class="form-group">
+                            <div class="input-group" >
+                                <span class="input-group-addon"><strong>imsi</strong></span>
+                                <input type="text" class="form-control" id="inputimsi">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-5 m-b-xs" style="width:500px;" id="countryCountryDisplay">
+                        <div class="form-group">
+                            <strong>
+                            <i class="fa fa-info-circle"></i>
+                                &nbsp; &nbsp;不设置国家，可以查询全网问题卡</strong>
+                            <div class="input-group" >
+                                <span class="input-group-addon" style="height: 25px"><strong>国家</strong></span>
+                                <select class="form-country" name="country" id="countryProDict" style="width:160px;">
+                                    <option ></option>
+                                </select>
+                            </div>
+                            <br/>
+                            <strong>
+                            <i class="fa fa-info-circle"></i>
+                                &nbsp; &nbsp;PLMN可以为空:输入格式(支持多个值) '22801','22803',...</strong>
+                            <div class="input-group" >
+                                <span class="input-group-addon" style="height: 25px"><strong>PLMN</strong></span>
+                                <input type="text" class="input-sm form-control" name="PLMN" id="countryPlmn" style="width:300px;"/>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                </div>
+            </div>
+    </div>
+    <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>
+                        <i class="fa fa-cogs"></i>&nbsp; &nbsp;
+                        阈值设置
+                    </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    &nbsp; &nbsp; &nbsp;<strong>
+                    <i class="fa fa-info-circle"></i>
+                    &nbsp;阈值设定默认为在国家维度下才会显示.</strong>
+                    <br/>
+                    <br/>
+                    <div class="col-sm-5 m-b-xs" style="width:500px;">
+                            <div class="form-group">
+                                <div class="input-group" id="countrolFlowerThresholdDisplay">
+                                    <span class="input-group-addon"><strong>流量阈值</strong></span>
+                                    <select class="form-control" id="FlowerThreshold">
+                                        <option>5</option>
+                                        <option value="0">0</option>
+                                        <option value="2">2</option>
+                                        <option value="7">7</option>
+                                        <option value="10">10</option>
+                                        <option value="20">20</option>
+                                    </select>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="col-sm-5 m-b-xs" style="width:500px;" >
+                            <div class="form-group" >
+                                <div class="input-group" id="countrolDispatchThresholdDisplay">
+                                    <span class="input-group-addon"><strong>分卡次数阈值</strong></span>
+                                    <select class="form-control" id="DispatchThreshold">
+                                        <option>12</option>
+                                        <option value="7">7</option>
+                                        <option value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="30">30</option>
+                                        <option value="50">50</option>
+                                    </select>
+                                </div>
+                            </div>
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                </div>
+            </div>
+    </div>
+</div>
+<div id="queryQlert"></div>
+<div id="ProbDict-QueryjqxNotification">
+    <div id="ProbDic-QuerynotificationContent">
+    </div>
+</div>
+<div id="Querycontainer">
+</div>
+<!--jqxgrid out-->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>
+                    <i class="fa fa-table"></i>&nbsp; &nbsp;
+                    查询结果
+                </h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-sm-5 m-b-xs">
+                    </div>
+                    <div class="col-sm-4 m-b-xs">
+                        <div data-toggle="buttons" class="btn-group">
+                            <button id="ProbDic_dataGet" type="button" class="btn btn-default ">
+                                查询
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            </button>
+                            <button id="probDicFlash" type="button" class="btn btn-default ">
+                                刷新
+                                <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                            </button>
+                            <button id="probDicExcelExport" type="button" class="btn btn-default">
+                                导出
+                                <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="table-responsive">
+    <div id='ProbDicjqxGrid'>
+        <div id="initProbDicjqxGrid"></div>
+    </div>
+</div>
+<!---->
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{% assets "jqwidgets_globle_js" %}
+    <script src="{{ ASSET_URL }}" type="text/javascript"></script>
+{% endassets %}
+
+{% assets "probVsimFirstDict_js" %}
+    <script src="{{ ASSET_URL }}" type="text/javascript"></script>
+{% endassets %}
+
+{% endblock %}

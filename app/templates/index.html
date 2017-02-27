@@ -1,0 +1,191 @@
+{% extends "main_base.html" %}
+
+
+{% block title %}主页APP{% endblock %}
+
+{% block head %}
+{{ super() }}
+    <script type="text/javascript">
+        var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    </script>
+{% endblock %}
+
+{% block breadcrumb %}
+<li class="active">
+    <a href="#">
+        <strong></strong>
+    </a>
+</li>
+{% endblock %}
+
+{% block row %}
+<div class="row">
+<div id="alert"></div>
+
+    <div class="col-lg-4">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <i class="fa fa-user-md"></i>用户
+                                    <div class="ibox-tools">
+                                        <a class="collapse-link">
+                                            <i class="fa fa-chevron-up"></i>
+                                        </a>
+                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                            <i class="fa fa-wrench"></i>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-user">
+                                            <li><a href="#">Config option 1</a>
+                                            </li>
+                                            <li><a href="#">Config option 2</a>
+                                            </li>
+                                        </ul>
+                                        <a class="close-link">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="ibox-content">
+                                    <div>
+
+                                        <div class="pull-right text-right">
+
+                                        </div>
+
+                                        <h4>当前登录用户：{{ current_user.name }}
+                                            <br/>
+                                            <br/>
+                                            <i class="fa fa-phone"></i>
+                                            <small class="m-r"><strong> support by lujian. </strong> </small>
+                                        </h4>
+                                        </div>
+                                    </div>
+                            </div>
+    </div>
+    <div class="col-lg-4">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+
+                                    <h5><i class="fa fa-briefcase"></i>  应用信息</h5>
+                                    <div class="ibox-tools">
+                                        <a class="collapse-link">
+                                            <i class="fa fa-chevron-up"></i>
+                                        </a>
+                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                            <i class="fa fa-wrench"></i>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-user">
+                                            <li><a href="#">Config option 1</a>
+                                            </li>
+                                            <li><a href="#">Config option 2</a>
+                                            </li>
+                                        </ul>
+                                        <a class="close-link">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="ibox-content ibox-heading">
+                                    <h3>欢迎您来到GSVC系统!</h3>
+                                    <small><i class="fa fa-map-marker"></i> 您的当前位置为顶级页面.</small>
+                                </div>
+                                <div class="ibox-content inspinia-timeline">
+                                    {% if  current_user.username != "TechSupport"%}
+                                    <div class="timeline-item">
+                                        <div class="row">
+                                            <div class="col-xs-3 date">
+                                                <br/>
+                                                <br/>
+                                                <i class="fa fa-bar-chart-o"></i>
+                                                <span class="label label-primary">卡资源数据:</span>
+                                            </div>
+                                            <div class="col-xs-7 content no-top-border">
+                                                <p class="m-b-xs"><strong>目录:</strong></p>
+                                                <br/>
+
+                                                <a href="/gsvchome">
+                                                <p class="m-b-xs"><i class="fa fa-map-marker"></i><strong>  国家维度卡资源概述  </strong></p>
+                                                </a>
+                                                <p><small>页面内容：国家维度卡资源数据统计包含现网卡数及状态统计、套餐统计、用户统计</small></p>
+                                                <br/>
+                                                <a href="{{ url_for('main.srcimsi', username=current_user.username) }}">
+                                                <p class="m-b-xs"><i class="fa fa-map-marker"></i><strong>卡资源手工维护表</strong></p>
+                                                </a>
+                                                <p><small>页面内容：现网及虚拟机国家维度卡资源数据</small></p>
+                                                <br/>
+                                                <p></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    <div class="timeline-item">
+                                        <div class="row">
+                                            <div class="col-xs-3 date">
+                                                <br/>
+                                                <br/>
+                                                <i class="fa fa-sitemap"></i>
+                                                <span class="label label-primary">问题卡诊断:</span>
+
+                                            </div>
+                                            <div class="col-xs-7 content">
+                                                <p class="m-b-xs"><strong>目录:</strong></p>
+                                                <br/>
+                                                <a href="/probVsimFirstDict">
+                                                <p class="m-b-xs"><i class="fa fa-map-marker"></i><strong>  国家问题卡查询  </strong></p>
+                                                </a>
+                                                <p><small>页面内容：统计卡的实时分卡次数（包含不同终端统计）、流量使用情况。</small></p>
+                                                <br/>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="row">
+                                            <div class="col-xs-3 date">
+                                                <br/>
+                                                <br/>
+                                                <i class="fa fa-th-large"></i>
+                                                <span class="label label-primary">专项应用:</span>
+                                                <br/>
+                                            </div>
+                                            <div class="col-xs-7 content">
+                                                <p class="m-b-xs"><strong>目录:</strong></p>
+                                                <br/>
+                                                <a href="/mutiCountryVsimSRC/140country">
+                                                <p class="m-b-xs"><i class="fa fa-map-marker"></i><strong>  140国卡统计  </strong></p>
+                                                </a>
+                                                <p><small>页面内容：现网140国卡国际国内流量情况统计。</small></p>
+                                                <br/>
+                                                <a href="/vsimFlowerQuery">
+                                                <p class="m-b-xs"><i class="fa fa-map-marker"></i><strong>  流量查询专项  </strong></p>
+                                                </a>
+                                                <p><small>页面内容：</small></p>
+                                                <p><small>1、目前只支持新架构；</small></p>
+                                                <p><small>2、根据不同设置条件，统计卡的流量信息；</small></p>
+                                                <p><small>3、支持天、小时维度查询。</small></p>
+                                                <br/>
+                                                {% if  current_user.username != "TechSupport"%}
+                                                <a href="/">
+                                                <p class="m-b-xs"><i class="fa fa-map-marker"></i><strong>  新卡测试专项  </strong></p>
+                                                </a>
+                                                <p><small>页面内容：</small></p>
+                                                <p><small>1、新卡测试信息表；</small></p>
+                                                <p><small>2、新卡测试性能日志查询。</small></p>
+                                                <br/>
+                                                {% endif %}
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+{% endblock %}
