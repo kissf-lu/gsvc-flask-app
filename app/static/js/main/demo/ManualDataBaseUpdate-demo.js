@@ -64,11 +64,11 @@ function appendManulForm(modal_title_id, modal_body_id, modal_head_name, temple_
 
 function DeleteUpdateInsertModal(param){
     //$("#progressAjax").jqxLoader({ text: "提交更新数据中...", width: 100, height: 60 });
-
+    var actionParam = param;
     //remove alert old
     $("#app-growl").children().remove();
     //append html of modal
-    var appendHtlm = appendManulForm(param.modalTitleID, param.modalBodyID, param.modalHeadTitle, param.getTempleTitle);
+    var appendHtlm = appendManulForm(actionParam.modalTitleID, actionParam.modalBodyID, actionParam.modalHeadTitle, actionParam.getTempleTitle);
     // show modal
     $('#manualModal').modal();
     //set options of form that you will submit files to server GSVC
@@ -76,7 +76,7 @@ function DeleteUpdateInsertModal(param){
         beforeSubmit:  showRequest,  // pre-submit callback
         success:       showResponse,  // post-submit callback
         error:         errResponse,  // post-submit err function
-        url:           param.postURL,// override for form's 'action' attribute
+        url:           actionParam.postURL,// override for form's 'action' attribute
         type:          "post",         // 'get' or 'post', override for form's 'method' attribute
         dataType:      "json"
         //timeout:       30000,
@@ -104,7 +104,7 @@ function DeleteUpdateInsertModal(param){
     $('#getTemplate').click(function () {
         //alert('getTemplateDele');
         var temp = document.createElement("form");
-        temp.action = param.TemplateURL;
+        temp.action = actionParam.TemplateURL;
         temp.method = "post";
         temp.style.display = "none";
         var opt = document.createElement("textarea");
