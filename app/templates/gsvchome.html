@@ -1,0 +1,247 @@
+{% extends "main_base.html" %}
+
+{% block title %}主页APP{% endblock %}
+
+{% block head %}
+{{ super() }}
+    {% assets "gsvchome_css" %}
+    <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
+    {% endassets %}
+    <script type="text/javascript">
+        var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    </script>
+{% endblock %}
+
+{% block breadcrumb %}
+<li class="active">
+    <a href="#">
+        <strong>国家维度卡资源概述</strong>
+    </a>
+</li>
+{% endblock %}
+
+
+{% block row %}
+<div id="country-alert"></div>
+<div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>国家概述面板 &nbsp; &nbsp; </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <small>
+                        <strong>
+                            <i class="fa fa-info-circle"></i>
+                            &nbsp; &nbsp;国家可不设置, 为查询全网结果！
+                        </strong>
+                    </small>
+                    <div class="row">
+                        <div class="col-sm-5 m-b-xs">
+                            <select class="form-country" name="country" id="countrySrcConSelect" style="width:120px;">
+                                <option ></option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4 m-b-xs">
+                            <div data-toggle="buttons" class="btn-group">
+                                <button id="countrySrcCondataGet" type="button" class="btn btn-default ">
+                                    查询
+                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                </button>
+                                <button id="countrySrcConFlash" type="button" class="btn btn-default ">
+                                    刷新
+                                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                                </button>
+                                <button id="countrySrcConexcelExport" type="button" class="btn btn-default">
+                                    导出
+                                    <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+<div class="table-responsive">
+    <div id='con-countrySRC-grid'>
+        <div id="con-countrySRC-jqxgrid"></div>
+    </div>
+</div>
+<!---->
+<div id="countryChartalert"></div>
+<div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>本国卡国家统计画板</h5>
+                    <small> &nbsp;&nbsp;<strong>注: 只统计本国卡,不包括多国卡和代理商卡.</strong></small>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-5 m-b-xs">
+                            <select class="form-country" name="country" id="countryChartSelect" style="width:120px;">
+                                <option ></option>
+                            </select>
+                            &nbsp;&nbsp;
+                        </div>
+
+                        <div class="col-sm-4 m-b-xs">
+                            <div data-toggle="buttons" class="btn-group">
+                                <button id="countryChartdataGet" type="button" class="btn btn-default ">
+                                    查询
+                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <small> &nbsp;&nbsp;<strong>注:点击查询会同时绘制：C-新架构-本国可用卡套餐流量统计.</strong></small>
+                    <div id="countryChartQueryjqxNotification">
+                             <div id="countryChartQuerynotificationContent">
+                            </div>
+                    </div>
+                    <div id="countryChartcontainer">
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+<div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>C-新架构-本国可用卡套餐流量统计
+                        <small>&nbsp;注:只统计可用卡.</small>
+                    </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div id="N_PackagesFlower_barChart_div">
+                        <canvas id="N_PackagesFlower_barChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+<div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>国家峰值用户数、总计卡数、可用卡数统计
+                        <small>&nbsp;&nbsp;<strong>注: 当天峰值用户为每小时刷新一次; 总计卡数和可用卡数数据为现网当前最新数据.</strong></small>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </h5>
+                    <div class="ibox-content">
+                        <!--Notifications-->
+                        <div id="MaxUsrjqxNotification">
+                            <div id="MaxUsrnotificationContent">
+
+                            </div>
+                        </div>
+                        <div id="MaxUsrQueryjqxNotification">
+                             <div id="MaxUsrQuerynotificationContent">
+
+                            </div>
+                        </div>
+                        <div id="container">
+                        </div>
+                        <div id="Querycontainer">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+<!--告警修饰器-->
+<div id="country-lineChart-alert"></div>
+<!--国家峰值用户统计-->
+<div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="col-sm-5 m-b-xs">
+                            <div class="form-group" id="country_lineChart_date">
+                                <div class="input-group input-daterange" id="datepicker">
+                                    <span class="input-group-addon"><strong>时间范围--起始</strong></span>
+                                    <input type="text" class="input-sm form-control" name="start" id="input-daterange-start"/>
+                                    <span class="input-group-addon"><strong>结束</strong></span>
+                                    <input type="text" class="input-sm form-control" name="end" id="input-daterange-end"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-5 m-b-xs">
+                            <form role="form" class="form-inline">
+                                <select class="form-butype" name="country" id="butypeMaxusr" style="width:100px;">
+                                    <option ></option>
+                                </select>
+                                <select class="form-timedim" name="country" id="timeDim" style="width:100px;">
+                                    <option ></option>
+                                </select>
+                                <select class="form-country" name="country" id="countryMaxusr" style="width:60px;">
+                                    <option ></option>
+                                </select>
+                                <button id="country_MaxusrlineChart_dataGet" type="button" class="btn btn-default " style="height:29px; background:#24ceab;">
+                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                </button>
+                            </form>
+                        </div>
+                        <div id="mutil_inecharts_div">
+                            <canvas id="country_lineChart" ></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+    <!---->
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+    {% assets "jqwidgets_globle_js" %}
+    <script src="{{ ASSET_URL }}" type="text/javascript"></script>
+    {% endassets %}
+    {% assets "gsvchome_js" %}
+    <script src="{{ ASSET_URL }}" type="text/javascript"></script>
+    {% endassets %}
+    {% assets "gsvchome_globle_js" %}
+    <script src="{{ ASSET_URL }}" charset="UTF-8" type="text/javascript"></script>
+    {% endassets %}
+
+{% endblock %}

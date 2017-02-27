@@ -1,0 +1,75 @@
+{% extends "base-login.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Login{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <!-- index_login 文件夹内CSS为login , register, index, edit_profiel CSS 文件 -->
+    {% assets "login_css" %}
+    <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
+    {% endassets %}
+{% endblock %}
+
+
+{% block content %}
+
+<div class="loginColumns animated fadeInDown">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+        <div class="row">
+
+            <div class="col-md-6">
+                <h2 class="font-bold">Welcome to GSVC+</h2>
+
+                <p>
+                    GSVC+WED  APP FramWork Support By Python
+                </p>
+
+                <p>
+                    GSVC VSIM SRC Manager FramWork For GSVC User
+                </p>
+
+                <p>
+                    GSVC VSIM SRC Chart And Table Support By Js Flask
+                </p>
+
+                <p>
+                    <small></small>
+                </p>
+
+            </div>
+            <div class="col-md-6">
+                <div class="ibox-content">
+                        {{ wtf.quick_form(form) }}
+                        <a href="#">
+                            <small>Forgot password?</small>
+                        </a>
+
+                        <p class="text-muted text-center">
+                            <small>Do not have an account?</small>
+                        </p>
+                        <a class="btn btn-sm btn-white btn-block" href="#">Create an account</a>
+
+                    <p class="m-t">
+                        <small>GSVC APP framework base on Bootstrap 3 &copy; 2014</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <hr/>
+        <div class="row">
+            <div class="col-md-6">
+                Copyright UcloudLink Con
+            </div>
+            <div class="col-md-6 text-right">
+               <small>© 2016-2017</small>
+            </div>
+        </div>
+</div>
+{% endblock %}

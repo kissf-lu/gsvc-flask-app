@@ -1,0 +1,103 @@
+{% extends "main_base.html" %}
+
+
+{% block title %}140国卡流量统计APP{% endblock %}
+
+{% block head %}
+{{ super() }}
+
+{% assets "muticountry140_css" %}
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
+{% endassets %}
+
+<script type="text/javascript">
+  var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+
+{% endblock %}
+
+{% block breadcrumb %}
+<li class="active">
+    <a href="#">
+        <strong>140国卡流量统计</strong>
+    </a>
+</li>
+{% endblock %}
+
+{% block row %}
+<!-- 虚拟机手工表资源 -->
+<!--筛选告警栏-->
+<div class="anp" id="app-growl"></div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>140国卡流量统计查询</h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-wrench"></i>
+                    </a>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-sm-5 m-b-xs">
+                         <div class="form-group" id="140countryFlowerStatics_date">
+                             <div class="input-group input-daterange" id="datepicker">
+                                 <span class="input-group-addon"><strong>begin</strong></span>
+                                    <input type="text" class="input-sm form-control" name="start" id="input-daterange-start"/>
+                                 <span class="input-group-addon"><strong>end</strong></span>
+                                 <input type="text" class="input-sm form-control" name="end" id="input-daterange-end"/>
+                             </div>
+                         </div>
+                    </div>
+                    <div class="col-sm-4 m-b-xs">
+                        <div data-toggle="buttons" class="btn-group">
+                            <button id="140countryFlowerStaticsDataGet" type="button" class="btn btn-default ">
+                                查询
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            </button>
+                            <button id="140countryFlowerStaticsDataFlash" type="button" class="btn btn-default ">
+                                刷新
+                                <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                            </button>
+                            <button id="140countryFlowerStaticsExcelExport" type="button" class="btn btn-default ">
+                                导出
+                                <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div id='140countryFlowerStaticsJqxDropDownList'>
+                        </div>
+                        <!--div id="jqxlistbox"></div-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="table-responsive">
+    <div id='140countryFlowerStaticsGrid'>
+        <div id="140countryFlowerStaticsJqxgrid"></div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{% assets "jqwidgets_globle_js" %}
+    <script src="{{ ASSET_URL }}" type="text/javascript"></script>
+{% endassets %}
+{% assets "muticountry140_js" %}
+    <script src="{{ ASSET_URL }}" type="text/javascript"></script>
+{% endassets %}
+{% endblock %}

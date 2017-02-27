@@ -1,0 +1,46 @@
+{% extends "base-login.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Register{% endblock %}
+
+{% block head %}
+{{ super() }}
+    <meta charset="utf-8">
+    <!-- title ico -->
+	<link rel="shortcut icon" href="{{ url_for('static', filename='title.ico') }}" type="image/x-icon">
+	<link rel="icon" href="{{ url_for('static', filename='title.ico') }}" type="image/x-icon">
+    <!-- index_login 文件夹内CSS为login , register, index, edit_profiel CSS 文件 -->
+    <!-- main css -->
+    <link href="{{ url_for('static', filename='css/auth/styles.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='css/auth/animate.css') }}" rel="stylesheet" type="text/css">
+
+{% endblock %}
+
+{% block content %}
+<div class="middle-box text-center loginscreen   animated fadeInDown">
+        <div>
+            <div >
+                <h1 class="logo-name">G+</h1>
+            </div>
+            <h3>Register to GSVC APP</h3>
+            <div class="ibox-content">
+            <p>Create account to see it in action.</p>
+                {{ form.hidden_tag() }}
+                {{ wtf.quick_form(form) }}
+                <p>
+
+                </p>
+                <p class="text-muted text-center"><small>已经注册?</small></p>
+                <a class="btn btn-sm btn-white btn-block" href="{{ url_for('auth.login') }}">登陆</a>
+            <p class="m-t"> <small>GSVC-APP base on Bootstrap3 &copy; 2016</small> </p>
+            </div>
+        </div>
+</div>
+
+{% block scripts %}
+{{ super() }}
+
+{% endblock %}
+
+
+{% endblock %}
