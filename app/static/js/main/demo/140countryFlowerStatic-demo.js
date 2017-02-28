@@ -5,12 +5,14 @@
  */
 
 
-/**     -------warn  func-------
- *
+/**=======================================================
+ *                          warn  func
+ *=========================================================
  *bootstrap warn button type alert
  * @param alert_button_item : is the jquery type DOC ID obtaining from jquery DOC;
  * @param alert_doc: is alerting string to users;
- */
+ *
+ *===================================================================================*/
 
 function  alert_func(alert_button_item,alert_doc) {
     var $alertItem = alert_button_item;
@@ -24,14 +26,15 @@ function  alert_func(alert_button_item,alert_doc) {
     $alertItem.children().detach();
     $alertItem.append(alertStr);
 }
-/**     -------FilterPanel set func-------
- *
+/**
+ *  -------FilterPanel set func-------
+ *======================================================
  *JqxGrid columns FilterPanel setting;
  * @param filterPanel panel to init;
  * @param datafield : jqxgrid column datafield param;
  * @param filterGrid : jquery type of grid DOC ID;
  * @param SrcAdapter : jqxgrid SrcAdapter param ;
- */
+ *=============================================================*/
 var buildFilterPanel = function (filterPanel, datafield,filterGrid,SrcAdapter) {
     var textInput = $("<input style='margin:5px;'/>");
     var applyinput = $("<div class='filter' style='height: 25px; margin-left: 20px; margin-top: 7px;'></div>");

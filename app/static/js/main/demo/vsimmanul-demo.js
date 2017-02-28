@@ -562,7 +562,6 @@ function actionManulAjaxAPI(grid_manul_array_data, jqxgrid_manul_src_source, pos
                 $itemQueryButton.attr("disabled", false);
             });
     }
-    
 }
 
 //------------------------------------------------------刷新虚拟机数据函数栏-----------------------------------
@@ -1034,6 +1033,5 @@ $(function () {
     });
 
     initonSysjqxGrid();
-
 
 });

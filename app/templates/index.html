@@ -164,12 +164,11 @@
                                                 <p><small>3、支持天、小时维度查询。</small></p>
                                                 <br/>
                                                 {% if  current_user.username != "TechSupport"%}
-                                                <a href="/">
-                                                <p class="m-b-xs"><i class="fa fa-map-marker"></i><strong>  新卡测试专项  </strong></p>
+                                                <a href="{{ url_for('main.newVsimInfoTable') }}">
+                                                <p class="m-b-xs"><i class="fa fa-map-marker"></i><strong>  新卡测试信息表  </strong></p>
                                                 </a>
                                                 <p><small>页面内容：</small></p>
-                                                <p><small>1、新卡测试信息表；</small></p>
-                                                <p><small>2、新卡测试性能日志查询。</small></p>
+                                                <p><small>1、新卡测试信息记录表单；</small></p>
                                                 <br/>
                                                 {% endif %}
 

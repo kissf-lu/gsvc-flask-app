@@ -1,11 +1,11 @@
 {% extends "main_base.html" %}
 
 
-{% block title %}NVT{% endblock %}
+{% block title %}新卡测试专项{% endblock %}
 
 {% block head %}
 {{ super() }}
-{% assets "vsimmanual_css" %}
+{% assets "new_vsim_test_info_css" %}
 <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
 {% endassets %}
 <script type="text/javascript">
@@ -157,7 +157,7 @@
 {% assets "jqwidgets_globle_js" %}
 <script src="{{ ASSET_URL }}" type="text/javascript"></script>
 {% endassets %}
-{% assets "vsimmanual_js" %}
+{% assets "new_vsim_test_info_js" %}
 <script src="{{ ASSET_URL }}" type="text/javascript"></script>
 {% endassets %}
 
