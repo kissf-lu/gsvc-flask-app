@@ -252,7 +252,7 @@ function initjqxGrid(initGrid, array){
 $(function () {
 
     //init select2 model
-    alert("ok!");
+    //===============================================
     var $classCountry = $(".select-country");
     var $classPerson = $(".select-person");
     var initSelectClassList = {
@@ -260,5 +260,6 @@ $(function () {
         person: $classPerson
     };
     initSelectView(initSelectClassList);
+    //===============================================
 
 });
