@@ -209,13 +209,13 @@ new_vsim_test_info_css = Bundle(
     'css/main/plugins/datepicker/datepicker3.css',
     'css/main/plugins/datepicker/daterangepicker.css',
     filters='cssmin',
-    output='css/gsvc_vsimmanual.css'
+    output='css/gsvc_new_vsim_test_info.css'
 )
 
 new_vsim_test_info_js = Bundle(
     # ("--vsimmanul-demo js--")
     'js/main/demo/newVsimInfoTable-demo.js',
-    'js/main/demo/ManualDataBaseUpdate-demo.js',
+    'js/main/demo/newVsimTestTableUpdate-demo.js',
     # ("-- 下拉筛选扩展 --")
     'js/main/plugins/select2/select2.min.js',
     # ("<!-- datepicker js -->")
@@ -227,7 +227,7 @@ new_vsim_test_info_js = Bundle(
     # ("-- jquery form --")
     'js/main/plugins/jqueryform/jquery.form.min.js',
     filters='jsmin',
-    output='js/gsvc_vsimmanual.js'
+    output='js/gsvc_new_vsim_test_info.js'
 )
 
 jqwidgets_globle_js = Bundle(
