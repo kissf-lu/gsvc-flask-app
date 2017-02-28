@@ -215,7 +215,7 @@ new_vsim_test_info_css = Bundle(
 new_vsim_test_info_js = Bundle(
     # ("--vsimmanul-demo js--")
     'js/main/demo/newVsimInfoTable-demo.js',
-    'js/main/demo/ManualDataBaseUpdate-demo.js',
+    'js/main/demo/newVsimTestTableUpdate-demo.js',
     # ("-- 下拉筛选扩展 --")
     'js/main/plugins/select2/select2.min.js',
     # ("<!-- datepicker js -->")
