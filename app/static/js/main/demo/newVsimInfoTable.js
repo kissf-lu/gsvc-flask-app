@@ -101,7 +101,7 @@ var buildFilterPanel = function (filterPanel, datafield,filterGrid,SrcAdapter) {
  * @param item_drop_down_list: jquery type of drop down list DOC ID
  *
  *=====================================================================**/
-function init140DropDownList(item_drop_down_list){
+function initDropDownList(item_drop_down_list){
     // Create a jqxDropDownList
     var country140jqxDropDownList=[
         { label: 'imsi', value: 'imsi', checked: true },
