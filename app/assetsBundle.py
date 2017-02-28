@@ -180,11 +180,6 @@ muticountry140_js = Bundle(
     filters='jsmin',
     output='js/gsvc_muticountry140.js'
 )
-muticountry140_globle_js = Bundle(
-    'js/main/plugins/jqwidgets/localization.zh-CN.js',
-    filters='jsmin',
-    output='js/gsvc_muticountry140_globle.js'
-)
 
 
 uploadfiles_css = Bundle(
@@ -203,6 +198,36 @@ uploadfiles_js = Bundle(
     'js/main/plugins/jasny-bootstrap/jasny-bootstrap.min.js',
     filters='cssmin',
     output='js/gsvc_uploadfiles.js'
+)
+
+new_vsim_test_info_css = Bundle(
+    # ("-- jqx css --")
+    'css/main/plugins/jqxGrid/jqx.base.css',
+    # ("--select2 css--")
+    'css/main/plugins/selectForm/select2.min.css',
+    # ("-- datepicker css --")
+    'css/main/plugins/datepicker/datepicker3.css',
+    'css/main/plugins/datepicker/daterangepicker.css',
+    filters='cssmin',
+    output='css/gsvc_vsimmanual.css'
+)
+
+new_vsim_test_info_js = Bundle(
+    # ("--vsimmanul-demo js--")
+    'js/main/demo/newVsimInfoTable-demo.js',
+    'js/main/demo/ManualDataBaseUpdate-demo.js',
+    # ("-- 下拉筛选扩展 --")
+    'js/main/plugins/select2/select2.min.js',
+    # ("<!-- datepicker js -->")
+    'js/main/plugins/fullcalendar/moment.min.js',
+    # ("<!--datapicker js  -->")
+    'js/main/plugins/daterangepicker/daterangepicker.js',
+    'js/main/plugins/datapicker/bootstrap-datepicker.js',
+    'js/main/plugins/datapicker/bootstrap-datepicker.zh-CN.min.js',
+    # ("-- jquery form --")
+    'js/main/plugins/jqueryform/jquery.form.min.js',
+    filters='jsmin',
+    output='js/gsvc_vsimmanual.js'
 )
 
 jqwidgets_globle_js = Bundle(

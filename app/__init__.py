@@ -30,6 +30,8 @@ from assetsBundle import (
     jqwidgets_globle_js,
     uploadfiles_css,
     uploadfiles_js,
+    new_vsim_test_info_css,
+    new_vsim_test_info_js
 )
 #app config
 from config import config
@@ -91,6 +93,9 @@ def create_app(config_name):
     #140country-statics
     assets_env.register("muticountry140_css", muticountry140_css)
     assets_env.register("muticountry140_js", muticountry140_js)
+    # new vsim infor table
+    assets_env.register("new_vsim_test_info_css", new_vsim_test_info_css)
+    assets_env.register("new_vsim_test_info_js", new_vsim_test_info_js)
     # 140country-statics
     assets_env.register("uploadfiles_css", uploadfiles_css)
     assets_env.register("uploadfiles_js", uploadfiles_js)

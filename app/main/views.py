@@ -112,14 +112,14 @@ def edit(id):
 @main.route('/srcimsi/<username>/_query_vsim/')
 @login_required
 def query_vsim(username):
-    #user_query = User.query.filter_by(username=username).first_or_404()
-    #name = user_query.username
+    # user_query = User.query.filter_by(username=username).first_or_404()
+    # name = user_query.username
     country = request.args.get('a', '', type=str)
     person = request.args.get('b', '', type=str)
-    #user_gsvc = User.query.filter_by(name=person).first_or_404()
+    # user_gsvc = User.query.filter_by(name=person).first_or_404()
     person_gsvc = person
     if country == "" and person == "":
-        vsim_con=VsimManualInfor.query.count()
+        vsim_con = VsimManualInfor.query.count()
     elif country == "" and person != "":
         vsim_con = VsimManualInfor.query.filter_by(person_gsvc=person_gsvc).count()
     elif country != "" and person == "":
@@ -127,7 +127,7 @@ def query_vsim(username):
     else:
         vsim_con = VsimManualInfor.query.filter_by(country_iso=country, person_gsvc=person_gsvc).count()
 
-    query = [{'country': country,'person': person_gsvc, 'vsim_con': vsim_con}]
+    query = [{'country': country, 'person': person_gsvc, 'vsim_con': vsim_con}]
     return json.dumps(query, sort_keys=True, indent=4)
 
 
@@ -172,12 +172,10 @@ def vsimFlowerQuery():
     return render_template('vsimFlowerQuery.html')
 
 
-@main.route('/test_jquery/_add_numbers')
+@main.route('/newVsimInfoTable', methods=['GET', 'POST'])
 @login_required
-def add_numbers():
-    a = request.args.get('a', 0, type=int)
-    b = request.args.get('b', 0, type=int)
-    return jsonify(result=a + b)
+def newVsimInfoTable():
+    return render_template('new_vsim_test/new_vsim_test_info_table.html')
 
 
 @main.route('/test_uploadfiles')
@@ -189,7 +187,7 @@ def test_jqxgrid():
 @login_required
 def export_excel():
     if request.method == 'POST':
-        arrayData = request.get_array(field_name='file')
+        arrayData = request.get_array(field_name= 'file')
         DicData = exportExcelFunc.getDictExcelData(array_data= arrayData)
         print (DicData['data'][0])
         if DicData['err']:
@@ -198,13 +196,4 @@ def export_excel():
             returnJsonData = {'err': False, 'errinfo': DicData['errinfo'], 'data': DicData['data']}
             return jsonify({"data": returnJsonData})
 
-
     return render_template('/test_jquery/test_uploadfiles.html')
-
-
-
-
-
-
-
-
