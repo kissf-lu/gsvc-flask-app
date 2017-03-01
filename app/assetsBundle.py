@@ -132,7 +132,6 @@ probVsimFirstDict_js = Bundle(
 vsimmanual_css = Bundle(
     # ("-- jqx css --")
     'css/main/plugins/jqxGrid/jqx.base.css',
-    'css/main/plugins/jqxGrid/jqx.energyblue.css',
     # ("--select2 css--")
     'css/main/plugins/selectForm/select2.min.css',
     # ("-- datepicker css --")
@@ -208,6 +207,8 @@ new_vsim_test_info_css = Bundle(
     # ("-- datepicker css --")
     'css/main/plugins/datepicker/datepicker3.css',
     'css/main/plugins/datepicker/daterangepicker.css',
+    # ("-- jasny-bootstrap --")
+    'css/main/plugins/jasny-bootstrap/jasny-bootstrap.min.css',
     filters='cssmin',
     output='css/gsvc_new_vsim_test_info.css'
 )
@@ -224,6 +225,8 @@ new_vsim_test_info_js = Bundle(
     'js/main/plugins/daterangepicker/daterangepicker.js',
     'js/main/plugins/datapicker/bootstrap-datepicker.js',
     'js/main/plugins/datapicker/bootstrap-datepicker.zh-CN.min.js',
+    # ("-- jasny-bootstrap --")
+    'js/main/plugins/jasny-bootstrap/jasny-bootstrap.min.js',
     # ("-- jquery form --")
     'js/main/plugins/jqueryform/jquery.form.min.js',
     filters='jsmin',

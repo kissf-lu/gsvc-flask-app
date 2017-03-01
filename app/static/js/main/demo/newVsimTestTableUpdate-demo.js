@@ -3,9 +3,6 @@
  * @type {string}
  */
 
-var alertWinStr=('');
-
-
 
 /**     --------appendManulForm func-------
  *
@@ -66,11 +63,11 @@ function DeleteUpdateInsertModal(param){
     //$("#progressAjax").jqxLoader({ text: "提交更新数据中...", width: 100, height: 60 });
     var actionParam = param;
     //remove alert old
-    $("#app-growl").children().remove();
+    param.alertID.children().remove();
     //append html of modal
     var appendHtlm = appendManulForm(actionParam.modalTitleID, actionParam.modalBodyID, actionParam.modalHeadTitle, actionParam.getTempleTitle);
     // show modal
-    $('#manualModal').modal();
+    param.modalID.modal();
     //set options of form that you will submit files to server GSVC
     var options = {
         beforeSubmit:  showRequest,  // pre-submit callback
@@ -208,21 +205,46 @@ function errResponse(){
     return false;
 }
 
+var globeVar = {
+    'alertWinStr':'',
+    'ID':{
+        'DeleteID' : $("#Delete"),
+        'UpdateID' : $('#Update'),
+        'InsertID' : $('#Insert'),
+        'alertID' : $('#alert-model'),
+        'modalID' : $('#newVsimTestInfo-Modal')
+    },
+    'set': function (strAlert) {
+        this.alertWinStr = strAlert;
+    }
+};
+
 $(function () {
-    var $deleteClick = $("#manualDelete");
-    var $insertClick = $('#manualInsert');
-    var $updateClick = $('#manualUpdate');
+    //
+    var idGloble= globeVar;
+    if (idGloble.ID !== undefined){
+        var $deleteClick = idGloble.ID.DeleteID;
+        var $insertClick = idGloble.ID.InsertID;
+        var $updateClick = idGloble.ID.UpdateID;
+        var $alertID = idGloble.ID.alertID;
+        var $modalID = idGloble.ID.modalID;
+    }else {
+        alert('Param globeVar False!');
+    }
+
     $deleteClick.click(function () {
         var optionClick={
             alert: "您确认要进行删除数据操作？数据删除不可恢复！",
             param: {
                 actionType: 'delete',
+                alertID: $alertID,
+                modalID: $modalID,
                 modalTitleID: "modalTitle",
                 modalBodyID: "modalBody",
                 modalHeadTitle: '批量删除设置窗口',
                 getTempleTitle: '获取批量删除模板',
-                postURL: $SCRIPT_ROOT + "/api/v1.0/delet_manulVsim/",
-                TemplateURL: $SCRIPT_ROOT +"/api/v1.0/export_manualDeleteTemplate/"
+                postURL: $SCRIPT_ROOT + "#",
+                TemplateURL: $SCRIPT_ROOT +"#"
             }
         };
         clickAction(optionClick);
@@ -232,12 +254,14 @@ $(function () {
             alert: "您确认要插入数据吗？禁止插入已有数据！",
             param: {
                 actionType: 'insert',
+                alertID: $alertID,
+                modalID: $modalID,
                 modalTitleID: "modalTitle",
                 modalBodyID: "modalBody",
                 modalHeadTitle: '批量导入设置窗口',
                 getTempleTitle: '获取批量导入模板',
-                postURL: $SCRIPT_ROOT + "/api/v1.0/insert_manulVsim/",
-                TemplateURL: $SCRIPT_ROOT +"/api/v1.0/export_manualInsertTemplate/"
+                postURL: $SCRIPT_ROOT + "#",
+                TemplateURL: $SCRIPT_ROOT +"#"
             }
         };
         clickAction(optionClick);
@@ -247,12 +271,14 @@ $(function () {
             alert: "您确认要更新数据吗？",
             param: {
                 actionType: 'update',
+                alertID: $alertID,
+                modalID: $modalID,
                 modalTitleID: "modalTitle",
                 modalBodyID: "modalBody",
                 modalHeadTitle: '批量更新设置窗口',
                 getTempleTitle: '获取批量更新模板',
-                postURL: $SCRIPT_ROOT + "/api/v1.0/update_manulVsim/",
-                TemplateURL: $SCRIPT_ROOT +"/api/v1.0/export_manualInsertTemplate/"
+                postURL: $SCRIPT_ROOT + "#",
+                TemplateURL: $SCRIPT_ROOT +"#"
             }
         };
         clickAction(optionClick);

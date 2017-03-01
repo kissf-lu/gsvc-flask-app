@@ -208,7 +208,7 @@ def insertStrMake(databaseTable,insertData):
         insertColumStr="(" + index + ", " + insertColumStr + ") "
         insertValueStr="VALUES(%(" + index+ ")s, " + insertValueStr + ") "
         insertStr = (insertHeadStr + insertColumStr + insertValueStr)
-        insertStrInfo = {"err":False,"errInfo":"","insertStr":insertStr}
+        insertStrInfo = {"err": False, "errInfo": "", "insertStr": insertStr}
         return insertStrInfo
 
 def insertOneColModel(sql_info, insertData):
@@ -220,11 +220,11 @@ def insertOneColModel(sql_info, insertData):
     """
     errInfo = ''
     try:
-        cnx = get_DataBaseConn(sysSql=sql_info['insetDB']['db'], Database=sql_info['insetDB']['database'])
+        cnx = get_DataBaseConn(sysSql=sql_info['insertDB']['db'], Database=sql_info['insertDB']['database'])
         cursor = cnx.cursor()
         # --------------------------------------制作mysql更新语句----------------------------------------------
         for i in range(len(insertData)):
-            insertAction = insertStrMake(sql_info['insetDB']['sheet'], insertData[i])
+            insertAction = insertStrMake(sql_info['insertDB']['sheet'], insertData[i])
             if insertAction["err"] :
                 cursor.close()
                 cnx.close()
@@ -245,23 +245,33 @@ def insertOneColModel(sql_info, insertData):
 
 
 def insertModel(SqlInfo,DicData):
+    """
 
-    inertActionInfo = ''
-    mgData = []
-    if DicData !=[]:
-        updateIMSI = get_key_value_str(data=DicData, key='imsi')
-        SysUpdateData = fetchUpdateDataFromSys(sql_info= SqlInfo,
-                                               update_imsi= updateIMSI)
-        if SysUpdateData :
-            mgData=mergeData(mergeKy='imsi',
-                          baseData=DicData,
-                          mergedData=SysUpdateData)
-            popdata = popBlankValue(mgData)
-            inertActionInfo = insertOneColModel(sql_info=SqlInfo, insertData=popdata)
-            return inertActionInfo
+    :param SqlInfo:
+    :param DicData:
+    :return:
+    """
+    inser_data = DicData
+    sql_set = SqlInfo
+    if inser_data:
+        try:
+            updateIMSI = get_key_value_str(data=inser_data, key='imsi')
+            SysUpdateData = fetchUpdateDataFromSys(sql_info=sql_set,
+                                                   update_imsi=updateIMSI)
+            if SysUpdateData:
+                mgData = mergeData(mergeKy='imsi',
+                                   baseData=inser_data,
+                                   mergedData=SysUpdateData)
+                popdata = popBlankValue(mgData)
+                inertActionInfo = insertOneColModel(sql_info=sql_set, insertData=popdata)
+                return inertActionInfo
 
-        else:
-            inertActionInfo = "新架构平台无卡信息数据！"
+            else:
+                inertActionInfo = "新架构平台无卡信息数据！"
+                return inertActionInfo
+        except KeyError:
+
+            inertActionInfo = "Erro:1001-Sql Config Dict Key Param Set Error!"
             return inertActionInfo
     else:
         inertActionInfo = "插入数据为空！"

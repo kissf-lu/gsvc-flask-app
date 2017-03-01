@@ -10,7 +10,6 @@
  * @param alert_doc: is alerting string to users;
  *
  *===================================================================================*/
-
 function  alert_func(alert_button_item,alert_doc) {
     var $alertItem = alert_button_item;
     var alertStr=('<div class="alert alert-warning" role="alert">'+

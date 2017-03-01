@@ -148,11 +148,19 @@ def updataOneColModel(SqlInfo,update_data):
 
 
 def updateModel(SqlInfo,DicData):
-    UpdateData=DicData
-    if UpdateData != []:
-        popdata=popBlankValue(UpdateData)
-        UpdateActionInfo = updataOneColModel(SqlInfo=SqlInfo,update_data=popdata)
-        return UpdateActionInfo
+    UpdateData = DicData
+    sql_set = SqlInfo
+    if UpdateData:
+        try:
+            popdata = popBlankValue(UpdateData)
+            UpdateActionInfo = updataOneColModel(SqlInfo=sql_set, update_data=popdata)
+
+            return UpdateActionInfo
+
+        except KeyError:
+            inertActionInfo = "Erro:1001-Sql Config Dict Key Param Set Error!"
+            return inertActionInfo
+
     else:
         UpdateActionInfo = "更新数据为空！"
         return UpdateActionInfo
