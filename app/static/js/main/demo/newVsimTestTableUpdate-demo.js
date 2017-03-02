@@ -205,7 +205,7 @@ function errResponse(){
     return false;
 }
 
-var globeVar = {
+var globeVarNewVsimTest = {
     'alertWinStr':'',
     'ID':{
         'DeleteID' : $("#Delete"),
@@ -221,7 +221,7 @@ var globeVar = {
 
 $(function () {
     //
-    var idGloble= globeVar;
+    var idGloble= globeVarNewVsimTest;
     if (idGloble.ID !== undefined){
         var $deleteClick = idGloble.ID.DeleteID;
         var $insertClick = idGloble.ID.InsertID;
@@ -229,7 +229,7 @@ $(function () {
         var $alertID = idGloble.ID.alertID;
         var $modalID = idGloble.ID.modalID;
     }else {
-        alert('Param globeVar False!');
+        alert('Param globeVarNewVsimTest False!');
     }
 
     $deleteClick.click(function () {
