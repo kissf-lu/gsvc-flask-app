@@ -38,22 +38,19 @@ function initSelectView(init_select_class_list){
     // select views
     init_select_class_list.country.select2({
         data: country_data
-
     });
     init_select_class_list.country.select2({
-        placeholder: "国家",
+        placeholder: "国家简码",
         allowClear: true
-
     });
     //select 模块
     init_select_class_list.person.select2({
         data: person_data
     });
     $(".select-person").select2({
-        placeholder: "负责人",
+        placeholder: "测试人",
         allowClear: true
     });
-
 }
 /**=====================================================
  *  -------FilterPanel set func-------
