@@ -204,9 +204,6 @@ new_vsim_test_info_css = Bundle(
     'css/main/plugins/jqxGrid/jqx.base.css',
     # ("--select2 css--")
     'css/main/plugins/selectForm/select2.min.css',
-    # ("-- datepicker css --")
-    'css/main/plugins/datepicker/datepicker3.css',
-    'css/main/plugins/datepicker/daterangepicker.css',
     # ("-- jasny-bootstrap --")
     'css/main/plugins/jasny-bootstrap/jasny-bootstrap.min.css',
     filters='cssmin',
@@ -219,12 +216,6 @@ new_vsim_test_info_js = Bundle(
     'js/main/demo/newVsimTestTableUpdate-demo.js',
     # ("-- 下拉筛选扩展 --")
     'js/main/plugins/select2/select2.min.js',
-    # ("<!-- datepicker js -->")
-    'js/main/plugins/fullcalendar/moment.min.js',
-    # ("<!--datapicker js  -->")
-    'js/main/plugins/daterangepicker/daterangepicker.js',
-    'js/main/plugins/datapicker/bootstrap-datepicker.js',
-    'js/main/plugins/datapicker/bootstrap-datepicker.zh-CN.min.js',
     # ("-- jasny-bootstrap --")
     'js/main/plugins/jasny-bootstrap/jasny-bootstrap.min.js',
     # ("-- jquery form --")
