@@ -10,7 +10,6 @@
  * @param alert_doc: is alerting string to users;
  *
  *===================================================================================*/
-
 function  alert_func(alert_button_item,alert_doc) {
     var $alertItem = alert_button_item;
     var alertStr=('<div class="alert alert-warning" role="alert">'+
@@ -128,53 +127,83 @@ var buildFilterPanel = function (filterPanel, datafield,filterGrid,SrcAdapter) {
         textInput.val("");
     });
 };
-/**=====================================================================
- *  -------init drop down model func-------
- *=====================================================================
- * @param item_drop_down_list: jquery type of drop down list DOC ID
- *
- *=====================================================================**/
-function initDropDownList(item_drop_down_list){
+/**================================
+ *  -------初始化显示选择函数
+ *=================================
+ * @param item_related_grid
+ * @param item_jqx_drop_down
+ *======================================================================**/
+function initDropDownList(item_related_grid, item_jqx_drop_down){
     // Create a jqxDropDownList
-    var country140jqxDropDownList=[
-        { name: 'person_supplier', type: 'string' },
-        { name: 'person_test', type: 'string' },
-        { name: 'card_info', type: 'string' },
-        { name: 'vsim_type', type: 'string' },
-        { name: 'country_cn', type: 'string' },
-        { name: 'country_iso', type: 'string' },
-        { name: 'operator', type: 'string' },
-        { name: 'plmn', type: 'string' },
-        { name: 'rat', type: 'string' },
-        { name: 'config_change', type: 'string' },
-        { name: 'imsi', type: 'string' },
-        { name: 'user_code', type: 'string' },
-        { name: 'imei', type: 'string' },
-        { name: 'device_type', type: 'string' },
-        { name: 'success_time', type: 'date' },
-        { name: 'change_time', type: 'date' },
-        { name: 'register_operator', type: 'string' },
-        { name: 'eplmn', type: 'string' },
-        { name: 'register_rat', type: 'string' },
-        { name: 'lac', type: 'string' },
-        { name: 'cellid', type: 'string' },
-        { name: 'service_usability', type: 'string' },
-        { name: 'stability_onehour', type: 'string' },
-        { name: 'agree_mbr', type: 'string' },
-        { name: 'agree_consistency', type: 'string' },
-        { name: 'fail_reason', type: 'string' },
-        { name: 'remark', type: 'string' }
+    var jqxDropDownList=[
+        {label: '卡提供人', value: 'person_supplier', checked: true },
+        {label: '测试人', value: 'person_test', checked: true },
+        {label: '测试卡信息', value: 'card_info', checked: true },
+        {label: '本国/多国', value: 'vsim_type', checked: true },
+        {label: '国家', value: 'country_cn', checked: true },
+        {label: '简称', value: 'country_iso', checked: true },
+        {label: '运营商', value: 'operator', checked: true },
+        {label: 'PLMN', value: 'plmn', checked: true },
+        {label: '网络制式', value: 'rat', checked: true },
+        {label: '配置更改', value: 'config_change', checked: true },
+        {label: 'IMSI', value: 'imsi', checked: true },
+        {label: '账户', value: 'user_code', checked: true },
+        {label: 'IMEI', value: 'imei', checked: true },
+        {label: '设备类型', value: 'device_type', checked: true },
+        {label: '调卡成功时间', value: 'success_time', checked: true },
+        {label: '换卡时间', value: 'change_time', checked: true },
+        {label: '注册运营商', value: 'register_operator', checked: true },
+        {label: 'EPLMN', value: 'eplmn', checked: true },
+        {label: '注册网络', value: 'register_rat', checked: true },
+        {label: 'LAC', value: 'lac', checked: true },
+        {label: 'CELLID', value: 'cellid', checked: true },
+        {label: '基本可用性', value: 'service_usability', checked: true },
+        {label: '1小时稳定性', value: 'stability_onehour', checked: true },
+        {label: '协商速率', value: 'agree_mbr', checked: true },
+        {label: '协商速率一致性', value: 'agree_consistency', checked: true },
+        {label: '失败原因', value: 'fail_reason', checked: true },
+        {label: '备注', value: 'remark', checked: true }
     ];
-    // drop down model set
-    item_drop_down_list.jqxDropDownList({
+    initDropdownlist(item_jqx_drop_down, jqxDropDownList);
+
+    item_jqx_drop_down.on('checkChange', function (event) {
+
+        actionDropDownList(item_related_grid, event);
+    });
+
+}
+/**=====================================================================
+ *
+ * @param item_jqx_drop_down : initialized DOC ID of jquery type jqx dropdown ID
+ * @param jqx_drop_down_list : source list to initialize Dropdownlist model
+ *======================================================================**/
+function initDropdownlist(item_jqx_drop_down, jqx_drop_down_list) {
+
+    item_jqx_drop_down.jqxDropDownList({
         checkboxes: true,
-        source: country140jqxDropDownList,
+        source: jqx_drop_down_list,
         autoOpen:true,
         animationType:'fade',
         filterable: true,
         dropDownHeight: 300,
         Width:150
     });
+}
+/**=====================================
+ *
+ * @param item_related_grid
+ * @param event
+ *=======================================================**/
+function actionDropDownList(item_related_grid, event) {
+
+    item_related_grid.jqxGrid('beginupdate');
+    if (event.args.checked) {
+        item_related_grid.jqxGrid('showcolumn', event.args.value);
+    }
+    else {
+        item_related_grid.jqxGrid('hidecolumn', event.args.value);
+    }
+    item_related_grid.jqxGrid('endupdate');
 }
 /**==========================================================================
  *  -------init jqxgrid func-------
@@ -292,16 +321,16 @@ function initjqxGrid(initGrid, array){
             { text: '调卡成功时间', datafield: 'success_time', filtertype: 'date', cellsformat: 'yyyy-MM-dd HH:mm:ss', width: 170 },
             { text: '换卡时间', datafield: 'change_time', filtertype: 'date', cellsformat: 'yyyy-MM-dd HH:mm:ss', width: 170 },
             { text: '注册运营商', datafield: 'register_operator', filtertype: 'checkedlist', width: 80 },
-            { text: 'EPMN', datafield: 'eplmn', filtertype: 'checkedlist', width: 80 },
+            { text: 'EPLMN', datafield: 'eplmn', filtertype: 'checkedlist', width: 80 },
             { text: '注册网络', datafield: 'register_rat', filtertype: 'checkedlist', width: 80 },
             { text: 'LAC', datafield: 'lac', filtertype: 'checkedlist', width: 80 },
             { text: 'CELLID', datafield: 'cellid', filtertype: 'checkedlist', width: 80 },
             { text: '基本可用性', datafield: 'service_usability', filtertype: 'checkedlist', width: 80 },
             { text: '1小时稳定性', datafield: 'stability_onehour', filtertype: 'checkedlist', width: 80 },
             { text: '协商速率', datafield: 'agree_mbr', filtertype: 'checkedlist', width: 150 },
-            { text: '协商速率一致性', datafield: 'agree_consistency', filtertype: 'checkedlist', width: 80 },
+            { text: '协商速率一致性', datafield: 'agree_consistency', filtertype: 'checkedlist', width: 150 },
             { text: '失败原因', datafield: 'fail_reason', filtertype: 'checkedlist', width: 80 },
-            { text: '备注', datafield: 'remark', filtertype: 'checkedlist', width: 80 }
+            { text: '备注', datafield: 'remark', filtertype: 'checkedlist', width: 200 }
         ]
     });
     return Srcsource;
@@ -326,8 +355,8 @@ $(function () {
     var JqxGridSource= initjqxGrid($itemNewVsimTestInfoJqgrid,gridArray);
     //===============================================
     //init drop down list for check
-    var $itemmanualDropDown = $("#jqxDropDownList");
-    //initManulDropDownList($itemManulJqgrid, $itemmanualDropDown);
+    var $itemDropDown = $("#jqxDropDownList");
+    initDropDownList($itemNewVsimTestInfoJqgrid, $itemDropDown);
     //=================================================================
 
 

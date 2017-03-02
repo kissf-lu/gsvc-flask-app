@@ -3,9 +3,6 @@
  * @type {string}
  */
 
-var alertWinStr=('');
-
-
 
 /**     --------appendManulForm func-------
  *
@@ -66,11 +63,11 @@ function DeleteUpdateInsertModal(param){
     //$("#progressAjax").jqxLoader({ text: "提交更新数据中...", width: 100, height: 60 });
     var actionParam = param;
     //remove alert old
-    $("#app-growl").children().remove();
+    param.alertID.children().remove();
     //append html of modal
     var appendHtlm = appendManulForm(actionParam.modalTitleID, actionParam.modalBodyID, actionParam.modalHeadTitle, actionParam.getTempleTitle);
     // show modal
-    $('#manualModal').modal();
+    param.modalID.modal();
     //set options of form that you will submit files to server GSVC
     var options = {
         beforeSubmit:  showRequest,  // pre-submit callback
@@ -119,7 +116,6 @@ function DeleteUpdateInsertModal(param){
 
 
 function clickAction(option_click) {
-    alertWinStr = option_click.alert;
     var param = option_click.param;
     var actionFun=DeleteUpdateInsertModal(param);
 }
@@ -150,19 +146,19 @@ function showRequest(formData, jqForm, options) {
     //var formElement = jqForm[0];
     //var conformR=conformRun();
     //alert(conformR);
-    if(!confirm(alertWinStr)){
+    if(!confirm(globeVarNewVsimTest.alertWinStr)){
         //$('#eventWindow').jqxWindow('close');
-        alertWinStr = '';
-        $('#manualModal').modal('hide');
+        globeVarNewVsimTest.set('');
+        globeVarNewVsimTest.ID.modalID.modal('hide');
 
         return false;
     }
     // here we could return false to prevent the form from being submitted;
     // returning anything other than false will allow the form submit to continue
     //$('#manualModal').modal('hide');
-    alertWinStr = '';
-    $("#progress-modal").modal('show');
-    $(".progress-bar").animate({width: "100%"});
+    globeVarNewVsimTest.set('');
+    globeVarNewVsimTest.ID.modal_progressID.modal('show');
+    globeVarNewVsimTest.ID.progress_barClass.animate({width: "100%"});
 
     return true;
 }
@@ -179,8 +175,6 @@ function showResponse(responseText, statusText, xhr, $form)  {
     // if the ajaxSubmit method was passed an Options Object with the dataType
     // property set to 'json' then the first argument to the success callback
     // is the json data object returned by the server
-    var $progressItem = $("#progress-modal");
-    var $manualModal = $('#manualModal');
     var alertClass = '';
     var alertInfo = '';
     if (responseText.err){
@@ -192,8 +186,8 @@ function showResponse(responseText, statusText, xhr, $form)  {
         alertInfo = ('操作成功！');
     }
     appendAlertInfo(alertClass, alertInfo);
-    $progressItem.modal('hide');
-    $manualModal.modal('hide');
+    globeVarNewVsimTest.ID.modal_progressID.modal('hide');
+    globeVarNewVsimTest.ID.modalID.modal('hide');
 
     return false;
 }
@@ -202,59 +196,92 @@ function errResponse(){
     var alertClass = '<div class="alert alert-warning" role="alert">';
     var alertInfo = ("Network Error!");
     appendAlertInfo(alertClass, alertInfo);
-    $("#progress-modal").modal('hide');
-    $('#manualModal').modal('hide');
+    globeVarNewVsimTest.ID.modal_progressID.modal('hide');
+    globeVarNewVsimTest.ID.modalID.modal('hide');
 
     return false;
 }
 
+var globeVarNewVsimTest = {
+    'alertWinStr':'',                                //alert() function use alertWinStr value to show alert
+    'ID':{
+        'DeleteID' : $("#Delete"),
+        'UpdateID' : $('#Update'),
+        'InsertID' : $('#Insert'),
+        'alertID' : $('#alert-model'),              //warn bar model use this id to set warn content
+        'modalID' : $('#newVsimTestInfo-Modal'),
+        'modal_progressID' : $("#progress-modal"),
+        'progress_barClass' : $(".progress-bar")
+    },
+    'set': function (strAlert) {
+        this.alertWinStr = strAlert;
+    }
+};
+
 $(function () {
-    var $deleteClick = $("#manualDelete");
-    var $insertClick = $('#manualInsert');
-    var $updateClick = $('#manualUpdate');
+    //
+    var idGloble= globeVarNewVsimTest;
+    if (idGloble.ID !== undefined){
+        var $deleteClick = idGloble.ID.DeleteID;
+        var $insertClick = idGloble.ID.InsertID;
+        var $updateClick = idGloble.ID.UpdateID;
+        var $alertID = idGloble.ID.alertID;
+        var $modalID = idGloble.ID.modalID;
+    }else {
+        alert('Param globeVarNewVsimTest False!');
+    }
+
     $deleteClick.click(function () {
+        idGloble.set("您确认要进行删除数据操作？数据删除不可恢复！");
         var optionClick={
-            alert: "您确认要进行删除数据操作？数据删除不可恢复！",
             param: {
                 actionType: 'delete',
+                alertID: $alertID,
+                modalID: $modalID,
                 modalTitleID: "modalTitle",
                 modalBodyID: "modalBody",
                 modalHeadTitle: '批量删除设置窗口',
                 getTempleTitle: '获取批量删除模板',
-                postURL: $SCRIPT_ROOT + "/api/v1.0/delet_manulVsim/",
-                TemplateURL: $SCRIPT_ROOT +"/api/v1.0/export_manualDeleteTemplate/"
+                postURL: $SCRIPT_ROOT + "#",
+                TemplateURL: $SCRIPT_ROOT +"#"
             }
         };
         clickAction(optionClick);
     });
     $insertClick.click(function () {
+        idGloble.set("您确认要插入数据吗？禁止插入已有数据！");
         var optionClick={
-            alert: "您确认要插入数据吗？禁止插入已有数据！",
             param: {
                 actionType: 'insert',
+                alertID: $alertID,
+                modalID: $modalID,
                 modalTitleID: "modalTitle",
                 modalBodyID: "modalBody",
                 modalHeadTitle: '批量导入设置窗口',
                 getTempleTitle: '获取批量导入模板',
-                postURL: $SCRIPT_ROOT + "/api/v1.0/insert_manulVsim/",
-                TemplateURL: $SCRIPT_ROOT +"/api/v1.0/export_manualInsertTemplate/"
+                postURL: $SCRIPT_ROOT + "#",
+                TemplateURL: $SCRIPT_ROOT +"#"
             }
         };
         clickAction(optionClick);
     });
     $updateClick.click(function () {
+        idGloble.set("您确认要更新数据吗？");
         var optionClick={
-            alert: "您确认要更新数据吗？",
             param: {
                 actionType: 'update',
+                alertID: $alertID,
+                modalID: $modalID,
                 modalTitleID: "modalTitle",
                 modalBodyID: "modalBody",
                 modalHeadTitle: '批量更新设置窗口',
                 getTempleTitle: '获取批量更新模板',
-                postURL: $SCRIPT_ROOT + "/api/v1.0/update_manulVsim/",
-                TemplateURL: $SCRIPT_ROOT +"/api/v1.0/export_manualInsertTemplate/"
+                postURL: $SCRIPT_ROOT + "#",
+                TemplateURL: $SCRIPT_ROOT +"#"
             }
         };
         clickAction(optionClick);
     });
+
+
 });

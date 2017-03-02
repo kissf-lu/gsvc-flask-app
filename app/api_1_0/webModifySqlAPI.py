@@ -29,7 +29,7 @@ def delet_manulVsim():
     if request.method == 'POST':
         arrayData = request.get_array(field_name='file')
 
-        return deleManuleVsimSrc(ArrayData= arrayData)
+        return deleManuleVsimSrc(array_data= arrayData)
 
     else:
         returnJsonData = {'err': True, 'errinfo': '操作违法！', 'data': []}
@@ -45,7 +45,7 @@ def insert_manulVsim():
     if request.method == 'POST':
         arrayData = request.get_array(field_name='file')
 
-        return insertManuleVsimSrc(ArrayData= arrayData)
+        return insertManuleVsimSrc(array_data= arrayData)
 
     else:
         returnJsonData = {'err': True, 'errinfo': '操作违法！', 'data': []}
@@ -62,7 +62,7 @@ def update_manulVsim():
     if request.method == 'POST':
         arrayData = request.get_array(field_name='file')
 
-        return updateManuleVsimSrc(ArrayData= arrayData)
+        return updateManuleVsimSrc(array_data= arrayData)
 
     else:
         returnJsonData = {'err': True, 'errinfo': '操作违法！', 'data': []}

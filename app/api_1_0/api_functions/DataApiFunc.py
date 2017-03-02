@@ -1,37 +1,36 @@
 # -*- coding: utf-8 -*-
 
 
-import mysql.connector
+# import mysql.connector
 import json
 from bson import json_util
 from updateSqlPack.insertoneColModle import insertModel
 from updateSqlPack.updateOneColModle import updateModel
 from updateSqlPack.deleteModel import deleteManualModel
 
-
 SqlInfo = {
-    "DeleManuleVsimSrc":{"db": "config_DevAmz", "database":"gsvcdatabase","sheet": "vsim_manual_infor"},
-    "InsertManuleVsimSrc":{
-        "insetDB":{"db": "config_DevAmz", "database":"gsvcdatabase","sheet": "vsim_manual_infor"},
-        "getUpdateData":{"db": "config_N", "database":"glocalme_css"}
+    "DeleManuleVsimSrc": {"db": "config_DevAmz", "database": "gsvcdatabase", "sheet": "vsim_manual_infor"},
+    "InsertManuleVsimSrc": {
+        "insertDB": {"db": "config_DevAmz", "database": "gsvcdatabase", "sheet": "vsim_manual_infor"},
+        "getUpdateData": {"db": "config_N", "database": "glocalme_css"}
     },
-    "updateManuleVsimSrc":{"db": "config_DevAmz", "database":"gsvcdatabase","sheet": "vsim_manual_infor"}
+    "updateManuleVsimSrc": {"db": "config_DevAmz", "database": "gsvcdatabase", "sheet": "vsim_manual_infor"}
 }
 
 
-def confirmExcelTemplateReg(excelColName, regColName):
+def confirmExcelTemplateReg(excel_col_name, reg_col_name):
     """
 
-    :param excelColName:
-    :param regColName:
+    :param excel_col_name:
+    :param reg_col_name:
     :return:
     """
-    ColBase = regColName
-    ColConfirm = excelColName
+    ColBase = reg_col_name
+    ColConfirm = excel_col_name
     confirmRS = True
 
-    if ((ColBase !=[]) and (ColConfirm !=[])):
-        if (len(ColBase) != len(ColConfirm)):
+    if (ColBase != []) and (ColConfirm != []):
+        if len(ColBase) != len(ColConfirm):
             confirmRS = False
         else:
             for i in range(len(ColBase)):
@@ -46,22 +45,25 @@ def confirmExcelTemplateReg(excelColName, regColName):
     return confirmRS
 
 
-def getDictExcelData(array_data,key_database,key_mirr_database):
+def getDictExcelData(array_data, key_database, key_mirr_database):
     """
+
     :param array_data:
+    :param key_database:
+    :param key_mirr_database:
     :return:
     """
-    dicData=[]
+    dicData = []
     key_dic = key_database
     key_mirr = key_mirr_database
-    errinfo =''
-    if ((type(array_data) is list) and (len(array_data) >=2)):
+    errinfo = ''
+    if (type(array_data) is list) and (len(array_data) >= 2):
         for i in range(len(array_data)):
             temp_dic = {}
-            if (i==0):
+            if i == 0:
                 excelCloName = array_data[0]
-                ifConfirm = confirmExcelTemplateReg(excelColName=excelCloName,regColName=key_mirr)
-                if (not ifConfirm):
+                ifConfirm = confirmExcelTemplateReg(excel_col_name=excelCloName, reg_col_name=key_mirr)
+                if not ifConfirm:
                     errinfo = "模板非法！核实模板是否正确！"
                     returnDictData = {'err': True, 'errinfo': errinfo, 'data': []}
 
@@ -70,28 +72,28 @@ def getDictExcelData(array_data,key_database,key_mirr_database):
                 for j in range(len(key_dic)):
                     try:
                         temp_dic.update({key_dic[j]: array_data[i][j]})
-                    except IndexError :
+                    except IndexError:
                         errinfo = 'Index Error'
                 dicData.append(temp_dic)
 
     else:
         errinfo = '导入数据不合法！请核实模板数据。'
-    if errinfo !='':
-        returnDictData = {'err': True, 'errinfo': errinfo, 'data':[]}
+    if errinfo != '':
+        returnDictData = {'err': True, 'errinfo': errinfo, 'data': []}
     else:
         returnDictData = {'err': False, 'errinfo': errinfo, 'data': dicData}
 
     return returnDictData
 
 
-def deleManuleVsimSrc(ArrayData):
+def deleManuleVsimSrc(array_data):
     """
     数据删除API函数，country调用
-    :param ArrayData:
+    :param array_data:
     :return:
     """
     state_result = ''
-    dataFromJS = ArrayData
+    dataFromJS = array_data
     deleteDatabaseItem = [unicode('imsi')]
     deleteDataMirr = [unicode('imsi')]
     DicData = getDictExcelData(array_data=dataFromJS,
@@ -102,7 +104,7 @@ def deleManuleVsimSrc(ArrayData):
         return json.dumps(returnJsonData, sort_keys=True, indent=4, default=json_util.default)
     else:
         state_result = deleteManualModel(SqlInfo=SqlInfo['DeleManuleVsimSrc'],
-                                        arrayDicData=DicData['data'])
+                                         arrayDicData=DicData['data'])
         if state_result != '':
             returnJsonData = {'err': True, 'errinfo': state_result}
             return json.dumps(returnJsonData, sort_keys=True, indent=4, default=json_util.default)
@@ -110,15 +112,16 @@ def deleManuleVsimSrc(ArrayData):
             returnJsonData = {'err': False, 'errinfo': state_result}
             return json.dumps(returnJsonData, sort_keys=True, indent=4, default=json_util.default)
 
-def insertManuleVsimSrc(ArrayData):
+
+def insertManuleVsimSrc(array_data):
     """
     数据插入API函数
-    :param ArrayData:
+    :param array_data:
     :return:
     """
     state_result = ''
-    dataFromJS = ArrayData
-    #此key用于替换insertDataMirr中对应的key，用于后续进行数据库插入key
+    dataFromJS = array_data
+    # 此key用于替换insertDataMirr中对应的key，用于后续进行数据库插入key
     insertDatabaseItem = [unicode('imsi'),
                           unicode('person_gsvc'),
                           unicode('country_cn'),
@@ -133,7 +136,7 @@ def insertManuleVsimSrc(ArrayData):
                           unicode('vsim_batch_num'),
                           unicode('owner_attr'),
                           unicode('country_attr')]
-    #此key为核实前端表格表头是否符合实际模板要求：列数相同、顺序相同
+    # 此key为核实前端表格表头是否符合实际模板要求：列数相同、顺序相同
     insertDataMirr = [unicode('imsi'),
                       unicode('负责人'),
                       unicode('国家'),
@@ -155,7 +158,7 @@ def insertManuleVsimSrc(ArrayData):
         returnJsonData = {'err': True, 'errinfo': DicData['errinfo']}
         return json.dumps(returnJsonData, sort_keys=True, indent=4, default=json_util.default)
     else:
-        state_result = insertModel(SqlInfo=SqlInfo['InsertManuleVsimSrc'],DicData=DicData['data'])
+        state_result = insertModel(SqlInfo=SqlInfo['InsertManuleVsimSrc'], DicData=DicData['data'])
         if state_result != '':
             returnJsonData = {'err': True, 'errinfo': state_result}
             return json.dumps(returnJsonData, sort_keys=True, indent=4, default=json_util.default)
@@ -163,14 +166,15 @@ def insertManuleVsimSrc(ArrayData):
             returnJsonData = {'err': False, 'errinfo': state_result}
             return json.dumps(returnJsonData, sort_keys=True, indent=4, default=json_util.default)
 
-def updateManuleVsimSrc(ArrayData):
+
+def updateManuleVsimSrc(array_data):
     """
     数据插入API函数
-    :param ArrayData:
+    :param array_data:
     :return:
     """
     state_result = ''
-    dataFromJS = ArrayData
+    dataFromJS = array_data
 
     # ("此key用于替换insertDataMirr中对应的key，用于后续进行数据库插入key")
     update_database_item = [unicode('imsi'),
