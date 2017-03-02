@@ -333,29 +333,70 @@ function initjqxGrid(initGrid, array){
     return Srcsource;
 }
 
+function newVsimTestInfoTableGetAjaxAPI() {
+    var ar='';
+}
 
+/**
+ *
+ * @type {{alertWinStr: string, gridArray: Array, ID: {DataGetID: (*), countryClass: (*), personClass: (*), newVsimTestInfoJqgridID: (*), modalID: (*), dropDownID: (*), alertModelID: (*)}, setalertWinStr: globeVarNewVsimTestinfo.setalertWinStr, clearGridArrayData: globeVarNewVsimTestinfo.clearGridArrayData}}
+ */
+var globeVarNewVsimTestinfo = {
+    'alertWinStr':'',                                //alert() function use alertWinStr value to show alert
+    'gridArray': [],
+    'ID':{
+        'DataGetID' : $("#newVsimTestInfoDataGet"),
+        'countryClass' : $(".select-country"),
+        'personClass' : $(".select-person"),
+        'newVsimTestInfoJqgridID' : $("#jqxgrid"),
+        'modalID' : $('#newVsimTestInfo-Modal'),
+        'dropDownID' : $("#jqxDropDownList"),
+        'alertModelID': $("#alert-model")
+    },
+    'setalertWinStr': function (strAlert) {
+        this.alertWinStr = strAlert;
+    },
+    'clearGridArrayData': function () {
+        this.gridArray=[];
+    }
+};
 $(function () {
 
     //init select2 model
     //===============================================
-    var $classCountry = $(".select-country");
-    var $classPerson = $(".select-person");
     var initSelectClassList = {
-        country: $classCountry,
-        person: $classPerson
+        country: globeVarNewVsimTestinfo.ID.countryClass,
+        person: globeVarNewVsimTestinfo.ID.personClass
     };
     initSelectView(initSelectClassList);
     //==============================================
     //init jqxgrid
-    var $itemNewVsimTestInfoJqgrid = $("#jqxgrid");
-    var gridArray = [];
-    var JqxGridSource= initjqxGrid($itemNewVsimTestInfoJqgrid,gridArray);
+    var JqxGridSource= initjqxGrid(globeVarNewVsimTestinfo.ID.newVsimTestInfoJqgridID,
+                                   globeVarNewVsimTestinfo.ID.gridArray);
     //===============================================
     //init drop down list for check
-    var $itemDropDown = $("#jqxDropDownList");
-    initDropDownList($itemNewVsimTestInfoJqgrid, $itemDropDown);
+    initDropDownList(globeVarNewVsimTestinfo.ID.newVsimTestInfoJqgridID,
+                     globeVarNewVsimTestinfo.ID.dropDownID);
     //=================================================================
+    globeVarNewVsimTestinfo.ID.DataGetID.click(function () {
+        var ajaxParam ={
+            'gridParam':{
+                'gridArray': globeVarNewVsimTestinfo.gridArray,
+                'gridSource': JqxGridSource
+            },
+            'postData':{
+                country: $("#select2-form-country").val(),
+                person: $("#select2-form-person").val()
+            },
+            'ID':{
+                'gridID': globeVarNewVsimTestinfo.ID.newVsimTestInfoJqgridID,
+                'dataGetID': globeVarNewVsimTestinfo.ID.newVsimTestInfoJqgridID,
+                'warnID': globeVarNewVsimTestinfo.ID.alertModelID
+            }
+        };
 
+
+    })
 
 
 });
