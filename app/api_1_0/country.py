@@ -151,5 +151,3 @@ def get_FlowerQuery():
                       imsi=queryImsi,
                       flower_query_key=aggGroupKey,
                       TimezoneOffset=TimezoneOffset)
-
-
