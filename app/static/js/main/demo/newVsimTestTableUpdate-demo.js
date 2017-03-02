@@ -116,7 +116,6 @@ function DeleteUpdateInsertModal(param){
 
 
 function clickAction(option_click) {
-    alertWinStr = option_click.alert;
     var param = option_click.param;
     var actionFun=DeleteUpdateInsertModal(param);
 }
@@ -147,19 +146,19 @@ function showRequest(formData, jqForm, options) {
     //var formElement = jqForm[0];
     //var conformR=conformRun();
     //alert(conformR);
-    if(!confirm(alertWinStr)){
+    if(!confirm(globeVarNewVsimTest.alertWinStr)){
         //$('#eventWindow').jqxWindow('close');
-        alertWinStr = '';
-        $('#manualModal').modal('hide');
+        globeVarNewVsimTest.set('');
+        globeVarNewVsimTest.ID.modalID.modal('hide');
 
         return false;
     }
     // here we could return false to prevent the form from being submitted;
     // returning anything other than false will allow the form submit to continue
     //$('#manualModal').modal('hide');
-    alertWinStr = '';
-    $("#progress-modal").modal('show');
-    $(".progress-bar").animate({width: "100%"});
+    globeVarNewVsimTest.set('');
+    globeVarNewVsimTest.ID.modal_progressID.modal('show');
+    globeVarNewVsimTest.ID.progress_barClass.animate({width: "100%"});
 
     return true;
 }
@@ -176,8 +175,6 @@ function showResponse(responseText, statusText, xhr, $form)  {
     // if the ajaxSubmit method was passed an Options Object with the dataType
     // property set to 'json' then the first argument to the success callback
     // is the json data object returned by the server
-    var $progressItem = $("#progress-modal");
-    var $manualModal = $('#manualModal');
     var alertClass = '';
     var alertInfo = '';
     if (responseText.err){
@@ -189,8 +186,8 @@ function showResponse(responseText, statusText, xhr, $form)  {
         alertInfo = ('操作成功！');
     }
     appendAlertInfo(alertClass, alertInfo);
-    $progressItem.modal('hide');
-    $manualModal.modal('hide');
+    globeVarNewVsimTest.ID.modal_progressID.modal('hide');
+    globeVarNewVsimTest.ID.modalID.modal('hide');
 
     return false;
 }
@@ -199,20 +196,22 @@ function errResponse(){
     var alertClass = '<div class="alert alert-warning" role="alert">';
     var alertInfo = ("Network Error!");
     appendAlertInfo(alertClass, alertInfo);
-    $("#progress-modal").modal('hide');
-    $('#manualModal').modal('hide');
+    globeVarNewVsimTest.ID.modal_progressID.modal('hide');
+    globeVarNewVsimTest.ID.modalID.modal('hide');
 
     return false;
 }
 
 var globeVarNewVsimTest = {
-    'alertWinStr':'',
+    'alertWinStr':'',                                //alert() function use alertWinStr value to show alert
     'ID':{
         'DeleteID' : $("#Delete"),
         'UpdateID' : $('#Update'),
         'InsertID' : $('#Insert'),
-        'alertID' : $('#alert-model'),
-        'modalID' : $('#newVsimTestInfo-Modal')
+        'alertID' : $('#alert-model'),              //warn bar model use this id to set warn content
+        'modalID' : $('#newVsimTestInfo-Modal'),
+        'modal_progressID' : $("#progress-modal"),
+        'progress_barClass' : $(".progress-bar")
     },
     'set': function (strAlert) {
         this.alertWinStr = strAlert;
@@ -233,8 +232,8 @@ $(function () {
     }
 
     $deleteClick.click(function () {
+        idGloble.set("您确认要进行删除数据操作？数据删除不可恢复！");
         var optionClick={
-            alert: "您确认要进行删除数据操作？数据删除不可恢复！",
             param: {
                 actionType: 'delete',
                 alertID: $alertID,
@@ -250,8 +249,8 @@ $(function () {
         clickAction(optionClick);
     });
     $insertClick.click(function () {
+        idGloble.set("您确认要插入数据吗？禁止插入已有数据！");
         var optionClick={
-            alert: "您确认要插入数据吗？禁止插入已有数据！",
             param: {
                 actionType: 'insert',
                 alertID: $alertID,
@@ -267,8 +266,8 @@ $(function () {
         clickAction(optionClick);
     });
     $updateClick.click(function () {
+        idGloble.set("您确认要更新数据吗？");
         var optionClick={
-            alert: "您确认要更新数据吗？",
             param: {
                 actionType: 'update',
                 alertID: $alertID,
