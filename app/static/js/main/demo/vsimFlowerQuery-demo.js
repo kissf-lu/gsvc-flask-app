@@ -17,6 +17,7 @@ var FlowerQuerySource ={
                     {name: 'time', type: 'date' },
                     {name: 'mcc', type: 'string' },
                     {name: 'plmn', type: 'string' },
+                    {name: 'lac', type: 'string' },
                     {name: 'Flower', type: 'number' }
                 ],
 };
@@ -75,6 +76,7 @@ function FlowerQueryjqxGrid(){
                     filtertype: 'date', hidden: true},
                     { text: 'mcc', datafield: 'mcc', filtertype: "range", width: 100, hidden: true},
                     { text: 'plmn', datafield: 'plmn', filtertype: "range", width: 100, hidden: true},
+                    { text: 'lac', datafield: 'lac', filtertype: "range", width: 100, hidden: true},
                     { text: 'Flower/MB', datafield: 'Flower', width: 300 },
                 ]
     });
@@ -87,6 +89,7 @@ var jqxDropDownList=[
             { label: 'time', value: 'time', checked: false },
             {label: 'plmn', value: 'plmn',checked: false },
             {label: 'mcc', value: 'mcc',checked: false },
+            {label: 'lac', value: 'lac',checked: false },
             {label: 'Flower', value: 'Flower',checked: true }
     ];
 //---------------------------------------------------初始化显示选择函数
@@ -219,11 +222,12 @@ $("#FlowerQueryExcelExport").click(function () {
                  for (var j = 0; j< pagesize; j++){
                      if (i+j< alldatanum){
                          view_data.push({
-                         imsi: rows[i+j].imsi,
-                         time: rows[i+j].time,
-                         mcc: rows[i+j].mcc,
-                         plmn: rows[i+j].plmn,
-                         Flower: rows[i+j].Flower
+                             imsi: rows[i+j].imsi,
+                             time: rows[i+j].time,
+                             mcc: rows[i+j].mcc,
+                             plmn: rows[i+j].plmn,
+                             lac: rows[i+j].lac,
+                             Flower: rows[i+j].Flower
                          })
                      }
 
@@ -610,6 +614,7 @@ $("#FlowerQuery_dataGet").click(function (){
                                            time: item.time,
                                            mcc: item.mcc,
                                            plmn: item.plmn,
+                                           lac: item.lac,
                                            Flower: item.Flower
                                        });
                                 });//each函数完成
@@ -752,6 +757,7 @@ $("#FlowerQuery_dataGet").click(function (){
                                            time: item.time,
                                            mcc: item.mcc,
                                            plmn: item.plmn,
+                                           lac: item.lac,
                                            Flower: item.Flower
                                        });
                                 });//each函数完成

@@ -76,8 +76,6 @@ vsimFlowerQuery_css = Bundle(
 )
 
 vsimFlowerQuery_js = Bundle(
-    # ("--jqwidgest js--")
-    'js/main/plugins/jqwidgets/jqxnotification.js',
     # (--switchery js--)
     'js/main/plugins/switchery/switchery.min.js',
     # ("--daterangepicker js--")

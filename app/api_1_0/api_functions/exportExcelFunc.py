@@ -225,6 +225,7 @@ def get_excelFlowerDataAndSorted(dic_data):
                 unicode('time'),
                 unicode('mcc'),
                 unicode('plmn'),
+                unicode('lac'),
                 unicode('Flower')]
     dateTimeKey = [unicode('time')]
     sorted_list_data = getListExcelData(dic_data=dicData,
