@@ -7,4 +7,5 @@ from . import  (getVsimCardCountryInfo,
                 get140countryFlowerStatics,
                 getCountryProbDic,
                 get_FlowerQueryFunction,
-                exportExcelFunc)
+                exportExcelFunc,
+                newVsimTest)

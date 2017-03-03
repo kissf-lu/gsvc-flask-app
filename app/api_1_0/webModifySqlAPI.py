@@ -45,7 +45,7 @@ def insert_manulVsim():
     if request.method == 'POST':
         arrayData = request.get_array(field_name='file')
 
-        return insertManuleVsimSrc(array_data= arrayData)
+        return insertManuleVsimSrc(array_data=arrayData)
 
     else:
         returnJsonData = {'err': True, 'errinfo': '操作违法！', 'data': []}
@@ -62,7 +62,7 @@ def update_manulVsim():
     if request.method == 'POST':
         arrayData = request.get_array(field_name='file')
 
-        return updateManuleVsimSrc(array_data= arrayData)
+        return updateManuleVsimSrc(array_data=arrayData)
 
     else:
         returnJsonData = {'err': True, 'errinfo': '操作违法！', 'data': []}

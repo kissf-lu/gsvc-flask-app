@@ -76,8 +76,6 @@ vsimFlowerQuery_css = Bundle(
 )
 
 vsimFlowerQuery_js = Bundle(
-    # ("--jqwidgest js--")
-    'js/main/plugins/jqwidgets/jqxnotification.js',
     # (--switchery js--)
     'js/main/plugins/switchery/switchery.min.js',
     # ("--daterangepicker js--")
@@ -204,9 +202,6 @@ new_vsim_test_info_css = Bundle(
     'css/main/plugins/jqxGrid/jqx.base.css',
     # ("--select2 css--")
     'css/main/plugins/selectForm/select2.min.css',
-    # ("-- datepicker css --")
-    'css/main/plugins/datepicker/datepicker3.css',
-    'css/main/plugins/datepicker/daterangepicker.css',
     # ("-- jasny-bootstrap --")
     'css/main/plugins/jasny-bootstrap/jasny-bootstrap.min.css',
     filters='cssmin',
@@ -219,12 +214,6 @@ new_vsim_test_info_js = Bundle(
     'js/main/demo/newVsimTestTableUpdate-demo.js',
     # ("-- 下拉筛选扩展 --")
     'js/main/plugins/select2/select2.min.js',
-    # ("<!-- datepicker js -->")
-    'js/main/plugins/fullcalendar/moment.min.js',
-    # ("<!--datapicker js  -->")
-    'js/main/plugins/daterangepicker/daterangepicker.js',
-    'js/main/plugins/datapicker/bootstrap-datepicker.js',
-    'js/main/plugins/datapicker/bootstrap-datepicker.zh-CN.min.js',
     # ("-- jasny-bootstrap --")
     'js/main/plugins/jasny-bootstrap/jasny-bootstrap.min.js',
     # ("-- jquery form --")
@@ -235,33 +224,7 @@ new_vsim_test_info_js = Bundle(
 
 jqwidgets_globle_js = Bundle(
     # ("--jqwidgets js--")
-    'js/main/plugins/jqwidgets/jqxcore.js',
-    'js/main/plugins/jqwidgets/jqxgrid.js',
-    'js/main/plugins/jqwidgets/jqxdata.js',
-    'js/main/plugins/jqwidgets/jqxdata.export.js',
-    'js/main/plugins/jqwidgets/jqxgrid.export.js',
-    'js/main/plugins/jqwidgets/jqxbuttons.js',
-    'js/main/plugins/jqwidgets/jqxwindow.js',
-    'js/main/plugins/jqwidgets/jqxscrollbar.js',
-    'js/main/plugins/jqwidgets/jqxcheckbox.js',
-    'js/main/plugins/jqwidgets/jqxpanel.js',
-    'js/main/plugins/jqwidgets/jqxloader.js',
-    'js/main/plugins/jqwidgets/globalize.js',
-    'js/main/plugins/jqwidgets/jqxmenu.js',
-    'js/main/plugins/jqwidgets/jqxgrid.selection.js',
-    'js/main/plugins/jqwidgets/jqxgrid.columnsresize.js',
-    'js/main/plugins/jqwidgets/jqxgrid.sort.js',
-    'js/main/plugins/jqwidgets/jqxdropdownlist.js',
-    'js/main/plugins/jqwidgets/jqxgrid.pager.js',
-    'js/main/plugins/jqwidgets/jqxlistbox.js',
-    'js/main/plugins/jqwidgets/jqxgrid.filter.js',
-    'js/main/plugins/jqwidgets/jqxinput.js',
-    'js/main/plugins/jqwidgets/jqxdatetimeinput.js',
-    'js/main/plugins/jqwidgets/jqxcalendar.js',
-    'js/main/plugins/jqwidgets/jqxtoolbar.js',
-    'js/main/plugins/jqwidgets/jqxcombobox.js',
-    'js/main/plugins/jqwidgets/jqxnotification.js',
-    'js/main/plugins/jqwidgets/jqxfileupload.js',
+    'js/main/plugins/jqwidgets/jqx-all.js',
     'js/main/plugins/jqwidgets/localization.zh-CN.js',
     filters='jsmin',
     output='js/gsvc_jqwidgets.js'

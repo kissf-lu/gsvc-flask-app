@@ -86,6 +86,14 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-wrench"></i>
                     </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li align="center"><small><strong>表格显示设置</strong></small></li>
+                        <br/>
+                        <li align="center">
+                            <div id='jqxDropDownList'>
+                            </div>
+                        </li>
+                    </ul>
                     <a class="close-link">
                         <i class="fa fa-times"></i>
                     </a>
@@ -105,16 +113,11 @@
                     </div>
                     <div class="col-sm-4 m-b-xs">
                         <div data-toggle="buttons" class="btn-group">
-                            <button id="SrcVsimDataGet" type="button" class="btn btn-default ">
+                            <button id="SrcVsimDataGet" type="button" class="btn btn-sm btn-primary pull-right m-t-n-xs ">
                                 查询
                                 <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                             </button>
                         </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div id='jqxDropDownList'>
-                        </div>
-                        <!--div id="jqxlistbox"></div-->
                     </div>
                 </div>
                 <div align="center" class="row">
@@ -159,13 +162,20 @@
                 <h5>新架构卡资源表单：</h5>
                 <small>注：本表格用于查询新架构系统卡资源状态表单，表单数据与系统数据库数据实时同步.</small>
                 <div class="ibox-tools">
-
                     <a class="collapse-link">
                         <i class="fa fa-chevron-up"></i>
                     </a>
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-wrench"></i>
                     </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li align="center"><small><strong>表格显示设置</strong></small></li>
+                        <br/>
+                        <li align="center">
+                            <div id='OnSysjqxDropDownList'>
+                            </div>
+                        </li>
+                    </ul>
                     <a class="close-link">
                         <i class="fa fa-times"></i>
                     </a>
@@ -174,13 +184,13 @@
             <div class="ibox-content">
                 <div class="row">
                     <div class="col-sm-5 m-b-xs">
-                        <select class="select-person" name="country" id="onSys-form-country" style="width:120px;">
+                        <select class="select-country" name="country" id="onSys-form-country" style="width:120px;">
                             <option ></option>
                         </select>
                     </div>
                     <div class="col-sm-4 m-b-xs">
                         <div data-toggle="buttons" class="btn-group">
-                            <button id="onSysSrcVsimDataGet" type="button" class="btn btn-default ">
+                            <button id="onSysSrcVsimDataGet" type="button" class="btn btn-primary ">
                                 查询
                                 <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                             </button>
@@ -193,12 +203,6 @@
                                 <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
                             </button>
                         </div>
-                    </div>
-                    <div class="col-sm-3">
-
-                        <div id='OnSysjqxDropDownList'>
-                        </div>
-                        <!--div id="jqxlistbox"></div-->
                     </div>
                 </div>
             </div>

@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block modal %}
-<!-- delete Modal -->
+<!-- set Modal -->
 <div class="modal fade" id="newVsimTestInfo-Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -33,7 +33,7 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!--progress Modal -->
 <div class="modal fade" id="newVsimTestInfo-progress-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -60,7 +60,7 @@
     </div>
 </div>
 {% endblock %}
-
+<!-- title sheet-->
 {% block breadcrumb %}
 <li class="active">
     <a href="#">
@@ -75,7 +75,7 @@
     <div class="col-lg-12">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
-                <h5>新卡测试信息表</h5>
+                <h5>设置面板</h5>
                 <small></small>
                 <div class="ibox-tools">
                     <a class="collapse-link">
@@ -84,6 +84,15 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-wrench"></i>
                     </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><small><strong>表格显示设置</strong></small>
+                        </li>
+                        <br/>
+                        <li>
+                            <div id='jqxDropDownList'>
+                            </div>
+                        </li>
+                    </ul>
                     <a class="close-link">
                         <i class="fa fa-times"></i>
                     </a>
@@ -91,28 +100,27 @@
             </div>
             <div class="ibox-content">
                 <div class="row">
-                    <div class="col-sm-5 m-b-xs">
-                        <select class="select-country" name="country" id="AMZ-form-country" style="width:120px;">
-                            <option ></option>
-                        </select>
-                        &nbsp;&nbsp;
-                        <select class="select-person" name="person" id="AMZ-form-person" style="width:120px;">
-                            <option ></option>
-                        </select>
-                        &nbsp;&nbsp;
-                    </div>
-                    <div class="col-sm-4 m-b-xs">
-                        <div data-toggle="buttons" class="btn-group">
-                            <button id="SrcVsimDataGet" type="button" class="btn btn-default ">
-                                查询
-                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                            </button>
+                    <div class="col-sm-4">
+                        <div class="form-group" id="vsim_test_table_imsi">
+                            <div class="input-group input-daterange" id="datepicker">
+                                <span class="input-group-addon"><strong>imsi</strong></span>
+                                <input type="text" class="input-sm form-control" name="start" id="input-imsi"/>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-3">
-                        <div id='jqxDropDownList'>
-                        </div>
-                        <!--div id="jqxlistbox"></div-->
+                    <div class="col-sm-4">
+                        <select class="select-person" name="person" id="select2-form-person" style="width:120px;">
+                            <option ></option>
+                        </select>
+                        <select class="select-country" name="country" id="select2-form-country" style="width:120px;">
+                            <option ></option>
+                        </select>
+                    </div>
+                    <div align="center" class="col-sm-3">
+                        <button id="newVsimTestInfoDataGet" type="button" class="btn btn-sm btn-primary pull-right m-t-n-xs">
+                            查询
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                        </button>
                     </div>
                 </div>
                 <div align="center" class="row">

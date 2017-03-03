@@ -986,13 +986,11 @@ $("#onSysSrcVsimDataGet").click(function () {
 //------------------------------------------------------------刷新数据button模块--------------------------
 $('#onSysSrcVsimFlash').click(function () {
     $('#OnSysjqxgrid').jqxGrid('updatebounddata');
-
 });
 //------------------------------------------------------------刷新数据button模块--end------------------------
 
 //------------------------------------------------------------3-iniMain函数初始化主模块------------------------------------
 $(function () {
-
     //初始化虚拟机select
     var $classCountry = $(".select-country");
     var $classPerson = $(".select-person");
@@ -1010,8 +1008,6 @@ $(function () {
     initManulDropDownList($itemManulJqgrid, $itemmanualDropDown);
     // init system drop down model
     initonSysDropDownList($itemOnsysJqxgrid, $itemOnsysDropDown);
-    //
-
     //初始虚拟机化表格
     var gridManulArrayData = [];
     var JqxGridManulSrcSource= initjqxGrid($itemManulJqgrid,gridManulArrayData);
@@ -1035,7 +1031,5 @@ $(function () {
 
         return false;
     });
-
     initonSysjqxGrid();
-
 });

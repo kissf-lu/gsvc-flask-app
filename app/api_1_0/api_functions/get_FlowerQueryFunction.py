@@ -150,7 +150,8 @@ def getHoursFlower(imsi,Begintime,Endtime,Mcc,Plmn,FlowerKey):
 
             elif keys == 'mcc':
                 addID = {'mcc': "$mcc"}
-
+            elif keys == 'lac':
+                addID = {'lac': "$lac"}
             else:
                 continue
 
@@ -240,7 +241,8 @@ def getDaysFlower(imsi,Begintime,Endtime,Mcc,Plmn,FlowerKey):
 
             elif keys == 'mcc':
                 addID = {'mcc': "$mcc"}
-
+            elif keys == 'lac':
+                addID = {'lac': "$lac"}
             else:
                 continue
 

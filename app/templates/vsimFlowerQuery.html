@@ -88,7 +88,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                     <div class="row">
                         <div class="col-md-4"  id="vsimFlowerMCC">
@@ -128,6 +127,7 @@
                                     <select data-placeholder="please chose key!" multiple class="chosen-select" style="width:300px;" id="chosenFlowerQueryKey">
                                         <option value="mcc">mcc</option>
                                         <option value="plmn">plmn</option>
+                                        <option value="lac">lac</option>
                                         <option value="time">time</option>
                                     </select>
                                 </div>
@@ -157,6 +157,16 @@
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
                         </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li align="center"><small><strong>表格显示设置</strong></small></li>
+                            <br/>
+                            <li align="center">
+                                <div id='jqxDropDownList'></div>
+                            </li>
+                        </ul>
                         <a class="close-link">
                             <i class="fa fa-times"></i>
                         </a>
@@ -168,7 +178,7 @@
                         </div>
                         <div class="col-sm-4 m-b-xs">
                                 <div data-toggle="buttons" class="btn-group">
-                                     <button id="FlowerQuery_dataGet" type="button" class="btn btn-default ">
+                                     <button id="FlowerQuery_dataGet" type="button" class="btn btn-primary ">
                                          查询
                                          <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                                      </button>
@@ -183,8 +193,7 @@
                                 </div>
                         </div>
                         <div class="col-sm-3">
-                                <div id='jqxDropDownList'>
-                                </div>
+
                                 <!--div id="jqxlistbox"></div-->
                         </div>
                     </div>
