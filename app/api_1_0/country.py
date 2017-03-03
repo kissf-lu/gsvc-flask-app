@@ -14,7 +14,8 @@ from api_functions.getCountrySrcConIndexGrid import qurycountrySrcCon
 from api_functions.getCountryProbDic import getProbFisrtDic
 # Python get Flower Model
 from api_functions.get_FlowerQueryFunction import getFlowers
-
+#
+from api_functions.newVsimTest import get_new_vsim_test_infor
 
 # ("以下为资源页面API接口-------------------------------------------------------------------------------------------------")
 @api.route('/get_srcVsimManulInfor/', methods=['POST'])
@@ -151,3 +152,21 @@ def get_FlowerQuery():
                       imsi=queryImsi,
                       flower_query_key=aggGroupKey,
                       TimezoneOffset=TimezoneOffset)
+
+
+# ("以下为资源页面API接口-------------------------------------------------------------------------------------------------")
+@api.route('/get_newVsimTestInforTable/', methods=['POST'])
+def get_newVsimTestInforTable():
+    """
+    本api为资源页获取手工维护表数据
+    :return:
+    """
+    if request.method == 'POST':
+        Dic_data = request.get_json()
+        imsi = str(Dic_data['imsi'])
+        country = str(Dic_data['country'])
+        person = str(Dic_data['person'])
+
+        return get_new_vsim_test_infor(person, country=country, imsi=imsi)
+
+    return False

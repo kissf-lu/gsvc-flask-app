@@ -333,19 +333,107 @@ function initjqxGrid(initGrid, array){
     return Srcsource;
 }
 
-function newVsimTestInfoTableGetAjaxAPI() {
-    var ar='';
+function newVsimTestInfoTableGetAjaxAPI(option) {
+    var PostData = option.postData;
+    var person = PostData.person;
+    var country = PostData.country;
+    var imsi = PostData.imsi;
+    //clear old warn content.
+    globeVarNewVsimTestinfo.ID.alertModelID.children().detach();
+
+    if (person==''){
+        //
+        alert_func(globeVarNewVsimTestinfo.ID.alertModelID,"请设置测试人!");
+    }else{
+        globeVarNewVsimTestinfo.clearGridArrayData();
+        globeVarNewVsimTestinfo.ID.newVsimTestInfoJqgridID.jqxGrid("clear");
+        globeVarNewVsimTestinfo.ID.newVsimTestInfoJqgridID.jqxGrid('showloadelement');
+        //disable query button before return data
+        globeVarNewVsimTestinfo.ID.DataGetID.attr("disabled", true);
+        // ajax request begin
+        var AjaxManualRequest = $.ajax({
+            type: "POST",
+            //url地址
+            url: $SCRIPT_ROOT + '/api/v1.0/get_newVsimTestInforTable/',
+            //request set
+            contentType: "application/json",
+            //data参数
+            data: JSON.stringify(PostData),
+            //server back data type
+            dataType: "json"
+        })
+            .done(function(data){
+                // clear old data
+                globeVarNewVsimTestinfo.clearGridArrayData();
+                globeVarNewVsimTestinfo.ID.newVsimTestInfoJqgridID.jqxGrid("clear");
+                var getData = data;
+                if (getData.data.length==0){
+                    if (getData.info.err){
+                        //delete old alter
+                        alert_func(globeVarNewVsimTestinfo.ID.alertModelID,("Error："+getData.info.errinfo));
+                    }
+                    else{
+                        alert_func(globeVarNewVsimTestinfo.ID.alertModelID,("无查询结果!"));
+                    }
+                }
+                else{
+                    var GridData = [];                                       //缓存表格数据
+                    $.each( getData.data, function(i, item){
+                        GridData.push({
+                            person_supplier: item.person_supplier,
+                            person_test: item.person_test,
+                            card_info: item.card_info,
+                            vsim_type: item.vsim_type,
+                            country_cn: item.country_cn,
+                            country_iso: item.country_iso,
+                            operator: item.operator,
+                            plmn: item.plmn,
+                            rat: item.rat,
+                            config_change: item.config_change,
+                            imsi: item.imsi,
+                            user_code: item.user_code,
+                            imei: item.imei,
+                            device_type: item.device_type,
+                            success_time: item.success_time,
+                            change_time: item.change_time,
+                            register_operator: item.register_operator,
+                            eplmn: item.eplmn,
+                            register_rat: item.register_rat,
+                            lac: item.lac,
+                            cellid: item.cellid,
+                            service_usability: item.service_usability,
+                            stability_onehour: item.stability_onehour,
+                            agree_mbr: item.agree_mbr,
+                            agree_consistency: item.agree_consistency,
+                            fail_reason: item.fail_reason,
+                            remark: item.remark
+                        });
+                    });//each函数完成
+                    // set the new data
+                    globeVarNewVsimTestinfo.setGridArrayData(GridData);
+                    option.gridParam.gridSource.localdata = GridData;
+                    globeVarNewVsimTestinfo.ID.newVsimTestInfoJqgridID.jqxGrid('updatebounddata');
+                }
+            })
+            .fail(function(jqXHR, status){
+                // clear old data
+                globeVarNewVsimTestinfo.clearGridArrayData();
+                globeVarNewVsimTestinfo.ID.newVsimTestInfoJqgridID.jqxGrid("clear");
+                //
+                alert_func(globeVarNewVsimTestinfo.ID.alertModelID,("Servers False!"));
+            })
+            .always(function() {
+                globeVarNewVsimTestinfo.ID.DataGetID.attr("disabled", false);
+            });
+    }
 }
 
-/**
- *
- * @type {{alertWinStr: string, gridArray: Array, ID: {DataGetID: (*), countryClass: (*), personClass: (*), newVsimTestInfoJqgridID: (*), modalID: (*), dropDownID: (*), alertModelID: (*)}, setalertWinStr: globeVarNewVsimTestinfo.setalertWinStr, clearGridArrayData: globeVarNewVsimTestinfo.clearGridArrayData}}
- */
 var globeVarNewVsimTestinfo = {
     'alertWinStr':'',                                //alert() function use alertWinStr value to show alert
     'gridArray': [],
     'ID':{
         'DataGetID' : $("#newVsimTestInfoDataGet"),
+        'imsiID': $("#input-imsi"),
         'countryClass' : $(".select-country"),
         'personClass' : $(".select-person"),
         'newVsimTestInfoJqgridID' : $("#jqxgrid"),
@@ -358,6 +446,10 @@ var globeVarNewVsimTestinfo = {
     },
     'clearGridArrayData': function () {
         this.gridArray=[];
+    },
+    'setGridArrayData': function (arrayData) {
+
+        this.gridArray=arrayData;
     }
 };
 $(function () {
@@ -381,22 +473,15 @@ $(function () {
     globeVarNewVsimTestinfo.ID.DataGetID.click(function () {
         var ajaxParam ={
             'gridParam':{
-                'gridArray': globeVarNewVsimTestinfo.gridArray,
                 'gridSource': JqxGridSource
             },
             'postData':{
-                country: $("#select2-form-country").val(),
-                person: $("#select2-form-person").val()
-            },
-            'ID':{
-                'gridID': globeVarNewVsimTestinfo.ID.newVsimTestInfoJqgridID,
-                'dataGetID': globeVarNewVsimTestinfo.ID.newVsimTestInfoJqgridID,
-                'warnID': globeVarNewVsimTestinfo.ID.alertModelID
+                imsi: globeVarNewVsimTestinfo.ID.imsiID.val(),
+                country: globeVarNewVsimTestinfo.ID.countryClass.val(),
+                person: globeVarNewVsimTestinfo.ID.personClass.val()
             }
         };
-
-
+        newVsimTestInfoTableGetAjaxAPI(ajaxParam);
     })
-
 
 });
