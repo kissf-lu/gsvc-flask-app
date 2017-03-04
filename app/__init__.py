@@ -18,7 +18,6 @@ from assetsBundle import (
     main_js,
     gsvchome_css,
     gsvchome_js,
-    gsvchome_globle_js,
     vsimFlowerQuery_css,
     vsimFlowerQuery_js,
     probVsimFirstDict_css,
@@ -80,7 +79,7 @@ def create_app(config_name):
     #gsvchome-statics
     assets_env.register("gsvchome_css", gsvchome_css)
     assets_env.register("gsvchome_js", gsvchome_js)
-    assets_env.register("gsvchome_globle_js", gsvchome_globle_js)
+    # assets_env.register("gsvchome_globle_js", gsvchome_globle_js)
     #vsimFlowerQuery-statics
     assets_env.register("vsimFlowerQuery_css", vsimFlowerQuery_css)
     assets_env.register("vsimFlowerQuery_js", vsimFlowerQuery_js)
