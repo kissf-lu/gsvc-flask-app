@@ -10,14 +10,12 @@ login_css = Bundle(
     filters='cssmin',
     output='css/gsvc_login.css'
 )
-
 main_css = Bundle(
     'css/main/animate.css',
     'css/main/style.css',
     filters='cssmin',
     output='css/gsvc_main.css'
 )
-
 main_js = Bundle(
     'js/main/inspinia.js',
     'js/main/plugins/metisMenu/jquery.metisMenu.js',
@@ -25,7 +23,6 @@ main_js = Bundle(
     filters='jsmin',
     output='js/gsvc_main.js'
 )
-
 gsvchome_css = Bundle(
     # ("-- select2 css--")
     'css/main/plugins/selectForm/select2.min.css',
@@ -37,7 +34,6 @@ gsvchome_css = Bundle(
     filters='cssmin',
     output='css/gsvc_gsvchome.css'
 )
-
 gsvchome_js = Bundle(
     'js/main/plugins/Chart/Chart.min.js',
     'js/main/plugins/fullcalendar/moment.min.js',
@@ -52,13 +48,11 @@ gsvchome_js = Bundle(
     filters='jsmin',
     output='js/gsvc_gsvchome.js'
 )
-
 gsvchome_globle_js = Bundle(
     'js/main/plugins/jqwidgets/localization.zh-CN.js',
     filters='jsmin',
     output='js/gsvc_gsvchome_globle.js'
 )
-
 vsimFlowerQuery_css = Bundle(
     'css/main/plugins/switchery/switchery.min.css',
     # ("-- select2 css--")
@@ -74,7 +68,6 @@ vsimFlowerQuery_css = Bundle(
     filters='cssmin',
     output='css/gsvc_vsimFlowerQuery.css'
 )
-
 vsimFlowerQuery_js = Bundle(
     # (--switchery js--)
     'js/main/plugins/switchery/switchery.min.js',
@@ -93,8 +86,6 @@ vsimFlowerQuery_js = Bundle(
     filters='jsmin',
     output='js/gsvc_vsimFlowerQuery.js'
 )
-
-
 probVsimFirstDict_css = Bundle(
     'css/main/plugins/switchery/switchery.min.css',
     # ("-- select2 css--")
@@ -108,8 +99,6 @@ probVsimFirstDict_css = Bundle(
     filters='cssmin',
     output='css/gsvc_probVsimFirstDict.css'
 )
-
-
 probVsimFirstDict_js = Bundle(
     # ("---switchery js--------")
     'js/main/plugins/switchery/switchery.min.js',
@@ -125,8 +114,6 @@ probVsimFirstDict_js = Bundle(
     filters='jsmin',
     output='js/gsvc_probVsimFirstDict.js'
 )
-
-
 vsimmanual_css = Bundle(
     # ("-- jqx css --")
     'css/main/plugins/jqxGrid/jqx.base.css',
@@ -164,7 +151,6 @@ muticountry140_css = Bundle(
     filters='cssmin',
     output='css/gsvc_muticountry140.css'
 )
-
 muticountry140_js = Bundle(
     # ("<!-- datepicker js -->")
     'js/main/plugins/fullcalendar/moment.min.js',
@@ -177,8 +163,6 @@ muticountry140_js = Bundle(
     filters='jsmin',
     output='js/gsvc_muticountry140.js'
 )
-
-
 uploadfiles_css = Bundle(
     # ("-- jqx css --")
     'css/main/plugins/jqxGrid/jqx.base.css',
@@ -196,7 +180,6 @@ uploadfiles_js = Bundle(
     filters='cssmin',
     output='js/gsvc_uploadfiles.js'
 )
-
 new_vsim_test_info_css = Bundle(
     # ("-- jqx css --")
     'css/main/plugins/jqxGrid/jqx.base.css',
@@ -207,7 +190,6 @@ new_vsim_test_info_css = Bundle(
     filters='cssmin',
     output='css/gsvc_new_vsim_test_info.css'
 )
-
 new_vsim_test_info_js = Bundle(
     # ("--vsimmanul-demo js--")
     'js/main/demo/newVsimInfoTable-demo.js',
@@ -221,7 +203,6 @@ new_vsim_test_info_js = Bundle(
     filters='jsmin',
     output='js/gsvc_new_vsim_test_info.js'
 )
-
 jqwidgets_globle_js = Bundle(
     # ("--jqwidgets js--")
     'js/main/plugins/jqwidgets/jqx-all.js',

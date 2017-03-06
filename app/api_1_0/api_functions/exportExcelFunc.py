@@ -22,9 +22,9 @@ def getDictExcelData(array_data):
     :param array_data:
     :return:
     """
-    dicData=[]
-    key_dic=[]
-    errinfo =''
+    dicData = []
+    key_dic = []
+    errinfo = ''
     if ((type(array_data) is list) and (len(array_data) >=2)):
         for i in range(len(array_data)):
             temp_dic = {}
@@ -49,7 +49,7 @@ def getDictExcelData(array_data):
     return returnDictData
 
 
-def getListExcelData(dic_data,sort_key,datetimekey):
+def getListExcelData(dic_data, sort_key, datetimekey):
     """
 
     :param dic_data:
@@ -65,14 +65,14 @@ def getListExcelData(dic_data,sort_key,datetimekey):
     sortKey = sort_key
     temp_null_key = []
 
-    if datetimeKey != []:
+    if datetimeKey:
         for data in dicData:
             for date in datetimeKey:
                 if date in data.keys():
                     if ((data[date] is not None ) and (data[date] != '')):
                         data[date] = str(datetime.strptime(data[date], '%Y-%m-%dT%H:%M:%S.%fZ') + dt.timedelta(hours=8))
     for dic in dicData:
-        temp_key = (dic).keys()
+        temp_key = dic.keys()
         if (len(max_key) < len(temp_key)):
             max_key = temp_key
 
@@ -80,7 +80,7 @@ def getListExcelData(dic_data,sort_key,datetimekey):
         if sortofkey not in max_key:
             temp_null_key.append(sortofkey)
 
-    if (temp_null_key != []) :
+    if temp_null_key:
         for k in temp_null_key:
             sortKey.remove(k)
 
@@ -88,11 +88,11 @@ def getListExcelData(dic_data,sort_key,datetimekey):
         for mk in max_key:
             if sk == mk:
                 sort_max_key.append(sk)
-    #添加标同行
+    # 添加标同行
     sorted_list_data.append(sort_max_key)
 
     for i in range(len(dicData)):
-        #每次清除上次记录
+        # 每次清除上次记录
         temp_one_list = []
         for key in sort_max_key:
             try:
@@ -101,11 +101,10 @@ def getListExcelData(dic_data,sort_key,datetimekey):
                 temp_one_list.append('')
         sorted_list_data.append(temp_one_list)
 
-
     return sorted_list_data
 
 
-def getDayHourListExcelData(dic_data,sort_key,datetimekey):
+def getDayHourListExcelData(dic_data, sort_key, datetimekey):
     """
 
     :param dic_data:
@@ -121,14 +120,14 @@ def getDayHourListExcelData(dic_data,sort_key,datetimekey):
     sortKey = sort_key
     temp_null_key = []
 
-    if datetimeKey != []:
+    if datetimeKey:
         for data in dicData:
             for date in datetimeKey:
                 if date in data.keys():
                     if ((data[date] is not None) and (data[date] != '')) :
                         data[date] = str(datetime.strptime(data[date], '%Y-%m-%d %H')+ dt.timedelta(hours=8))
     for dic in dicData:
-        temp_key = (dic).keys()
+        temp_key = dic.keys()
         if (len(max_key) < len(temp_key)):
             max_key = temp_key
 
@@ -136,7 +135,7 @@ def getDayHourListExcelData(dic_data,sort_key,datetimekey):
         if sortofkey not in max_key:
             temp_null_key.append(sortofkey)
 
-    if (temp_null_key != []) :
+    if temp_null_key:
         for k in temp_null_key:
             sortKey.remove(k)
 
@@ -144,11 +143,11 @@ def getDayHourListExcelData(dic_data,sort_key,datetimekey):
         for mk in max_key:
             if sk == mk:
                 sort_max_key.append(sk)
-    #添加标同行
+    # 添加标同行
     sorted_list_data.append(sort_max_key)
 
     for i in range(len(dicData)):
-        #每次清除上次记录
+        # 每次清除上次记录
         temp_one_list = []
         for key in sort_max_key:
             try:
@@ -156,7 +155,6 @@ def getDayHourListExcelData(dic_data,sort_key,datetimekey):
             except KeyError:
                 temp_one_list.append('')
         sorted_list_data.append(temp_one_list)
-
 
     return sorted_list_data
 
@@ -182,7 +180,7 @@ def get_excelCountrySrcStaticDataAndSorted(dic_data):
                unicode('流量使用率')]
 
     dateTimeKey = [unicode('套餐更新日期')]
-    #print (dicData[0][unicode('套餐更新日期')])
+    # print (dicData[0][unicode('套餐更新日期')])
     sorted_list_data = getDayHourListExcelData(dic_data=dicData,
                                                sort_key=sortKey,
                                                datetimekey=dateTimeKey)
@@ -198,14 +196,15 @@ def get_excel140countryDataAndSorted(dic_data):
     """
     dicData = dic_data
     sortKey = [unicode('imsi'),
-                unicode('国际流量'),
-                unicode('国内流量'),
-                unicode('总计流量'),
-                unicode('国际流量占比'),
-                unicode('套餐类型'),
-                unicode('网络集名'),
-                unicode('ORG'),
-                unicode('state')]
+               unicode('国际流量'),
+               unicode('国内流量'),
+               unicode('总计流量'),
+               unicode('国际流量占比'),
+               unicode('套餐类型'),
+               unicode('网络集名'),
+               unicode('ORG'),
+               unicode('state')]
+
     dateTimeKey = []
     sorted_list_data = getListExcelData(dic_data=dicData,
                                         sort_key=sortKey,
@@ -222,11 +221,12 @@ def get_excelFlowerDataAndSorted(dic_data):
     """
     dicData = dic_data
     sortKey = [unicode('imsi'),
-                unicode('time'),
-                unicode('mcc'),
-                unicode('plmn'),
-                unicode('lac'),
-                unicode('Flower')]
+               unicode('time'),
+               unicode('mcc'),
+               unicode('plmn'),
+               unicode('lac'),
+               unicode('Flower')]
+
     dateTimeKey = [unicode('time')]
     sorted_list_data = getListExcelData(dic_data=dicData,
                                         sort_key=sortKey,
@@ -243,30 +243,30 @@ def get_excelManulInfoDataAndSorted(dic_data):
     """
     dicData = dic_data
     sortKey = [unicode('imsi'),
-                unicode('country_iso'),
-                unicode('country_cn'),
-                unicode('GSVC负责人'),
-                unicode('运营负责人'),
-                unicode('系统'),
-                unicode('state'),
-                unicode('slot_state'),
-                unicode('是否代理商卡'),
-                unicode('是否多国卡'),
-                unicode('卡批次'),
-                unicode('BAM编码'),
-                unicode('卡位'),
-                unicode('operator'),
-                unicode('iccid'),
-                unicode('套餐'),
-                unicode('套餐外付费类型'),
-                unicode('激活日期'),
-                unicode('上次套餐更新日期'),
-                unicode('下次套餐更新日期'),
-                unicode('备注'),
-                unicode('电话号码'),
-                unicode('付费类型'),
-                unicode('apn'),
-                unicode('上架日期')]
+               unicode('country_iso'),
+               unicode('country_cn'),
+               unicode('GSVC负责人'),
+               unicode('运营负责人'),
+               unicode('系统'),
+               unicode('state'),
+               unicode('slot_state'),
+               unicode('是否代理商卡'),
+               unicode('是否多国卡'),
+               unicode('卡批次'),
+               unicode('BAM编码'),
+               unicode('卡位'),
+               unicode('operator'),
+               unicode('iccid'),
+               unicode('套餐'),
+               unicode('套餐外付费类型'),
+               unicode('激活日期'),
+               unicode('上次套餐更新日期'),
+               unicode('下次套餐更新日期'),
+               unicode('备注'),
+               unicode('电话号码'),
+               unicode('付费类型'),
+               unicode('apn'),
+               unicode('上架日期')]
 
     dateTimeKey = [unicode('激活日期'),
                    unicode('上次套餐更新日期'),
@@ -276,7 +276,6 @@ def get_excelManulInfoDataAndSorted(dic_data):
     sorted_list_data = getListExcelData(dic_data=dicData,
                                         sort_key=sortKey,
                                         datetimekey=dateTimeKey)
-
 
     return sorted_list_data
 
@@ -289,38 +288,36 @@ def get_excelOnSysInfoDataAndSorted(dic_data):
     """
     dicData = dic_data
     sortKey = [unicode('imsi'),
-                unicode('country'),
-                unicode('卡分组属性'),
-                unicode('套餐'),
-                unicode('state'),
-                unicode('占用状态'),
-                unicode('卡位状态'),
-                unicode('激活状态'),
-                unicode('认证状态'),
-                unicode('业务状态'),
-                unicode('BAM状态'),
-                unicode('套餐状态'),
-                unicode('激活类型'),
-                unicode('本网可用'),
-                unicode('是否多国卡'),
-                unicode('初始流量MB'),
-                unicode('累计使用流量MB'),
-                unicode('剩余流量MB'),
-                unicode('激活日期'),
-                unicode('上次套餐更新日期'),
-                unicode('下次套餐更新日期'),
-                unicode('iccid'),
-                unicode('BAM编码'),
-                unicode('卡位'),
-                unicode('备注')]
+               unicode('country'),
+               unicode('卡分组属性'),
+               unicode('套餐'),
+               unicode('state'),
+               unicode('占用状态'),
+               unicode('卡位状态'),
+               unicode('激活状态'),
+               unicode('认证状态'),
+               unicode('业务状态'),
+               unicode('BAM状态'),
+               unicode('套餐状态'),
+               unicode('激活类型'),
+               unicode('本网可用'),
+               unicode('是否多国卡'),
+               unicode('初始流量MB'),
+               unicode('累计使用流量MB'),
+               unicode('剩余流量MB'),
+               unicode('激活日期'),
+               unicode('上次套餐更新日期'),
+               unicode('下次套餐更新日期'),
+               unicode('iccid'),
+               unicode('BAM编码'),
+               unicode('卡位'),
+               unicode('备注')]
     dateTimeKey = [unicode('激活日期'),
                    unicode('上次套餐更新日期'),
                    unicode('下次套餐更新日期')]
     sorted_list_data = getListExcelData(dic_data=dicData,
                                         sort_key=sortKey,
                                         datetimekey=dateTimeKey)
-
-
     return sorted_list_data
 
 

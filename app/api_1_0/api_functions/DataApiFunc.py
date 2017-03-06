@@ -7,15 +7,9 @@ from bson import json_util
 from updateSqlPack.insertoneColModle import insertModel
 from updateSqlPack.updateOneColModle import updateModel
 from updateSqlPack.deleteModel import deleteManualModel
+from SqlPack.SqlLinkInfo import DataApiFuncSqlLink as sql
 
-SqlInfo = {
-    "DeleManuleVsimSrc": {"db": "config_DevAmz", "database": "gsvcdatabase", "sheet": "vsim_manual_infor"},
-    "InsertManuleVsimSrc": {
-        "insertDB": {"db": "config_DevAmz", "database": "gsvcdatabase", "sheet": "vsim_manual_infor"},
-        "getUpdateData": {"db": "config_N", "database": "glocalme_css"}
-    },
-    "updateManuleVsimSrc": {"db": "config_DevAmz", "database": "gsvcdatabase", "sheet": "vsim_manual_infor"}
-}
+SqlInfo = sql
 
 
 def confirmExcelTemplateReg(excel_col_name, reg_col_name):
