@@ -15,5 +15,10 @@ DataApiFuncSqlLink = {
 
 get140countryFlowerStatics = {
     "140src": {"db": "config_N", "database": "glocalme_css"},
-    'get140Flower': {'uri': gsvcdbAdmin, 'db': 'gsvcdb', 'collection': mongo_gsvcFlower[2]}
+    'get140Flower': {'uri': gsvcdbAdmin, 'db': 'gsvcdb', 'collection': 'VsimFlowerOf140'}
+}
+getFlowerQueryFunction = {
+    'queryhourFlower': {'uri': gsvcdbAdmin, 'db': 'gsvcdb', 'collection': 'hourChargeFlower'},
+    'querydayFlower': {'uri': gsvcdbAdmin, 'db': 'gsvcdb', 'collection': 'dayChargeFlower'},
+    'src_on_sys': {"db": "config_N", "database": "glocalme_css"}
 }

@@ -2,21 +2,16 @@
 #coding=utf-8
 
 import json
-import sys
 from bson import json_util
-from bson.code import Code
 from SqlPack.SQLModel import qureResultAsJson
 import time
 import pymongo
 import datetime
-#获取连接信息
-from SqlPack.pyMongoModel import (sql_info)
-#Mongo_Model
-from SqlPack.Mongo_Model import (msmongo,
-                                 pygroup)
-#获取新架构卡资源数据库连接信息
-N_sysStr = 'config_N'
-N_Database = 'glocalme_css'
+# 获取连接信息
+from SqlPack.SqlLinkInfo import getFlowerQueryFunction as sql_info
+# 获取新架构卡资源数据库连接信息
+N_sysStr = sql_info['src_on_sys']['db']
+N_Database = sql_info['src_on_sys']['database']
 
 
 def datetime_timestamp(dt):
@@ -60,14 +55,14 @@ def StrTimeTOUnix(dt,format):
     return s
 
 
-def UnixTOStrTime(value,format):
+def UnixTOStrTime(value, format_str):
     """
     :param value:unix时间戳
     :param format:输出时间格式
     :return:返回时间戳
     """
     # 最后再经过strftime函数转换为字符型正常日期格式。
-    dt = time.strftime(format, time.localtime(value))
+    dt = time.strftime(format_str, time.localtime(value))
     return dt
 
 
@@ -79,11 +74,12 @@ def getGMT0StrTime(strTime, offSet):
     :return:
     """
     try:
-        GMT0dateTime = datetime.datetime.strptime(strTime,'%Y-%m-%d %H:%M:%S')-datetime.timedelta(minutes = offSet)
+        GMT0dateTime = datetime.datetime.strptime(strTime, '%Y-%m-%d %H:%M:%S')-datetime.timedelta(minutes=offSet)
     except ValueError:
         GMT0dateTime = datetime.datetime.strptime(strTime, '%Y-%m-%d') - datetime.timedelta(minutes=offSet)
 
-    return  str(GMT0dateTime)
+    return str(GMT0dateTime)
+
 
 def getlistimsi(Data):
     """
@@ -94,15 +90,15 @@ def getlistimsi(Data):
     imsiData = Data
     list_imsi = []
     if type(imsiData) is dict:
-        for data in imsiData :
+        for data in imsiData:
             list_imsi.append(str(data['imsi']))
 
-    elif type(imsiData) is list :
+    elif type(imsiData) is list:
         for data in imsiData :
             list_imsi.append(str(data))
 
-    elif type(imsiData) is str :
-        for data in imsiData.split(',') :
+    elif type(imsiData) is str:
+        for data in imsiData.split(','):
             list_imsi.append(data)
 
     else:
@@ -121,17 +117,20 @@ def getJosonData(sysStr, Database, query_str):
     return jsonResults
 
 
-def getHoursFlower(imsi,Begintime,Endtime,Mcc,Plmn,FlowerKey):
+def getHoursFlower(imsi, Begintime, Endtime, Mcc, Plmn, FlowerKey):
     """
 
-    :param Dicdata:
+    :param imsi:
     :param Begintime:
     :param Endtime:
+    :param Mcc:
+    :param Plmn:
+    :param FlowerKey:
     :return:
     """
     list_imsi = imsi
     returnData = []
-    #查询起始和截止时间
+    # 查询起始和截止时间
     flowerBegintime = Begintime
     flowerEndtime = Endtime
     queryMcc = Mcc
@@ -141,13 +140,11 @@ def getHoursFlower(imsi,Begintime,Endtime,Mcc,Plmn,FlowerKey):
     if groupItem is None:
         keysNULL = 'NULL'
     else:
-        for keys in groupItem :
+        for keys in groupItem:
             if keys == 'plmn':
-                addID = {'plmn':"$plmn"}
-
+                addID = {'plmn': "$plmn"}
             elif keys == 'time':
                 addID = {'time': "$createtime"}
-
             elif keys == 'mcc':
                 addID = {'mcc': "$mcc"}
             elif keys == 'lac':
@@ -157,8 +154,8 @@ def getHoursFlower(imsi,Begintime,Endtime,Mcc,Plmn,FlowerKey):
 
             groupID.update(addID)
 
-    #Match Stages Set---------------------------------------------------
-    #Unix Time Make
+    # Match Stages Set---------------------------------------------------
+    # Unix Time Make
     beginLUnix = (datetime_timestamp(flowerBegintime)) * 1000
     endLUnix = (datetime_timestamp(flowerEndtime)) * 1000
 
@@ -185,43 +182,43 @@ def getHoursFlower(imsi,Begintime,Endtime,Mcc,Plmn,FlowerKey):
     pipeline = [
         {"$match": matchStages
          },
-
         {"$group": {
             "_id": groupID,
-            'Flower': { '$sum':  { '$add': [ "$userFlower","$sysFlower"] }}
+            'Flower': {'$sum': {'$add': ["$userFlower", "$sysFlower"]}}
         }
         }]
-    connection = pymongo.MongoClient(sql_info['getFlower']['queryhourFlower']['uri'])
-    aggeData = list(connection.get_database(sql_info['getFlower']['queryhourFlower']['db']
+    connection = pymongo.MongoClient(sql_info['queryhourFlower']['uri'])
+    aggeData = list(connection.get_database(sql_info['queryhourFlower']['db']
                                             ).get_collection(
-                                            sql_info['getFlower']['queryhourFlower']['collection']).aggregate(pipeline))
+                                            sql_info['queryhourFlower']['collection']).aggregate(pipeline))
 
     for i in range(len(aggeData)):
-        agg_id_temp = aggeData[i].pop('_id')  # {‘_id’:{}}转换成标准json数据
+        agg_id_temp = aggeData[i].pop('_id')                                   # {‘_id’:{}}转换成标准json数据
         aggeData[i].update(agg_id_temp)
-        #流量输出为MB
-        aggeData[i]['Flower'] = round(((aggeData[i]['Flower'])/ 1024/ 1024),2)
+        # 流量输出为MB
+        aggeData[i]['Flower'] = round(((aggeData[i]['Flower'])/1024/1024), 2)
         if groupItem is not None:
             if ('time' in groupItem) and ('time' in aggeData[i]):
-                aggeData[i]['time']  = timestamp_datetime(aggeData[i]['time']/1000)
-
-
+                aggeData[i]['time'] = timestamp_datetime(aggeData[i]['time']/1000)
     connection.close()
 
     return aggeData
 
 
-def getDaysFlower(imsi,Begintime,Endtime,Mcc,Plmn,FlowerKey):
+def getDaysFlower(imsi, Begintime, Endtime, Mcc, Plmn, FlowerKey):
     """
 
-    :param Dicdata:
+    :param imsi:
     :param Begintime:
     :param Endtime:
+    :param Mcc:
+    :param Plmn:
+    :param FlowerKey:
     :return:
     """
     list_imsi = imsi
     returnData = []
-    #查询起始和截止时间
+    # 查询起始和截止时间
     flowerBegintime = Begintime
     flowerEndtime = Endtime
     queryMcc = Mcc
@@ -232,13 +229,12 @@ def getDaysFlower(imsi,Begintime,Endtime,Mcc,Plmn,FlowerKey):
     if groupItem is None:
         keysNULL = 'NULL'
     else:
-        for keys in groupItem :
+        for keys in groupItem:
             if keys == 'plmn':
-                addID = {'plmn':"$plmn"}
+                addID = {'plmn': "$plmn"}
 
             elif keys == 'time':
                 addID = {'time': "$createtime"}
-
             elif keys == 'mcc':
                 addID = {'mcc': "$mcc"}
             elif keys == 'lac':
@@ -248,12 +244,12 @@ def getDaysFlower(imsi,Begintime,Endtime,Mcc,Plmn,FlowerKey):
 
             groupID.update(addID)
 
-    #Match Stages Set---------------------------------------------------
-    #Unix Time Make
+    # Match Stages Set---------------------------------------------------
+    # Unix Time Make
     beginLUnix = (datetime_timestamp(flowerBegintime)) * 1000
     endLUnix = (datetime_timestamp(flowerEndtime)) * 1000
 
-    print (beginLUnix,endLUnix)
+    print (beginLUnix, endLUnix)
 
     if ((queryPlmn != '') and (queryMcc != '')):
         matchStages = {'createtime': {'$gte': beginLUnix, '$lte': endLUnix},
@@ -271,7 +267,6 @@ def getDaysFlower(imsi,Begintime,Endtime,Mcc,Plmn,FlowerKey):
                        'imsi': {'$in': list_imsi},
                        'plmn': queryPlmn
                        }
-
     else:
         matchStages = {'createtime': {'$gte': beginLUnix, '$lte': endLUnix},
                        'imsi': {'$in': list_imsi}
@@ -279,32 +274,30 @@ def getDaysFlower(imsi,Begintime,Endtime,Mcc,Plmn,FlowerKey):
     pipeline = [
         {"$match": matchStages
          },
-
         {"$group": {
             "_id": groupID,
-            'Flower': { '$sum':  { '$add': [ "$userFlower","$sysFlower"] }}
+            'Flower': {'$sum': {'$add': ["$userFlower", "$sysFlower"]}}
         }
         }]
-    connection = pymongo.MongoClient(sql_info['getFlower']['querydayFlower']['uri'])
-    aggeData = list(connection.get_database(sql_info['getFlower']['querydayFlower']['db']
+    connection = pymongo.MongoClient(sql_info['querydayFlower']['uri'])
+    aggeData = list(connection.get_database(sql_info['querydayFlower']['db']
                                             ).get_collection(
-                                            sql_info['getFlower']['querydayFlower']['collection']).aggregate(pipeline))
-
+                                            sql_info['querydayFlower']['collection']).aggregate(pipeline))
     for i in range(len(aggeData)):
         agg_id_temp = aggeData[i].pop('_id')  # {‘_id’:{}}转换成标准json数据
         aggeData[i].update(agg_id_temp)
-        #流量输出为MB
-        aggeData[i]['Flower'] = round(((aggeData[i]['Flower'])/ 1024/ 1024),2)
+        # 流量输出为MB
+        aggeData[i]['Flower'] = round(((aggeData[i]['Flower'])/1024/1024), 2)
         if groupItem is not None:
             if ('time' in groupItem) and ('time' in aggeData[i]):
-                aggeData[i]['time']  = timestamp_datetime(aggeData[i]['time']/1000)
+                aggeData[i]['time'] = timestamp_datetime(aggeData[i]['time']/1000)
 
     connection.close()
 
     return aggeData
 
 
-def getFlowers(querySort,begintime,endtime,mcc,plmn,imsi,flower_query_key,TimezoneOffset):
+def getFlowers(querySort, begintime, endtime, mcc, plmn, imsi, flower_query_key, TimezoneOffset):
     """
 
     :param querySort:
@@ -323,47 +316,38 @@ def getFlowers(querySort,begintime,endtime,mcc,plmn,imsi,flower_query_key,Timezo
     queryMcc = str(mcc)
     queryPlmn = str(plmn)
     queryImsi = getlistimsi(imsi)
-    queryFlowerKey= flower_query_key
+    queryFlowerKey = flower_query_key
     queryTimezoneOffset = int(TimezoneOffset)
-    #部署服务器是时间为GMT0时间
-    queryGMTOBeginTime = getGMT0StrTime(strTime=queryBegintime,
-                                        offSet=queryTimezoneOffset)
-    queryGMTOEndTime = getGMT0StrTime(strTime=queryEndtime,
-                                        offSet=queryTimezoneOffset)
+    # 部署服务器是时间为GMT0时间
+    queryGMTOBeginTime = getGMT0StrTime(strTime=queryBegintime, offSet=queryTimezoneOffset)
+    queryGMTOEndTime = getGMT0StrTime(strTime=queryEndtime, offSet=queryTimezoneOffset)
     errInfo = ''
     DicData = []
-    #print (queryMcc)
-    if ((querysort == '') or
-        (queryImsi == '') or
-        (queryBegintime == '') or
-        (queryEndtime == '')):
-
-        DicResults = {'info': {'err':True,'errinfo':'存在空类型参数'}, 'data': []}
+    if ((querysort == '') or (queryImsi == '') or (queryBegintime == '') or (queryEndtime == '')):
+        DicResults = {'info': {'err': True, 'errinfo': '存在空类型参数'}, 'data': []}
         return json.dumps(DicResults, sort_keys=True, indent=4, default=json_util.default)
-
     else:
         if (querysort == 'hours'):
             try:
-                DicData = getHoursFlower(imsi= queryImsi,
-                                         Begintime= queryBegintime,
-                                         Endtime= queryEndtime,
-                                         Mcc = queryMcc,
-                                         Plmn= queryPlmn,
-                                         FlowerKey= queryFlowerKey)
+                DicData = getHoursFlower(imsi=queryImsi,
+                                         Begintime=queryBegintime,
+                                         Endtime=queryEndtime,
+                                         Mcc=queryMcc,
+                                         Plmn=queryPlmn,
+                                         FlowerKey=queryFlowerKey)
             except ValueError:
-                errInfo = "input Date Time ValueError"  # 'Database Error!'
+                errInfo = "input Date Time ValueError"        # 'Database Error!'
             except pymongo.errors.OperationFailure:
                 errInfo = "DataBase Authentication failed!"
             except pymongo.errors.NetworkTimeout:
                 errInfo = "DataBase Connection Exceeded SocketTimeoutMS!"
             except:
                 errInfo = "Unexpected error"
-
-            if errInfo != '':
+            if errInfo:
                 DicResults = {'info': {'err': True, 'errinfo': errInfo}, 'data': DicData}
                 return json.dumps(DicResults, sort_keys=True, indent=4, default=json_util.default)
             else:
-                if DicData == []:
+                if DicData:
                     DicResults = {'info': {'err': True, 'errinfo': '无查询结果，请重新设置查询参数'}, 'data': DicData}
                     return json.dumps(DicResults, sort_keys=True, indent=4, default=json_util.default)
                 else:
@@ -371,27 +355,25 @@ def getFlowers(querySort,begintime,endtime,mcc,plmn,imsi,flower_query_key,Timezo
                     return json.dumps(DicResults, sort_keys=True, indent=4, default=json_util.default)
         else:
             try:
-                DicData = getDaysFlower(imsi= queryImsi,
-                                        Begintime= queryBegintime,
-                                        Endtime= queryEndtime,
+                DicData = getDaysFlower(imsi=queryImsi,
+                                        Begintime=queryBegintime,
+                                        Endtime=queryEndtime,
                                         Mcc=queryMcc,
-                                        Plmn= queryPlmn,
-                                        FlowerKey= queryFlowerKey)
+                                        Plmn=queryPlmn,
+                                        FlowerKey=queryFlowerKey)
             except ValueError:
-                errInfo = "天维度的短时间日期有问题！"#'Database Error!'
+                errInfo = "天维度的短时间日期有问题！"                     # 'Database Error!'
             except pymongo.errors.OperationFailure:
                 errInfo = "DataBase Authentication failed!"
             except pymongo.errors.NetworkTimeout:
                 errInfo = "DataBase Connection Exceeded SocketTimeoutMS!"
             except:
-                #print (sys.exc_info()[0])
                 errInfo = "Unexpected error"
-
-            if errInfo != '':
+            if errInfo:
                 DicResults = {'info': {'err': True, 'errinfo': errInfo}, 'data': DicData}
                 return json.dumps(DicResults, sort_keys=True, indent=4, default=json_util.default)
             else:
-                if DicData == []:
+                if DicData:
                     DicResults = {'info': {'err': True, 'errinfo': '无查询结果，请重新设置查询参数'}, 'data': DicData}
                     return json.dumps(DicResults, sort_keys=True, indent=4, default=json_util.default)
                 else:
