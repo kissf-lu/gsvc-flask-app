@@ -12,7 +12,6 @@ DataApiFuncSqlLink = {
     },
     "updateManuleVsimSrc": {"db": "config_DevAmz", "database": "devdatabase", "sheet": "vsim_manual_infor"}
 }
-
 get140countryFlowerStatics = {
     "140src": {"db": "config_N", "database": "glocalme_css"},
     'get140Flower': {'uri': gsvcdbAdmin, 'db': 'gsvcdb', 'collection': 'VsimFlowerOf140'}
