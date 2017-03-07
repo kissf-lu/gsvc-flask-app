@@ -8,7 +8,9 @@ import time
 import datetime
 import pymongo
 # from SqlPack.pyMongoModel import (sql_info)
-from SqlPack.SqlLinkInfo import get140countryFlowerStatics as sql_info
+from SqlPack.SqlLinkInfo import get140countryFlowerStatics as SqlInfo
+
+sql_info = SqlInfo
 
 imsiInfo_sysStr = sql_info['140src']['db']
 imsiInfo_Database = sql_info['140src']['database']
@@ -106,7 +108,6 @@ def get_allFlower(beginLUnix, endLUnix, list_imsi):
     :return:
     """
     if not list_imsi:
-        # print ("无all查询imsi")
         return []
     else:
         groupID = {'imsi': "$imsi"}
