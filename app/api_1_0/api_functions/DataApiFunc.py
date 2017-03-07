@@ -206,7 +206,6 @@ def updateManuleVsimSrc(array_data):
                         unicode('卡批次'),
                         unicode('是否代理商卡 0否，1是代理商卡'),
                         unicode('卡的国家属性 0本国卡，1是多国卡')]
-
     dic_data = getDictExcelData(array_data=dataFromJS,
                                 key_database=update_database_item,
                                 key_mirr_database=update_data_mirr)
