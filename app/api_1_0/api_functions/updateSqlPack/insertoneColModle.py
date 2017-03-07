@@ -27,9 +27,9 @@ def cur_file_dir():
 
 
 def getDataFromCsv():
-    reader_Inser=[]
-    dir_root=cur_file_dir()
-    full_dir_file=os.path.join(dir_root,'querydata', 'csvdatahuangliuqing-utf8.csv')
+    reader_Inser = []
+    dir_root = cur_file_dir()
+    full_dir_file = os.path.join(dir_root, 'querydata', 'csvdatahuangliuqing-utf8.csv')
 
     try:
         with open(full_dir_file, 'r') as csvfile:
@@ -46,7 +46,7 @@ def getDataFromCsv():
         return False
 
 
-def get_key_value_str(data,key):
+def get_key_value_str(data, key):
     """
     返回："'a1','a2', ..."类型的字符串 方便 sql in ('')类数据查询
     :param data: 包含key数据的原始数据
@@ -55,23 +55,23 @@ def get_key_value_str(data,key):
     """
     strResult = ""
     for i in range(len(data)):
-        if i!=0:
-            strResult=strResult+"','"+data[i][key]
+        if i != 0:
+            strResult = strResult + "','" + data[i][key]
         else:
-            strResult="".join(data[i][key])
-    return "".join(["'",strResult,"'"])
+            strResult = "".join(data[i][key])
+    return "".join(["'", strResult, "'"])
 
 
-def add_dickey(Json_Result,key_value):
+def add_dickey(Json_Result, key_value):
     """
+    :param Json_Result:
+    :param key_value:
+    :return:
     """
-    hour_day_mouth_add = []
-
     if Json_Result == []:
-        #print('函数传入转换字典为空[]，无转换数据！')
+        # print('函数传入转换字典为空[]，无转换数据！')
         return []
     for i in range(len(Json_Result)):
-        temp_dic = {}
         try:
             Json_Result[i].update(key_value)
         except KeyError as keyerr:
@@ -105,37 +105,37 @@ def fetchUpdateDataFromSys(sql_info,update_imsi):
     :return:
     """
 
-    N_DataStr=("SELECT "
-    "DISTINCT (CAST(a.`imsi` AS CHAR)) AS 'imsi' "
-    ",a.`iccid` AS 'iccid' "
-    ",a.`iso2` AS 'country_iso' "
-    ",GROUP_CONCAT(DISTINCT b.`package_type_name` SEPARATOR ';') AS 'package_type' "
-    ",b.`activate_time` AS 'activated_time' "
-    ",b.`last_update_time` AS 'last_update_time' "
-    ",b.`next_update_time` AS 'next_update_time' "
-    ",a.`msisdn` AS 'phone_num' "
-    ",a.`rat` AS 'rat' "
-    ",a.`pay_type` AS 'pay_type' "
-    ",a.`apn_g2` AS 'apn' "
-    ",a.`create_time` AS 'shelved_time' "
-    ",a.`bam_id` AS 'bam_code' "
-    ",a.`slot_no` AS 'slot_num' "
-    ",a.`available_status` AS 'state' "
-"FROM  `t_css_vsim` AS a  "
-"LEFT  JOIN `t_css_vsim_packages` b "
-"	ON a.`imsi`=b.`imsi` "
-"WHERE "
-    "a.`slot_status`='0' AND "
-    "a.`bam_status`='0' AND "
-    "a.`imsi` IN  " +"("+update_imsi+")"
-"GROUP BY (CAST(a.`imsi` AS CHAR)) ")
+    N_DataStr=(
+        "SELECT "
+        "DISTINCT (CAST(a.`imsi` AS CHAR)) AS 'imsi' "
+        ",a.`iccid` AS 'iccid' "
+        ",a.`iso2` AS 'country_iso' "
+        ",GROUP_CONCAT(DISTINCT b.`package_type_name` SEPARATOR ';') AS 'package_type' "
+        ",b.`activate_time` AS 'activated_time' "
+        ",b.`last_update_time` AS 'last_update_time' "
+        ",b.`next_update_time` AS 'next_update_time' "
+        ",a.`msisdn` AS 'phone_num' "
+        ",a.`rat` AS 'rat' "
+        ",a.`pay_type` AS 'pay_type' "
+        ",a.`apn_g2` AS 'apn' "
+        ",a.`create_time` AS 'shelved_time' "
+        ",a.`bam_id` AS 'bam_code' "
+        ",a.`slot_no` AS 'slot_num' "
+        ",a.`available_status` AS 'state' "
+        "FROM  `t_css_vsim` AS a  "
+        "LEFT  JOIN `t_css_vsim_packages` b "
+        "	ON a.`imsi`=b.`imsi` "
+        "WHERE "
+        "a.`slot_status`='0' AND "
+        "a.`bam_status`='0' AND "
+        "a.`imsi` IN  " + "(" + update_imsi + ")"
+        "GROUP BY (CAST(a.`imsi` AS CHAR)) "
+    )
     N_Data=qureResultAsJson(sysStr=sql_info['getUpdateData']['db'],
                             Database=sql_info['getUpdateData']['database'],
                             query_str=N_DataStr,
                             where=[])
-
-
-    if (N_Data!=[]):
+    if N_Data:
         N_returnData = add_dickey(Json_Result=N_Data, key_value={'bu_group': 'N'})
         update_data=[]
         update_data.extend(N_returnData)
@@ -196,20 +196,20 @@ def insertStrMake(databaseTable,insertData):
         value = []
 
         for j in range(len(dicList)):
-            if (j==len(dicList)-1):
-                Columtemp = dicList[j]+" "
-                Valuetemp = "%(" + dicList[j] +")s "
+            if (j==len(dicList) - 1):
+                Columtemp = dicList[j] + " "
+                Valuetemp = "%(" + dicList[j] + ")s "
             else:
                 Columtemp = dicList[j]+", "
-                Valuetemp = "%(" + dicList[j] +")s, "
-
-            insertColumStr=insertColumStr + Columtemp
-            insertValueStr=insertValueStr + Valuetemp
-        insertColumStr="(" + index + ", " + insertColumStr + ") "
-        insertValueStr="VALUES(%(" + index+ ")s, " + insertValueStr + ") "
+                Valuetemp = "%(" + dicList[j] + ")s, "
+            insertColumStr = insertColumStr + Columtemp
+            insertValueStr = insertValueStr + Valuetemp
+        insertColumStr = "(" + index + ", " + insertColumStr + ") "
+        insertValueStr = "VALUES(%(" + index + ")s, " + insertValueStr + ") "
         insertStr = (insertHeadStr + insertColumStr + insertValueStr)
         insertStrInfo = {"err": False, "errInfo": "", "insertStr": insertStr}
         return insertStrInfo
+
 
 def insertOneColModel(sql_info, insertData):
     """
@@ -225,7 +225,7 @@ def insertOneColModel(sql_info, insertData):
         # --------------------------------------制作mysql更新语句----------------------------------------------
         for i in range(len(insertData)):
             insertAction = insertStrMake(sql_info['insertDB']['sheet'], insertData[i])
-            if insertAction["err"] :
+            if insertAction["err"]:
                 cursor.close()
                 cnx.close()
                 errInfo = insertAction["errInfo"]
@@ -244,7 +244,7 @@ def insertOneColModel(sql_info, insertData):
     return errInfo
 
 
-def insertModel(SqlInfo,DicData):
+def insertModel(SqlInfo, DicData):
     """
 
     :param SqlInfo:
@@ -270,7 +270,6 @@ def insertModel(SqlInfo,DicData):
                 inertActionInfo = "新架构平台无卡信息数据！"
                 return inertActionInfo
         except KeyError:
-
             inertActionInfo = "Erro:1001-Sql Config Dict Key Param Set Error!"
             return inertActionInfo
     else:
