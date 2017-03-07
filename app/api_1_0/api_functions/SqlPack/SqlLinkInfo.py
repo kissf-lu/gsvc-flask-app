@@ -22,3 +22,7 @@ getFlowerQueryFunction = {
     'querydayFlower': {'uri': gsvcdbAdmin, 'db': 'gsvcdb', 'collection': 'dayChargeFlower'},
     'src_on_sys': {"db": "config_N", "database": "glocalme_css"}
 }
+getonSysSrc = {
+    'getVsimManulInfor': {"db": "config_amzami", "database": "gsvcdatabase"},
+    'qureyNVsim': {"db": "config_N", "database": "glocalme_css"}
+}
