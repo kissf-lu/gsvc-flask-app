@@ -1,24 +1,30 @@
 # -*- coding: utf-8 -*-
 
 
+"""=========================================================================
+本接口函数为手工维护表批量更新、导入、删除资源API接口，以下为对应的三个接口函数：
+deleManuleVsimSrc，insertManuleVsimSrc，updateManuleVsimSrc
+============================================================================
+@author: lujian
+============================================================================"""
 # import mysql.connector
 import json
 from bson import json_util
 from updateSqlPack.insertoneColModle import insertModel
 from updateSqlPack.updateOneColModle import updateModel
 from updateSqlPack.deleteModel import deleteManualModel
-from SqlPack.SqlLinkInfo import DataApiFuncSqlLink as sql
+from SqlPack.SqlLinkInfo import DataApiFuncSqlLink as Sql
 
-SqlInfo = sql
+SqlInfo = Sql
 
 
 def confirmExcelTemplateReg(excel_col_name, reg_col_name):
-    """
-
+    """===================================
+    本函数为内部调用函数，确认批量模板是否正确。
     :param excel_col_name:
     :param reg_col_name:
     :return:
-    """
+    ======================================"""
     ColBase = reg_col_name
     ColConfirm = excel_col_name
     confirmRS = True
@@ -40,13 +46,14 @@ def confirmExcelTemplateReg(excel_col_name, reg_col_name):
 
 
 def getDictExcelData(array_data, key_database, key_mirr_database):
-    """
-
-    :param array_data:
-    :param key_database:
-    :param key_mirr_database:
+    """==========================================================
+    本函数将前端传入的array_data数据和对应的key_database
+    :param array_data: 待处理前端数据
+    :param key_database: 与数据库的列表相同，用于替换前端中文标头值
+    :param key_mirr_database: 与前端表头相同的中文列表
+    =============================================================
     :return:
-    """
+    =================================================================="""
     dicData = []
     key_dic = key_database
     key_mirr = key_mirr_database
@@ -56,6 +63,7 @@ def getDictExcelData(array_data, key_database, key_mirr_database):
             temp_dic = {}
             if i == 0:
                 excelCloName = array_data[0]
+                # 根据excelCloName和key_mirr判断模板是否正确
                 ifConfirm = confirmExcelTemplateReg(excel_col_name=excelCloName, reg_col_name=key_mirr)
                 if not ifConfirm:
                     errinfo = "模板非法！核实模板是否正确！"
@@ -72,7 +80,7 @@ def getDictExcelData(array_data, key_database, key_mirr_database):
 
     else:
         errinfo = '导入数据不合法！请核实模板数据。'
-    if errinfo != '':
+    if errinfo:
         returnDictData = {'err': True, 'errinfo': errinfo, 'data': []}
     else:
         returnDictData = {'err': False, 'errinfo': errinfo, 'data': dicData}
@@ -81,12 +89,11 @@ def getDictExcelData(array_data, key_database, key_mirr_database):
 
 
 def deleManuleVsimSrc(array_data):
-    """
-    数据删除API函数，country调用
+    """=============================
+    数据删除API函数
     :param array_data:
     :return:
-    """
-    state_result = ''
+    ================================"""
     dataFromJS = array_data
     deleteDatabaseItem = [unicode('imsi')]
     deleteDataMirr = [unicode('imsi')]
@@ -108,12 +115,12 @@ def deleManuleVsimSrc(array_data):
 
 
 def insertManuleVsimSrc(array_data):
-    """
+    """============================
     数据插入API函数
     :param array_data:
     :return:
-    """
-    state_result = ''
+    ==============================="""
+    # state_result = ''
     dataFromJS = array_data
     # 此key用于替换insertDataMirr中对应的key，用于后续进行数据库插入key
     insertDatabaseItem = [unicode('imsi'),
@@ -162,14 +169,13 @@ def insertManuleVsimSrc(array_data):
 
 
 def updateManuleVsimSrc(array_data):
-    """
-    数据插入API函数
+    """==================================
+    数据更新API函数
     :param array_data:
     :return:
-    """
-    state_result = ''
+    ======================================"""
+    # state_result = ''
     dataFromJS = array_data
-
     # ("此key用于替换insertDataMirr中对应的key，用于后续进行数据库插入key")
     update_database_item = [unicode('imsi'),
                             unicode('person_gsvc'),
@@ -185,7 +191,6 @@ def updateManuleVsimSrc(array_data):
                             unicode('vsim_batch_num'),
                             unicode('owner_attr'),
                             unicode('country_attr')]
-
     # ("此key为核实前端表格表头是否符合实际模板要求：列数相同、顺序相同")
     update_data_mirr = [unicode('imsi'),
                         unicode('负责人'),
@@ -211,7 +216,7 @@ def updateManuleVsimSrc(array_data):
         return json.dumps(return_json_data, sort_keys=True, indent=4, default=json_util.default)
     else:
         state_result = updateModel(SqlInfo=SqlInfo['updateManuleVsimSrc'], DicData=dic_data['data'])
-        if state_result != '':
+        if state_result:
             return_json_data = {'err': True, 'errinfo': state_result}
             return json.dumps(return_json_data, sort_keys=True, indent=4, default=json_util.default)
         else:
