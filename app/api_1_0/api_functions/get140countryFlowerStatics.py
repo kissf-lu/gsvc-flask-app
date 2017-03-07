@@ -105,8 +105,8 @@ def get_allFlower(beginLUnix, endLUnix, list_imsi):
     :param list_imsi:
     :return:
     """
-    if list_imsi:
-        print ("无all查询imsi")
+    if not list_imsi:
+        # print ("无all查询imsi")
         return []
     else:
         groupID = {'imsi': "$imsi"}
@@ -147,7 +147,7 @@ def get_USFlower(beginLUnix, endLUnix, list_imsi):
     :param list_imsi:
     :return:
     """
-    if list_imsi:
+    if not list_imsi:
         return []
     else:
         groupID = {'imsi': "$imsi"}
@@ -171,7 +171,7 @@ def get_USFlower(beginLUnix, endLUnix, list_imsi):
             sql_info['get140Flower']['collection']
             ).aggregate(pipeline))
         for i in range(len(aggeData)):
-            agg_id_temp = aggeData[i].pop('_id')  # {‘_id’:{}}转换成标准json数据
+            agg_id_temp = aggeData[i].pop('_id')                      # {‘_id’:{}}转换成标准json数据
             aggeData[i].update(agg_id_temp)
             # 流量输出为MB
             aggeData[i]['internalflower'] = round(((aggeData[i]['internalflower']) / 1024 / 1024), 2)
@@ -189,7 +189,7 @@ def get_NotUSFlower(beginLUnix, endLUnix, list_imsi):
     :param list_imsi:
     :return:
     """
-    if list_imsi:
+    if not list_imsi:
         return []
     else:
         groupID = {'imsi': "$imsi"}
@@ -316,7 +316,7 @@ def qury140countryFlowerStatics(begintime, endtime, TimezoneOffset):
     FlowerData = []
     errInfoSrc = ''
     errInfoFlower = ''
-    if ((begindate) or (enddate)):
+    if (not begindate) or (not enddate):
         DicResults = {'info': {'err': True, 'errinfo': '时间参数异常！'}, 'data': []}
         return json.dumps(DicResults, sort_keys=True, indent=4, default=json_util.default)
     else:
@@ -327,13 +327,13 @@ def qury140countryFlowerStatics(begintime, endtime, TimezoneOffset):
         if errInfoSrc:
             DicResults = {'info': {'err': True, 'errinfo': errInfoSrc}, 'data': []}
             return json.dumps(DicResults, sort_keys=True, indent=4, default=json_util.default)
-        elif Info140Country:
+        elif not Info140Country:
             errInfoSrc = '系统无套餐名包含140国卡的信息！'
             DicResults = {'info': {'err': True, 'errinfo': errInfoSrc}, 'data': []}
             return json.dumps(DicResults, sort_keys=True, indent=4, default=json_util.default)
         else:
             try:
-                FlowerData = get_140countryFlower(startDate=begindate,      # queryGMTOBeginTime,
+                FlowerData = get_140countryFlower(startDate=begindate,       # queryGMTOBeginTime,
                                                   stopDate=enddate,          # queryGMTOEndTime,
                                                   data=Info140Country)
             except ValueError:
@@ -348,7 +348,7 @@ def qury140countryFlowerStatics(begintime, endtime, TimezoneOffset):
             if errInfoFlower:
                 DicResults = {'info': {'err': True, 'errinfo': errInfoFlower}, 'data': []}
                 return json.dumps(DicResults, sort_keys=True, indent=4, default=json_util.default)
-            elif FlowerData:
+            elif not FlowerData:
                 errInfoFlower = '无指定时间范围内140国卡流量使用记录！'
                 DicResults = {'info': {'err': True, 'errinfo': errInfoFlower}, 'data': []}
                 return json.dumps(DicResults, sort_keys=True, indent=4, default=json_util.default)
