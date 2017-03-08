@@ -63,11 +63,12 @@ function DeleteUpdateInsertModal(param){
     //$("#progressAjax").jqxLoader({ text: "提交更新数据中...", width: 100, height: 60 });
     var actionParam = param;
     //remove alert old
-    param.alertID.children().remove();
+    actionParam.alertID.children().remove();
     //append html of modal
-    var appendHtlm = appendManulForm(actionParam.modalTitleID, actionParam.modalBodyID, actionParam.modalHeadTitle, actionParam.getTempleTitle);
+    var appendHtlm = appendManulForm(actionParam.modalTitleID, actionParam.modalBodyID,
+                                     actionParam.modalHeadTitle, actionParam.getTempleTitle);
     // show modal
-    param.modalID.modal();
+    actionParam.modalID.modal();
     //set options of form that you will submit files to server GSVC
     var options = {
         beforeSubmit:  showRequest,  // pre-submit callback
@@ -230,7 +231,6 @@ $(function () {
     }else {
         alert('Param globeVarNewVsimTest False!');
     }
-
     $deleteClick.click(function () {
         idGloble.set("您确认要进行删除数据操作？数据删除不可恢复！");
         var optionClick={
@@ -243,7 +243,7 @@ $(function () {
                 modalHeadTitle: '批量删除设置窗口',
                 getTempleTitle: '获取批量删除模板',
                 postURL: $SCRIPT_ROOT + "#",
-                TemplateURL: $SCRIPT_ROOT +"#"
+                TemplateURL: $SCRIPT_ROOT +"/api/v1.0/export_newVsimTestInfoDeleteTemplate/"
             }
         };
         clickAction(optionClick);
@@ -260,7 +260,7 @@ $(function () {
                 modalHeadTitle: '批量导入设置窗口',
                 getTempleTitle: '获取批量导入模板',
                 postURL: $SCRIPT_ROOT + "#",
-                TemplateURL: $SCRIPT_ROOT +"#"
+                TemplateURL: $SCRIPT_ROOT +"/api/v1.0/export_newVsimTestInfoInsertUpdateTemplate/"
             }
         };
         clickAction(optionClick);
@@ -277,11 +277,9 @@ $(function () {
                 modalHeadTitle: '批量更新设置窗口',
                 getTempleTitle: '获取批量更新模板',
                 postURL: $SCRIPT_ROOT + "#",
-                TemplateURL: $SCRIPT_ROOT +"#"
+                TemplateURL: $SCRIPT_ROOT +"/api/v1.0/export_newVsimTestInfoInsertUpdateTemplate/"
             }
         };
         clickAction(optionClick);
     });
-
-
 });

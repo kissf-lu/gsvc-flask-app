@@ -25,24 +25,24 @@ def getDictExcelData(array_data):
     dicData = []
     key_dic = []
     errinfo = ''
-    if ((type(array_data) is list) and (len(array_data) >=2)):
+    if (type(array_data) is list) and (len(array_data) >= 2):
         for i in range(len(array_data)):
             temp_dic = {}
-            if (i==0):
+            if i == 0:
                 key_dic = array_data[0]
             else:
                 for j in range(len(key_dic)):
                     try:
                         temp_dic.update({key_dic[j]: array_data[i][j]})
 
-                    except IndexError :
+                    except IndexError:
                         errinfo = 'Index Error'
                 dicData.append(temp_dic)
 
     else:
         errinfo = 'Data Error'
-    if errinfo !='':
-        returnDictData = {'err': True, 'errinfo': errinfo, 'data':[]}
+    if errinfo:
+        returnDictData = {'err': True, 'errinfo': errinfo, 'data': []}
     else:
         returnDictData = {'err': False, 'errinfo': errinfo, 'data': dicData}
 
@@ -69,11 +69,11 @@ def getListExcelData(dic_data, sort_key, datetimekey):
         for data in dicData:
             for date in datetimeKey:
                 if date in data.keys():
-                    if ((data[date] is not None ) and (data[date] != '')):
+                    if (data[date] is not None) and (data[date] != ''):
                         data[date] = str(datetime.strptime(data[date], '%Y-%m-%dT%H:%M:%S.%fZ') + dt.timedelta(hours=8))
     for dic in dicData:
         temp_key = dic.keys()
-        if (len(max_key) < len(temp_key)):
+        if len(max_key) < len(temp_key):
             max_key = temp_key
 
     for sortofkey in sortKey:
@@ -124,11 +124,11 @@ def getDayHourListExcelData(dic_data, sort_key, datetimekey):
         for data in dicData:
             for date in datetimeKey:
                 if date in data.keys():
-                    if ((data[date] is not None) and (data[date] != '')) :
-                        data[date] = str(datetime.strptime(data[date], '%Y-%m-%d %H')+ dt.timedelta(hours=8))
+                    if (data[date] is not None) and (data[date] != ''):
+                        data[date] = str(datetime.strptime(data[date], '%Y-%m-%d %H') + dt.timedelta(hours=8))
     for dic in dicData:
         temp_key = dic.keys()
-        if (len(max_key) < len(temp_key)):
+        if len(max_key) < len(temp_key):
             max_key = temp_key
 
     for sortofkey in sortKey:
@@ -384,6 +384,66 @@ def get_excelManualInsertTemple(dic_data):
                unicode('是否代理商卡 0否，1是代理商卡'),
                unicode('卡的国家属性 0本国卡，1是多国卡')]
 
+    dateTimeKey = []
+    sorted_list_data = getListExcelData(dic_data=dicData,
+                                        sort_key=sortKey,
+                                        datetimekey=dateTimeKey)
+
+    return sorted_list_data
+
+
+def get_excelNewVsimTestInfoDeleteTemple(dic_data):
+    """
+
+    :param dic_data:
+    :return:
+    """
+    dicData = dic_data
+    sortKey = [unicode('id_newvsimtest')]
+    dateTimeKey = []
+    sorted_list_data = getListExcelData(dic_data=dicData,
+                                        sort_key=sortKey,
+                                        datetimekey=dateTimeKey)
+
+    return sorted_list_data
+
+
+def get_excelNewVsimTestInfoInsertUpdateTemple(dic_data):
+    """
+
+    :param dic_data:
+    :return:
+    """
+    dicData = dic_data
+    sortKey = [unicode("测试id"),
+               unicode("卡提供人"),
+               unicode("测试人"),
+               unicode("测试卡信息"),
+               unicode("本国/多国(0本国, 1多国)"),
+               unicode("国家"),
+               unicode("简称"),
+               unicode("运营商"),
+               unicode("plmn"),
+               unicode("网络制式"),
+               unicode("配置更改"),
+               unicode("imsi"),
+               unicode("账户"),
+               unicode("imei"),
+               unicode("设备类型"),
+               unicode("调卡成功时间"),
+               unicode("换卡时间"),
+               unicode("注册运营商"),
+               unicode("eplmn"),
+               unicode("注册网络"),
+               unicode("lac"),
+               unicode("cellid"),
+               unicode("基本可用性(0 否, 1是)"),
+               unicode("1小时稳定性(0 否, 1是)"),
+               unicode("协商速率"),
+               unicode("协商速率一致性(0 否, 1是)"),
+               unicode("失败原因"),
+               unicode("备注")
+               ]
     dateTimeKey = []
     sorted_list_data = getListExcelData(dic_data=dicData,
                                         sort_key=sortKey,

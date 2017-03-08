@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 
 
-"""=========================================================================
-本接口函数为手工维护表批量更新、导入、删除资源API接口，以下为对应的三个接口函数：
+"""======================================================
+本模块为批量修改数据库信息接口函数，设计mysql,mongo等数据库:
+==========================================================
+1、手工维护表批量更新、导入、删除资源API接口，以下为对应的三个接口函数：
 deleManuleVsimSrc，insertManuleVsimSrc，updateManuleVsimSrc
-============================================================================
+2、新卡测试接口：
+
+===================================================================
 @author: lujian
 ============================================================================"""
 # import mysql.connector
@@ -222,3 +226,29 @@ def updateManuleVsimSrc(array_data):
         else:
             return_json_data = {'err': False, 'errinfo': state_result}
             return json.dumps(return_json_data, sort_keys=True, indent=4, default=json_util.default)
+
+
+def deleNewVsimTestInfoSrc(array_data):
+    """=============================
+    数据删除API函数
+    :param array_data:
+    :return:
+    ================================"""
+    dataFromJS = array_data
+    deleteDatabaseItem = [unicode('id_newvsimtest')]
+    deleteDataMirr = [unicode('id_newvsimtest')]
+    DicData = getDictExcelData(array_data=dataFromJS,
+                               key_database=deleteDatabaseItem,
+                               key_mirr_database=deleteDataMirr)
+    if DicData['err']:
+        returnJsonData = {'err': True, 'errinfo': DicData['errinfo']}
+        return json.dumps(returnJsonData, sort_keys=True, indent=4, default=json_util.default)
+    else:
+        state_result = deleteManualModel(SqlInfo=SqlInfo['DeleManuleVsimSrc'],
+                                         arrayDicData=DicData['data'])
+        if state_result != '':
+            returnJsonData = {'err': True, 'errinfo': state_result}
+            return json.dumps(returnJsonData, sort_keys=True, indent=4, default=json_util.default)
+        else:
+            returnJsonData = {'err': False, 'errinfo': state_result}
+            return json.dumps(returnJsonData, sort_keys=True, indent=4, default=json_util.default)

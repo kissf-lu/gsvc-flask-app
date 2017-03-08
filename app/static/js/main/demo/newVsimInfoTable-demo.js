@@ -133,6 +133,7 @@ var buildFilterPanel = function (filterPanel, datafield,filterGrid,SrcAdapter) {
 function initDropDownList(item_related_grid, item_jqx_drop_down){
     // Create a jqxDropDownList
     var jqxDropDownList=[
+        {label: '测试id', value: 'id_newvsimtest', checked: true },
         {label: '卡提供人', value: 'person_supplier', checked: true },
         {label: '测试人', value: 'person_test', checked: true },
         {label: '测试卡信息', value: 'card_info', checked: true },
@@ -216,6 +217,7 @@ function initjqxGrid(initGrid, array){
         localdata: array,
         datatype: "json",
         datafields: [
+            { name: 'id_newvsimtest', type: 'string'},
             { name: 'person_supplier', type: 'string'},
             { name: 'person_test', type: 'string'},
             { name: 'card_info', type: 'string'},
@@ -291,6 +293,7 @@ function initjqxGrid(initGrid, array){
                     return "<div style='margin:4px;'>" + (value + 1) + "</div>";
                 }
             },
+            { text: '测试id', datafield: 'id_newvsimtest' , width: 100},
             { text: '卡提供人', datafield: 'person_supplier' , filtertype: 'checkedlist', width: 80},
             { text: '测试人', datafield: 'person_test', filtertype: 'checkedlist', width: 80},
             { text: '测试卡信息', datafield: 'card_info', filtertype: 'checkedlist', width: 200 },
@@ -298,7 +301,7 @@ function initjqxGrid(initGrid, array){
             { text: '国家', datafield: 'country_cn', filtertype: 'checkedlist', width: 80 },
             { text: '简称', datafield: 'country_iso', filtertype: 'checkedlist', width: 80 },
             { text: '运营商', datafield: 'operator', filtertype: 'checkedlist', width: 80 },
-            { text: 'PLMN', datafield: 'plmn', filtertype: 'checkedlist', width: 80 },
+            { text: 'plmn', datafield: 'plmn', filtertype: 'checkedlist', width: 80 },
             { text: '网络制式', datafield: 'rat', filtertype: 'checkedlist', width: 80 },
             { text: '配置更改', datafield: 'config_change', filtertype: 'checkedlist', width: 150},
             { text: 'imsi', datafield: 'imsi' , width: 150,
@@ -308,7 +311,7 @@ function initjqxGrid(initGrid, array){
                 }
             },
             { text: '账户', datafield: 'user_code', filtertype: 'checkedlist', width: 200},
-            { text: 'IMEI', datafield: 'imei' , width: 150,
+            { text: 'imei', datafield: 'imei' , width: 150,
                 filtertype: "custom",
                 createfilterpanel: function (datafield, filterPanel) {
                     buildFilterPanel(filterPanel, datafield, $jqGridItem,SrcAdapter);
@@ -318,10 +321,10 @@ function initjqxGrid(initGrid, array){
             { text: '调卡成功时间', datafield: 'success_time', filtertype: 'date', cellsformat: 'yyyy-MM-dd HH:mm:ss', width: 170 },
             { text: '换卡时间', datafield: 'change_time', filtertype: 'date', cellsformat: 'yyyy-MM-dd HH:mm:ss', width: 170 },
             { text: '注册运营商', datafield: 'register_operator', filtertype: 'checkedlist', width: 80 },
-            { text: 'EPLMN', datafield: 'eplmn', filtertype: 'checkedlist', width: 80 },
+            { text: 'eplmn', datafield: 'eplmn', filtertype: 'checkedlist', width: 80 },
             { text: '注册网络', datafield: 'register_rat', filtertype: 'checkedlist', width: 80 },
-            { text: 'LAC', datafield: 'lac', filtertype: 'checkedlist', width: 80 },
-            { text: 'CELLID', datafield: 'cellid', filtertype: 'checkedlist', width: 80 },
+            { text: 'lac', datafield: 'lac', filtertype: 'checkedlist', width: 80 },
+            { text: 'cellid', datafield: 'cellid', filtertype: 'checkedlist', width: 80 },
             { text: '基本可用性', datafield: 'service_usability', filtertype: 'checkedlist', width: 80 },
             { text: '1小时稳定性', datafield: 'stability_onehour', filtertype: 'checkedlist', width: 80 },
             { text: '协商速率', datafield: 'agree_mbr', filtertype: 'checkedlist', width: 150 },
@@ -380,6 +383,7 @@ function newVsimTestInfoTableGetAjaxAPI(option) {
                     var GridData = [];                                       //缓存表格数据
                     $.each( getData.data, function(i, item){
                         GridData.push({
+                            id_newvsimtest: item.id_newvsimtest,
                             person_supplier: item.person_supplier,
                             person_test: item.person_test,
                             card_info: item.card_info,
@@ -483,5 +487,4 @@ $(function () {
         };
         newVsimTestInfoTableGetAjaxAPI(ajaxParam);
     })
-
 });
