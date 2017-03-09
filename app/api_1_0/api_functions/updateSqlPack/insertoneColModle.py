@@ -2,7 +2,8 @@
 
 
 """==============================================
-该脚本用于手工维护表插入新imsi：只更新非空值
+该脚本用于手工维护表插入新imsi：只更新非空值.
+前期版本，插入主键限制为imsi
 Created on 2016年6月28日
 =================================================
 @author: lujian
@@ -13,7 +14,22 @@ import os
 import sys
 import csv
 import mysql.connector
+from bson.objectid import ObjectId
 from ..SqlPack.SQLModel import (qureResultAsJson, get_DataBaseConn)
+
+
+def add_objid(Json_Result, keyobjectid):
+    """
+    """
+    if not Json_Result:
+        return []
+    for i in range(len(Json_Result)):
+        try:
+            Json_Result[i].update({keyobjectid: str(ObjectId())})
+        except KeyError as keyerr:
+            print('KeyError:', keyerr)
+
+    return Json_Result
 
 
 def cur_file_dir():
@@ -69,7 +85,7 @@ def add_dickey(Json_Result, key_value):
     :param key_value:
     :return:
     ================================================"""
-    if Json_Result == []:
+    if not Json_Result:
         # print('函数传入转换字典为空[]，无转换数据！')
         return []
     for i in range(len(Json_Result)):
@@ -109,7 +125,7 @@ def fetchUpdateDataFromSys(sql_info, update_imsi):
     :param update_imsi:
     :return:
     =========================================================="""
-
+    Sql = sql_info
     N_DataStr = (
         "SELECT "
         "DISTINCT (CAST(a.`imsi` AS CHAR)) AS 'imsi' "
@@ -136,8 +152,8 @@ def fetchUpdateDataFromSys(sql_info, update_imsi):
         "a.`imsi` IN  " + "(" + update_imsi + ")"
         "GROUP BY (CAST(a.`imsi` AS CHAR)) "
     )
-    N_Data = qureResultAsJson(sysStr=sql_info['getUpdateData']['db'],
-                              Database=sql_info['getUpdateData']['database'],
+    N_Data = qureResultAsJson(sysStr=Sql['db'],
+                              Database=Sql['database'],
                               query_str=N_DataStr,
                               where=[])
     if N_Data:
@@ -184,19 +200,20 @@ def popBlankValue(popData):
     return popData
 
 
-def insertStrMake(databaseTable, insertData):
+def insertStrMake(databaseTable, insertData, insert_key):
     """======================================
     完成插入SQL语句组合
     databaseTable:插入数据库表单名
     insertData：更新数据
     =========================================="""
-    if 'imsi' not in insertData.keys():
-            insertStrInfo = {"err": True, "errInfo": "存在无IMSI主键行！", "insertStr": ""}
+    key_insert = insert_key
+    if key_insert not in insertData.keys():
+            insertStrInfo = {"err": True, "errInfo": "存在无主键行！", "insertStr": ""}
             return insertStrInfo
     else:
         dicList = list(insertData.keys())
-        dicList.remove('imsi')
-        index = "imsi"                                              # 插入主键定义
+        dicList.remove(key_insert)
+        index = key_insert                                              # 插入主键定义
         insertHeadStr = "INSERT INTO  `" + databaseTable + "`  "
         insertColumStr = ""
         insertValueStr = ""
@@ -216,28 +233,35 @@ def insertStrMake(databaseTable, insertData):
         return insertStrInfo
 
 
-def insertOneColModel(sql_info, insertData):
-    """========================================
+def insertOneColModel(sql_info, insert_data, insert_key):
+    """===============================================
 
-    :param sql_info:
-    :param insertData:
+    :param sql_info: 数据格式{"db": "config_DevAmz",
+                             "database": "devdatabase",
+                             "sheet": "vsim_test_info"}
+    :param insert_data: Insert Data to insert database
+    :param insert_key: type string
+    ===================================================
     :return:
-    ============================================"""
+    ======================================================================================"""
+    Sql = sql_info
+    InsertData = insert_data
+    InsertKey = insert_key
     errInfo = ''
     try:
-        cnx = get_DataBaseConn(sysSql=sql_info['insertDB']['db'], Database=sql_info['insertDB']['database'])
+        cnx = get_DataBaseConn(sysSql=Sql['db'], Database=Sql['database'])
         cursor = cnx.cursor()
-        # --------------------------------------制作mysql更新语句----------------------------------------------
-        for i in range(len(insertData)):
-            insertAction = insertStrMake(sql_info['insertDB']['sheet'], insertData[i])
+        # 制作mysql更新语句
+        for i in range(len(InsertData)):
+            insertAction = insertStrMake(Sql['sheet'], InsertData[i], InsertKey)
             if insertAction["err"]:
                 cursor.close()
                 cnx.close()
                 errInfo = insertAction["errInfo"]
                 return errInfo
             else:
-                # --------------提交更新字段------------------------------
-                insert_value = insertData[i]
+                # 提交更新字段
+                insert_value = InsertData[i]
                 insert_section = insertAction["insertStr"]
                 cursor.execute(insert_section, insert_value)
         cnx.commit()
@@ -249,30 +273,74 @@ def insertOneColModel(sql_info, insertData):
     return errInfo
 
 
-def insertModel(SqlInfo, DicData):
+def insertFetchSRCModel(sql_info, dic_data, key_dic):
     """==========================================
+    用于插入主键为imsi
+    :param SqlInfo: 包括插入数据库和资源更新数据库：
+    "InsertManuleVsimSrc": {
+        "insertDB": {"db": "config_DevAmz", "database": "devdatabase", "sheet": "vsim_manual_infor"},
+        "getUpdateData": {"db": "config_N", "database": "glocalme_css"}}
 
-    :param SqlInfo:
-    :param DicData:
+    :param dic_data: 待导入批量数据
+    :param key_dic:
+    ====================================================================================================
     :return:
-    ============================================="""
-    inser_data = DicData
-    sql_set = SqlInfo
+    ===================================================================================================="""
+    inser_data = dic_data
+    sql_set = sql_info
+    KeyDic = key_dic
     if inser_data:
         try:
-            updateIMSI = get_key_value_str(data=inser_data, key='imsi')
-            SysUpdateData = fetchUpdateDataFromSys(sql_info=sql_set,
+            updateIMSI = get_key_value_str(data=inser_data, key=KeyDic['insert'])
+            SysUpdateData = fetchUpdateDataFromSys(sql_info=sql_set['getUpdateData'],
                                                    update_imsi=updateIMSI)
             if SysUpdateData:
-                mgData = mergeData(mergeKy='imsi',
+                mgData = mergeData(mergeKy=KeyDic['merge'],   # 合并原始数据和资源数据
                                    baseData=inser_data,
                                    mergedData=SysUpdateData)
                 popdata = popBlankValue(mgData)
-                inertActionInfo = insertOneColModel(sql_info=sql_set, insertData=popdata)
+                inertActionInfo = insertOneColModel(sql_info=sql_set['insertDB'],
+                                                    insert_data=popdata,
+                                                    insert_key=KeyDic['insert'])
                 return inertActionInfo
 
             else:
                 inertActionInfo = "新架构平台无卡信息数据！"
+                return inertActionInfo
+        except KeyError:
+            inertActionInfo = "Erro:1001-Sql Config Dict Key Param Set Error!"
+            return inertActionInfo
+    else:
+        inertActionInfo = "插入数据为空！"
+        return inertActionInfo
+
+
+def insertModel(sql_info, dic_data, insert_key):
+    """==========================================
+
+    :param sql_info: 数据库连接信息
+                   type:{"db": "config_DevAmz",
+                   "database": "devdatabase",
+                   "sheet": "vsim_test_info"}
+    :param dic_data:
+    :param insert_key:
+    =============================================
+    :return:
+    ============================================="""
+    inser_data = dic_data
+    Sql = sql_info
+    InsertKey = insert_key
+    if inser_data:
+        try:
+            # updateIMSI = get_key_value_str(data=inser_data, key=InsertKey)
+            addObjectIDData = add_objid(Json_Result=inser_data, keyobjectid=InsertKey)
+            if addObjectIDData:
+                popdata = popBlankValue(addObjectIDData)
+                inertActionInfo = insertOneColModel(sql_info=Sql, insert_data=popdata, insert_key=InsertKey)
+                return inertActionInfo
+
+            else:
+                inertActionInfo = "插入数据异常！"
                 return inertActionInfo
         except KeyError:
             inertActionInfo = "Erro:1001-Sql Config Dict Key Param Set Error!"
