@@ -79,22 +79,24 @@ def popBlankValue(popData):
     return popData
 
 
-def updateStrMake(update_sheet, update_data):
+def updateStrMake(update_sheet, update_data, key_update):
     """
 
     :param update_sheet:
     :param update_data:
+    :param key_update:
     :return:
     """
+    priKey = key_update
     updateTable = update_sheet
-    if 'imsi' not in update_data.keys():
-            updateStrMakeInfo = {"err": True, "errInfo": "更新数据存在空imsi行！", "updateStr": "", "updateValue": ""}
+    if priKey not in update_data.keys():
+            updateStrMakeInfo = {"err": True, "errInfo": "更新数据存在空键值行！", "updateStr": "", "updateValue": ""}
             return updateStrMakeInfo
     else:
         setStr = 'SET '
         dicList = list(update_data.keys())
-        dicList.remove('imsi')
-        index = 'imsi'
+        dicList.remove(priKey)
+        index = priKey
         value = []
         for j in range(len(dicList)):
             if j == (len(dicList)-1):
@@ -107,22 +109,27 @@ def updateStrMake(update_sheet, update_data):
         updateStr = ("UPDATE `" + updateTable + "` " + setStr + " WHERE " + index + "=%s ")
         updateValue = tuple(value)
         updateStrMakeInfo = {"err": False, "errInfo": "", "updateStr": updateStr, "updateValue": updateValue}
+
         return updateStrMakeInfo
 
 
-def updataOneColModel(SqlInfo, update_data):
-    """=======================================
-    :param SqlInfo:
+def updataOneColModel(sql_info, update_data, key_item):
+    """
+
+    :param sql_info:
     :param update_data:
+    :param key_item:
     :return:
-    ==========================================="""
+    """
+    Sql = sql_info
+    update_key = key_item
     errInfo = ""
     try:
-        cnx = get_DataBaseConn(sysSql=SqlInfo['db'], Database=SqlInfo['database'])
+        cnx = get_DataBaseConn(sysSql=Sql['db'], Database=Sql['database'])
         cursor = cnx.cursor()
         # 制作mysql更新语句
         for i in range(len(update_data)):
-            updateAction = updateStrMake(SqlInfo['sheet'], update_data[i])
+            updateAction = updateStrMake(Sql['sheet'], update_data[i], key_update=update_key)
             # 如果存在无IMSI的情况不采用更新策略，返回提示信息
             if updateAction["err"]:
                 errInfo = updateAction["errInfo"]
@@ -143,13 +150,14 @@ def updataOneColModel(SqlInfo, update_data):
     return errInfo
 
 
-def updateModel(SqlInfo, DicData):
-    UpdateData = DicData
-    sql_set = SqlInfo
+def updateModel(sql_info, dic_data, update_key):
+    UpdateData = dic_data
+    Sql = sql_info
+    key_update = update_key
     if UpdateData:
         try:
             popdata = popBlankValue(UpdateData)
-            UpdateActionInfo = updataOneColModel(SqlInfo=sql_set, update_data=popdata)
+            UpdateActionInfo = updataOneColModel(sql_info=Sql, update_data=popdata, key_item=key_update)
             return UpdateActionInfo
         except KeyError:
             inertActionInfo = "Erro:1001-Sql Config Dict Key Param Set Error!"

@@ -14,10 +14,13 @@ from . import api
 from flask import json
 from flask import request
 from bson import json_util
-#DataApiFunc 为数据库更新、插入、删除数据等操作函数
+# DataApiFunc 为数据库更新、插入、删除数据等操作函数
 from api_functions.DataApiFunc import (deleManuleVsimSrc,
                                        insertManuleVsimSrc,
-                                       updateManuleVsimSrc)
+                                       updateManuleVsimSrc,
+                                       deleteNewVsimTestInfo,
+                                       insertNewVsimTestInfo,
+                                       updateNewVsimTestInfo)
 
 
 @api.route('/delet_manulVsim/', methods=['POST'])
@@ -29,12 +32,13 @@ def delet_manulVsim():
     if request.method == 'POST':
         arrayData = request.get_array(field_name='file')
 
-        return deleManuleVsimSrc(array_data= arrayData)
+        return deleManuleVsimSrc(array_data=arrayData)
 
     else:
         returnJsonData = {'err': True, 'errinfo': '操作违法！', 'data': []}
 
         return json.dumps(returnJsonData, sort_keys=True, indent=4, default=json_util.default)
+
 
 @api.route('/insert_manulVsim/', methods=['POST'])
 def insert_manulVsim():
@@ -63,6 +67,57 @@ def update_manulVsim():
         arrayData = request.get_array(field_name='file')
 
         return updateManuleVsimSrc(array_data=arrayData)
+
+    else:
+        returnJsonData = {'err': True, 'errinfo': '操作违法！', 'data': []}
+
+        return json.dumps(returnJsonData, sort_keys=True, indent=4, default=json_util.default)
+
+
+@api.route('/delet_newvsimtest_info_table/', methods=['POST'])
+def delet_newvsimtest_info_table():
+    """
+
+    :return:
+    """
+    if request.method == 'POST':
+        arrayData = request.get_array(field_name='file')
+
+        return deleteNewVsimTestInfo(array_data=arrayData)
+
+    else:
+        returnJsonData = {'err': True, 'errinfo': '操作违法！', 'data': []}
+
+        return json.dumps(returnJsonData, sort_keys=True, indent=4, default=json_util.default)
+
+
+@api.route('/insert_newvsimtest_info_table/', methods=['POST'])
+def insert_newvsimtest_info_table():
+    """
+
+    :return:
+    """
+    if request.method == 'POST':
+        arrayData = request.get_array(field_name='file')
+
+        return insertNewVsimTestInfo(array_data=arrayData)
+
+    else:
+        returnJsonData = {'err': True, 'errinfo': '操作违法！', 'data': []}
+
+        return json.dumps(returnJsonData, sort_keys=True, indent=4, default=json_util.default)
+
+
+@api.route('/update_newvsimtest_info_table/', methods=['POST'])
+def update_newvsimtest_info_table():
+    """
+
+    :return:
+    """
+    if request.method == 'POST':
+        arrayData = request.get_array(field_name='file')
+
+        return updateNewVsimTestInfo(array_data=arrayData)
 
     else:
         returnJsonData = {'err': True, 'errinfo': '操作违法！', 'data': []}

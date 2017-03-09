@@ -276,7 +276,7 @@ def insertOneColModel(sql_info, insert_data, insert_key):
 def insertFetchSRCModel(sql_info, dic_data, key_dic):
     """==========================================
     用于插入主键为imsi
-    :param SqlInfo: 包括插入数据库和资源更新数据库：
+    :param sql_info: 包括插入数据库和资源更新数据库：
     "InsertManuleVsimSrc": {
         "insertDB": {"db": "config_DevAmz", "database": "devdatabase", "sheet": "vsim_manual_infor"},
         "getUpdateData": {"db": "config_N", "database": "glocalme_css"}}

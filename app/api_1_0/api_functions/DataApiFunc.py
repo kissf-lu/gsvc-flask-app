@@ -14,9 +14,10 @@ deleManuleVsimSrc，insertManuleVsimSrc，updateManuleVsimSrc
 # import mysql.connector
 import json
 from bson import json_util
-from updateSqlPack.insertoneColModle import insertModel
+from updateSqlPack.insertoneColModle import (insertModel,
+                                             insertFetchSRCModel)
 from updateSqlPack.updateOneColModle import updateModel
-from updateSqlPack.deleteModel import deleteManualModel
+from updateSqlPack.deleteModel import deleteModel
 from SqlPack.SqlLinkInfo import DataApiFuncSqlLink as Sql
 
 SqlInfo = Sql
@@ -108,8 +109,9 @@ def deleManuleVsimSrc(array_data):
         returnJsonData = {'err': True, 'errinfo': DicData['errinfo']}
         return json.dumps(returnJsonData, sort_keys=True, indent=4, default=json_util.default)
     else:
-        state_result = deleteManualModel(SqlInfo=SqlInfo['DeleManuleVsimSrc'],
-                                         arrayDicData=DicData['data'])
+        state_result = deleteModel(SqlInfo=SqlInfo['DeleManuleVsimSrc'],
+                                   arrayDicData=DicData['data'],
+                                   delete_key='imsi')
         if state_result != '':
             returnJsonData = {'err': True, 'errinfo': state_result}
             return json.dumps(returnJsonData, sort_keys=True, indent=4, default=json_util.default)
@@ -163,7 +165,10 @@ def insertManuleVsimSrc(array_data):
         returnJsonData = {'err': True, 'errinfo': DicData['errinfo']}
         return json.dumps(returnJsonData, sort_keys=True, indent=4, default=json_util.default)
     else:
-        state_result = insertModel(SqlInfo=SqlInfo['InsertManuleVsimSrc'], DicData=DicData['data'])
+        state_result = insertFetchSRCModel(sql_info=SqlInfo['InsertManuleVsimSrc'],
+                                           dic_data=DicData['data'],
+                                           key_dic={'insert': 'imsi',
+                                                    'merge': 'imsi'})
         if state_result != '':
             returnJsonData = {'err': True, 'errinfo': state_result}
             return json.dumps(returnJsonData, sort_keys=True, indent=4, default=json_util.default)
@@ -219,7 +224,9 @@ def updateManuleVsimSrc(array_data):
         return_json_data = {'err': True, 'errinfo': dic_data['errinfo']}
         return json.dumps(return_json_data, sort_keys=True, indent=4, default=json_util.default)
     else:
-        state_result = updateModel(SqlInfo=SqlInfo['updateManuleVsimSrc'], DicData=dic_data['data'])
+        state_result = updateModel(sql_info=SqlInfo['updateManuleVsimSrc'],
+                                   dic_data=dic_data['data'],
+                                   update_key='imsi')
         if state_result:
             return_json_data = {'err': True, 'errinfo': state_result}
             return json.dumps(return_json_data, sort_keys=True, indent=4, default=json_util.default)
@@ -228,7 +235,7 @@ def updateManuleVsimSrc(array_data):
             return json.dumps(return_json_data, sort_keys=True, indent=4, default=json_util.default)
 
 
-def deleNewVsimTestInfoSrc(array_data):
+def deleteNewVsimTestInfo(array_data):
     """=============================
     数据删除API函数
     :param array_data:
@@ -244,8 +251,175 @@ def deleNewVsimTestInfoSrc(array_data):
         returnJsonData = {'err': True, 'errinfo': DicData['errinfo']}
         return json.dumps(returnJsonData, sort_keys=True, indent=4, default=json_util.default)
     else:
-        state_result = deleteManualModel(SqlInfo=SqlInfo['DeleManuleVsimSrc'],
-                                         arrayDicData=DicData['data'])
+        state_result = deleteModel(SqlInfo=SqlInfo['NewVsimTestInfo']['Delete'],
+                                   arrayDicData=DicData['data'],
+                                   delete_key='id_newvsimtest')
+        if state_result != '':
+            returnJsonData = {'err': True, 'errinfo': state_result}
+            return json.dumps(returnJsonData, sort_keys=True, indent=4, default=json_util.default)
+        else:
+            returnJsonData = {'err': False, 'errinfo': state_result}
+            return json.dumps(returnJsonData, sort_keys=True, indent=4, default=json_util.default)
+
+
+def insertNewVsimTestInfo(array_data):
+    """============================
+    数据插入API函数
+    :param array_data:
+    :return:
+    ==============================="""
+    # state_result = ''
+    dataFromJS = array_data
+    # 此key用于替换insertDataMirr中对应的key，用于后续进行数据库插入key
+    insertDatabaseItem = [unicode('person_supplier'),
+                          unicode('person_test'),
+                          unicode('card_info'),
+                          unicode('vsim_type'),
+                          unicode('country_cn'),
+                          unicode('country_iso'),
+                          unicode('operator'),
+                          unicode('plmn'),
+                          unicode('rat'),
+                          unicode('config_change'),
+                          unicode('imsi'),
+                          unicode('user_code'),
+                          unicode('imei'),
+                          unicode('device_type'),
+                          unicode('success_time'),
+                          unicode('change_time'),
+                          unicode('register_operator'),
+                          unicode('eplmn'),
+                          unicode('register_rat'),
+                          unicode('lac'),
+                          unicode('cellid'),
+                          unicode('service_usability'),
+                          unicode('stability_onehour'),
+                          unicode('agree_mbr'),
+                          unicode('agree_consistency'),
+                          unicode('fail_reason'),
+                          unicode('remark')]
+    # 此key为核实前端表格表头是否符合实际模板要求：列数相同、顺序相同
+    insertDataMirr = [unicode("卡提供人"),
+                      unicode("测试人"),
+                      unicode("测试卡信息"),
+                      unicode("本国/多国(0本国, 1多国)"),
+                      unicode("国家"),
+                      unicode("简称"),
+                      unicode("运营商"),
+                      unicode("plmn"),
+                      unicode("网络制式"),
+                      unicode("配置更改"),
+                      unicode("imsi"),
+                      unicode("账户"),
+                      unicode("imei"),
+                      unicode("设备类型"),
+                      unicode("调卡成功时间"),
+                      unicode("换卡时间"),
+                      unicode("注册运营商"),
+                      unicode("eplmn"),
+                      unicode("注册网络"),
+                      unicode("lac"),
+                      unicode("cellid"),
+                      unicode("基本可用性(0 否, 1是)"),
+                      unicode("1小时稳定性(0 否, 1是)"),
+                      unicode("协商速率"),
+                      unicode("协商速率一致性(0 否, 1是)"),
+                      unicode("失败原因"),
+                      unicode("备注")]
+    DicData = getDictExcelData(array_data=dataFromJS,
+                               key_database=insertDatabaseItem,
+                               key_mirr_database=insertDataMirr)
+    if DicData['err']:
+        returnJsonData = {'err': True, 'errinfo': DicData['errinfo']}
+        return json.dumps(returnJsonData, sort_keys=True, indent=4, default=json_util.default)
+    else:
+        state_result = insertModel(sql_info=SqlInfo['NewVsimTestInfo']['Insert'],
+                                   dic_data=DicData['data'],
+                                   insert_key='id_newvsimtest')
+        if state_result != '':
+            returnJsonData = {'err': True, 'errinfo': state_result}
+            return json.dumps(returnJsonData, sort_keys=True, indent=4, default=json_util.default)
+        else:
+            returnJsonData = {'err': False, 'errinfo': state_result}
+            return json.dumps(returnJsonData, sort_keys=True, indent=4, default=json_util.default)
+
+
+def updateNewVsimTestInfo(array_data):
+    """============================
+    数据插入API函数
+    :param array_data:
+    :return:
+    ==============================="""
+    # state_result = ''
+    dataFromJS = array_data
+    # 此key用于替换insertDataMirr中对应的key，用于后续进行数据库插入key
+    insertDatabaseItem = [unicode('id_newvsimtest'),
+                          unicode('person_supplier'),
+                          unicode('person_test'),
+                          unicode('card_info'),
+                          unicode('vsim_type'),
+                          unicode('country_cn'),
+                          unicode('country_iso'),
+                          unicode('operator'),
+                          unicode('plmn'),
+                          unicode('rat'),
+                          unicode('config_change'),
+                          unicode('imsi'),
+                          unicode('user_code'),
+                          unicode('imei'),
+                          unicode('device_type'),
+                          unicode('success_time'),
+                          unicode('change_time'),
+                          unicode('register_operator'),
+                          unicode('eplmn'),
+                          unicode('register_rat'),
+                          unicode('lac'),
+                          unicode('cellid'),
+                          unicode('service_usability'),
+                          unicode('stability_onehour'),
+                          unicode('agree_mbr'),
+                          unicode('agree_consistency'),
+                          unicode('fail_reason'),
+                          unicode('remark')]
+    # 此key为核实前端表格表头是否符合实际模板要求：列数相同、顺序相同
+    insertDataMirr = [unicode("测试id"),
+                      unicode("卡提供人"),
+                      unicode("测试人"),
+                      unicode("测试卡信息"),
+                      unicode("本国/多国(0本国, 1多国)"),
+                      unicode("国家"),
+                      unicode("简称"),
+                      unicode("运营商"),
+                      unicode("plmn"),
+                      unicode("网络制式"),
+                      unicode("配置更改"),
+                      unicode("imsi"),
+                      unicode("账户"),
+                      unicode("imei"),
+                      unicode("设备类型"),
+                      unicode("调卡成功时间"),
+                      unicode("换卡时间"),
+                      unicode("注册运营商"),
+                      unicode("eplmn"),
+                      unicode("注册网络"),
+                      unicode("lac"),
+                      unicode("cellid"),
+                      unicode("基本可用性(0 否, 1是)"),
+                      unicode("1小时稳定性(0 否, 1是)"),
+                      unicode("协商速率"),
+                      unicode("协商速率一致性(0 否, 1是)"),
+                      unicode("失败原因"),
+                      unicode("备注")]
+    DicData = getDictExcelData(array_data=dataFromJS,
+                               key_database=insertDatabaseItem,
+                               key_mirr_database=insertDataMirr)
+    if DicData['err']:
+        returnJsonData = {'err': True, 'errinfo': DicData['errinfo']}
+        return json.dumps(returnJsonData, sort_keys=True, indent=4, default=json_util.default)
+    else:
+        state_result = updateModel(sql_info=SqlInfo['NewVsimTestInfo']['Update'],
+                                   dic_data=DicData['data'],
+                                   update_key='id_newvsimtest')
         if state_result != '':
             returnJsonData = {'err': True, 'errinfo': state_result}
             return json.dumps(returnJsonData, sort_keys=True, indent=4, default=json_util.default)

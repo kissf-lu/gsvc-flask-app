@@ -10,7 +10,12 @@ DataApiFuncSqlLink = {
         "insertDB": {"db": "config_DevAmz", "database": "devdatabase", "sheet": "vsim_manual_infor"},
         "getUpdateData": {"db": "config_N", "database": "glocalme_css"}
     },
-    "updateManuleVsimSrc": {"db": "config_DevAmz", "database": "devdatabase", "sheet": "vsim_manual_infor"}
+    "updateManuleVsimSrc": {"db": "config_DevAmz", "database": "devdatabase", "sheet": "vsim_manual_infor"},
+    "NewVsimTestInfo": {
+        "Delete": {"db": "config_DevAmz", "database": "devdatabase", "sheet": "vsim_test_info"},
+        "Update": {"db": "config_DevAmz", "database": "devdatabase", "sheet": "vsim_test_info"},
+        "Insert": {"db": "config_DevAmz", "database": "devdatabase", "sheet": "vsim_test_info"}
+        }
 }
 get140countryFlowerStatics = {
     "140src": {"db": "config_N", "database": "glocalme_css"},
@@ -24,4 +29,7 @@ getFlowerQueryFunction = {
 getonSysSrc = {
     'getVsimManulInfor': {"db": "config_amzami", "database": "gsvcdatabase"},
     'qureyNVsim': {"db": "config_N", "database": "glocalme_css"}
+}
+getCountryProbDic = {
+    "getSrc": {"db": "config_N", "database": "glocalme_css"}
 }

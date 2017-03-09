@@ -26,7 +26,9 @@ from api_functions.exportExcelFunc import (get_excel140countryDataAndSorted,
                                            get_excelManualInsertTemple,
                                            get_excelCountrySrcStaticDataAndSorted,
                                            get_excelNewVsimTestInfoDeleteTemple,
-                                           get_excelNewVsimTestInfoInsertUpdateTemple)
+                                           get_excelNewVsimTestInfoInsertTemple,
+                                           get_excelNewVsimTestInfoUpdateTemple)
+
 
 @api.route('/export_countrySrcStatic/',methods=['POST'])
 def export_countrySrcStatic():
@@ -37,6 +39,7 @@ def export_countrySrcStatic():
         return excel.make_response_from_array(sortedDicData, "xls", file_name="ExportCountrySrcStaticData")
     else:
         return False
+
 
 @api.route('/export_140country/',methods=['POST'])
 def export_140country():
@@ -70,6 +73,7 @@ def export_ManualInfo():
 
         return excel.make_response_from_array(sortedDicData, "xls", file_name="ExportManualInfoData")
     return False
+
 
 @api.route('/export_manualDeleteTemplate/',methods=['POST'])
 def export_manualDeleteTemplate():
@@ -138,8 +142,8 @@ def export_newVsimTestInfoDeleteTemplate():
     return False
 
 
-@api.route('/export_newVsimTestInfoInsertUpdateTemplate/', methods=['POST'])
-def export_newVsimTestInfoInsertUpdateTemplate():
+@api.route('/export_newVsimTestInfoUpdateTemplate/', methods=['POST'])
+def export_newVsimTestInfoUpdateTemplate():
     if request.method == 'POST':
         # dic_data=json.loads(request.form['data'])
         dic_data = [{unicode("测试id"): unicode("460068029099402"),
@@ -171,9 +175,49 @@ def export_newVsimTestInfoInsertUpdateTemplate():
                      unicode("失败原因"): unicode(""),
                      unicode("备注"): unicode("")
                      }]
-        sortedDicData = get_excelNewVsimTestInfoInsertUpdateTemple(dic_data=dic_data)
+        sortedDicData = get_excelNewVsimTestInfoUpdateTemple(dic_data=dic_data)
 
         return excel.make_response_from_array(sortedDicData, "xls",
-                                              file_name="NewVsimTestInfoInsertUpdateTemple")
+                                              file_name="NewVsimTestInfoUpdateTemple")
+
+    return False
+
+
+@api.route('/export_newVsimTestInfoInsertTemplate/', methods=['POST'])
+def export_newVsimTestInfoInsertTemplate():
+    if request.method == 'POST':
+        # dic_data=json.loads(request.form['data'])
+        dic_data = [{unicode("卡提供人"): unicode("丁洁"),
+                     unicode("测试人"): unicode("凌刚"),
+                     unicode("测试卡信息"): unicode("TELSTRA测试卡，2016.12.20到期"),
+                     unicode("本国/多国(0本国, 1多国)"): unicode("0"),
+                     unicode("国家"): unicode("澳大利亚"),
+                     unicode("简称"): unicode("AU"),
+                     unicode("运营商"): unicode("TELSTRA"),
+                     unicode("plmn"): unicode("50501"),
+                     unicode("网络制式"): unicode("24"),
+                     unicode("配置更改"): unicode("更改卡制式为2G/3G"),
+                     unicode("imsi"): unicode("505013502029797"),
+                     unicode("账户"): unicode("test748_KR@uroaming.com"),
+                     unicode("imei"): unicode("868740023157474"),
+                     unicode("设备类型"): unicode("G2_160906"),
+                     unicode("调卡成功时间"): unicode("2016-12-15 01:44:20"),
+                     unicode("换卡时间"): unicode("2016-12-15 03:43:45"),
+                     unicode("注册运营商"): unicode("TELSTRA"),
+                     unicode("eplmn"): unicode("50501"),
+                     unicode("注册网络"): unicode("8"),
+                     unicode("lac"): unicode("338"),
+                     unicode("cellid"): unicode("87282827"),
+                     unicode("基本可用性(0 否, 1是)"): unicode("1"),
+                     unicode("1小时稳定性(0 否, 1是)"): unicode("1"),
+                     unicode("协商速率"): unicode("3g convert dl:8640,ul:7936"),
+                     unicode("协商速率一致性(0 否, 1是)"): unicode("1"),
+                     unicode("失败原因"): unicode(""),
+                     unicode("备注"): unicode("")
+                     }]
+        sortedDicData = get_excelNewVsimTestInfoInsertTemple(dic_data=dic_data)
+
+        return excel.make_response_from_array(sortedDicData, "xls",
+                                              file_name="NewVsimTestInfoInsertTemple")
 
     return False
