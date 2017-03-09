@@ -14,8 +14,13 @@ amzami_Database = 'gsvcdatabase'
 
 
 def getJosonData(sysStr, Database, query_str):
+    """
 
-
+    :param sysStr:
+    :param Database:
+    :param query_str:
+    :return:
+    """
     jsonResults = qureResultAsJson(sysStr=sysStr,
                                    Database=Database,
                                    query_str=query_str,
@@ -26,6 +31,7 @@ def getJosonData(sysStr, Database, query_str):
 def getNVsimCountryStatic(country):
     """
 
+    :param country:
     :return:
     """
     queryCoutry = country
@@ -70,24 +76,20 @@ def getNVsimCountryStatic(country):
                       "ORDER BY COUNT(DISTINCT a.`imsi`) DESC ")
     jsonResults_Nvsim = getJosonData(sysStr=N_sysStr, Database=N_Database, query_str=query_str_vsim)
 
-
     return jsonResults_Nvsim
 
 
 def getSVsimCountryStatic(country):
     """
 
+    :param country:
     :return:
     """
-
     queryCoutry = country
-
-
     if queryCoutry == "":
         where = ""
     else:
         where = "AND a.`country_code2`=" + "'" + queryCoutry + "' "
-
     query_str_vsim = ("SELECT  "
                       "a.`country_code2`AS 'country', "
                       "COUNT(1) AS 'all_num', "
@@ -96,7 +98,9 @@ def getSVsimCountryStatic(country):
                       "FROM `t_resvsim` AS a "
                       "LEFT JOIN `t_resvsimpackagetype`AS c ON c.`itemid`=a.`packagetype` "
                       "LEFT JOIN `t_resvsimowner`AS e ON e.`sourceid`=a.`imsi` "
-                      "WHERE a.`state` LIKE '_0__0' AND (c.`name` NOT  REGEXP '.*[0-9]国.*') AND e.`sourceid` IS NULL " + where + " "
+                      "WHERE a.`state` LIKE '_0__0' "
+                      "     AND (c.`name` NOT  REGEXP '.*[0-9]国.*') "
+                      "     AND e.`sourceid` IS NULL " + where + " "
                       "GROUP BY a.`country_code2`")
     jsonResults_Svsim = getJosonData(sysStr=S_sysStr, Database=S_Database, query_str=query_str_vsim)
 
@@ -124,12 +128,11 @@ def getNVsimPackageflowStatus(country):
                       "WHERE  "
                       "   a.`bam_status`=0  "
                       "   AND a.`slot_status`=0   "
-                      "   AND (b.`package_type_name` IS NOT NULL) "+ where + " "
+                      "   AND (b.`package_type_name` IS NOT NULL) " + where + " "
                       "GROUP BY b.`package_type_name` "
                       "ORDER BY CAST(SUM(b.`init_flow`)/1024/1024/1024 AS UNSIGNED) DESC  ")
 
     NVsimPackageflowStatus = getJosonData(sysStr=N_sysStr, Database=N_Database, query_str=query_str_flow)
-
 
     return NVsimPackageflowStatus
 
@@ -154,8 +157,8 @@ def getSVsimPackageflowStatus(country):
                       "LEFT JOIN `t_resvsimpackagetype`AS c ON c.`itemid`=a.`packagetype` "
                       "LEFT JOIN `t_resvsimowner`AS e ON e.`sourceid`=a.`imsi`  "
                       "WHERE  a.`state`LIKE '_0__0' "
-                             "AND (c.`name` NOT  REGEXP '.*[0-9]国.*') "
-                             "AND e.`sourceid` IS NULL " + where + " "
+                      "       AND (c.`name` NOT  REGEXP '.*[0-9]国.*') "
+                      "       AND e.`sourceid` IS NULL " + where + " "
                       "GROUP BY c.`name` "
                       "ORDER BY CAST(SUM(c.`flowsize`)/1024 AS UNSIGNED) DESC ")
     SVsimPackageflowStatus = getJosonData(sysStr=S_sysStr, Database=S_Database, query_str=query_str_flow)
@@ -163,8 +166,7 @@ def getSVsimPackageflowStatus(country):
     return SVsimPackageflowStatus
 
 
-
-def getVsimCountryStatic(country,**kwargs):
+def getVsimCountryStatic(country, **kwargs):
     """
 
     :param country: 按国家进行数据统计
@@ -172,17 +174,8 @@ def getVsimCountryStatic(country,**kwargs):
     :return:
     """
     queryCoutry = country
-
-
-    #jsonResults_Nvsim = getNVsimCountryStatic(country=queryCoutry)
-    #jsonResults_Svsim = []#getSVsimCountryStatic(country=queryCoutry)
-    #jsonResults_vsim ={"N":jsonResults_Nvsim, "S":jsonResults_Svsim}
-
     jsonResults_NVsimPackageflowStatus = getNVsimPackageflowStatus(country=queryCoutry)
-    #jsonResults_SVsimPackageflowStatus = []#getSVsimPackageflowStatus(country=queryCoutry)
-    jsonResults_VsimPackageflowStatus = {"N":jsonResults_NVsimPackageflowStatus}
-
-
+    jsonResults_VsimPackageflowStatus = {"N": jsonResults_NVsimPackageflowStatus}
     JsonRow = {"country": {"VsimPackageflowStatus": jsonResults_VsimPackageflowStatus}}
     return json.dumps(JsonRow, sort_keys=True, indent=4, default=json_util.default)
 
@@ -212,7 +205,8 @@ def getMutiLineNonshelfandAvaCard(country):
                                      "LEFT JOIN `t_css_v_pool_map` AS c "
                                      "      ON c.`vsim_id`=a.`id` "
                                      "WHERE "
-                                     "   (b.`package_type_name` NOT  REGEXP '.*[0-9]国.*') AND a.`iso2`=" + "'" + queryCountry + "' "
+                                     "   (b.`package_type_name` NOT  REGEXP '.*[0-9]国.*')"
+                                     "   AND a.`iso2`=" + "'" + queryCountry + "' "
                                      "   AND a.`bam_status`=0 "
                                      "   AND a.`slot_status`=0 "
                                      "   AND a.`vsim_type` = 0 "
@@ -255,11 +249,14 @@ def getMutiLineSonshelfandAvaCard(country):
     return jsonResults_S_onshelfandAvaCard
 
 
-def getMutiLineMaxUser(country,begintime,endtime,butype_set,timedim_set):
+def getMutiLineMaxUser(country, begintime, endtime, butype_set, timedim_set):
     """
 
     :param country:
-    :param kwargs:
+    :param begintime:
+    :param endtime:
+    :param butype_set:
+    :param timedim_set:
     :return:
     """
     queryCountry = country
@@ -267,8 +264,6 @@ def getMutiLineMaxUser(country,begintime,endtime,butype_set,timedim_set):
     queryEndTime = endtime
     butype_set = butype_set
     timedim_set = timedim_set
-
-
     query_str_MaxUser = (
         "SELECT b.country,DATE_FORMAT(b.sampletime, " + timedim_set + ") AS sampletime , MAX(b.onlinemax) AS onlinemax "
         "FROM ( "
@@ -285,7 +280,7 @@ def getMutiLineMaxUser(country,begintime,endtime,butype_set,timedim_set):
     return jsonResults_MaxUser
 
 
-def getindexHtmlMutiLineData(country,begintime,endtime,**kwargs):
+def getindexHtmlMutiLineData(country, begintime, endtime, **kwargs):
     """
     :本部分用于获取绘制主页国家峰值曲线图数据。获取国家峰值用户、在板卡数、可用卡数统计数据
     :param country:
@@ -324,18 +319,17 @@ def getindexHtmlMutiLineData(country,begintime,endtime,**kwargs):
     VsimCon=[]
     # (当前国家总计卡数、可用卡数数据获取-----------------------------------------------------------------------)
     if BU == 'ALL':
-        tempData=[]
-        jsonResultsGTBUonshelfandAvaCard=getMutiLineNonshelfandAvaCard(country=country)
-        jsonResultsSonshelfandAvaCard=getMutiLineSonshelfandAvaCard(country=country)
-        tempData={"GTBU":jsonResultsGTBUonshelfandAvaCard,"S":jsonResultsSonshelfandAvaCard}
+        jsonResultsGTBUonshelfandAvaCard = getMutiLineNonshelfandAvaCard(country=country)
+        jsonResultsSonshelfandAvaCard = getMutiLineSonshelfandAvaCard(country=country)
+        tempData = {"GTBU":jsonResultsGTBUonshelfandAvaCard, "S": jsonResultsSonshelfandAvaCard}
         if tempData["GTBU"] != []:
             if tempData["S"] != []:
                 for i in range(len(tempData["GTBU"])):
                     for j in range(len(tempData["S"])):
-                        sumData=[]
-                        sumData=[{"on_shelf_num":(tempData["GTBU"][i]["on_shelf_num"]+tempData["S"][i]["on_shelf_num"]),
-                                  "ava_num":(tempData["GTBU"][i]["ava_num"]+tempData["S"][i]["ava_num"])}]
-                        VsimCon={"ALL":sumData}
+                        sumData = [{"on_shelf_num": (tempData["GTBU"][i]["on_shelf_num"] +
+                                                    tempData["S"][i]["on_shelf_num"]),
+                                  "ava_num": (tempData["GTBU"][i]["ava_num"] + tempData["S"][i]["ava_num"])}]
+                        VsimCon = {"ALL": sumData}
             else:
                 VsimCon = {"ALL": tempData["GTBU"]}
         else:
@@ -351,10 +345,10 @@ def getindexHtmlMutiLineData(country,begintime,endtime,**kwargs):
         jsonResultsSonshelfandAvaCard = getMutiLineSonshelfandAvaCard(country=country)
         VsimCon = {"S": jsonResultsSonshelfandAvaCard}
 
-    conData=VsimCon[BU]
+    conData = VsimCon[BU]
 
     JsonRow_MaxUser = {"maxuser": jsonResults_MaxUser,
-                       "con":conData
+                       "con": conData
                        }
 
     return json.dumps(JsonRow_MaxUser, sort_keys=True, indent=4, default=json_util.default)
