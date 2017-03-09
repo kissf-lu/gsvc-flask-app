@@ -121,7 +121,7 @@ function clickAction(option_click) {
     var actionFun=DeleteUpdateInsertModal(param);
 }
 
-function appendAlertInfo(alert_class, info_str){
+function appendAlertInfo(alert_class, info_str, alert_id){
 
     var alertHTML = (
     alert_class +
@@ -131,9 +131,9 @@ function appendAlertInfo(alert_class, info_str){
     '<strong>'+info_str+'</strong> '+
     '</div>');
     // remove old form html
-    $("#app-growl").children().remove();
+    alert_id.children().remove();
     // append new form html
-    $("#app-growl").append(alertHTML);
+    alert_id.append(alertHTML);
 }
 
 // pre-submit callback
@@ -186,7 +186,7 @@ function showResponse(responseText, statusText, xhr, $form)  {
         alertClass = '<div class="alert alert-success" role="alert">';
         alertInfo = ('操作成功！');
     }
-    appendAlertInfo(alertClass, alertInfo);
+    appendAlertInfo(alertClass, alertInfo, globeVarNewVsimTest.ID.alertID);
     globeVarNewVsimTest.ID.modal_progressID.modal('hide');
     globeVarNewVsimTest.ID.modalID.modal('hide');
 
@@ -196,7 +196,7 @@ function showResponse(responseText, statusText, xhr, $form)  {
 function errResponse(){
     var alertClass = '<div class="alert alert-warning" role="alert">';
     var alertInfo = ("Network Error!");
-    appendAlertInfo(alertClass, alertInfo);
+    appendAlertInfo(alertClass, alertInfo, globeVarNewVsimTest.ID.alertID);
     globeVarNewVsimTest.ID.modal_progressID.modal('hide');
     globeVarNewVsimTest.ID.modalID.modal('hide');
 
@@ -211,7 +211,7 @@ var globeVarNewVsimTest = {
         'InsertID' : $('#Insert'),
         'alertID' : $('#alert-model'),              //warn bar model use this id to set warn content
         'modalID' : $('#newVsimTestInfo-Modal'),
-        'modal_progressID' : $("#progress-modal"),
+        'modal_progressID' : $("#newVsimTestInfo-progress-modal"),
         'progress_barClass' : $(".progress-bar")
     },
     'set': function (strAlert) {
@@ -242,7 +242,7 @@ $(function () {
                 modalBodyID: "modalBody",
                 modalHeadTitle: '批量删除设置窗口',
                 getTempleTitle: '获取批量删除模板',
-                postURL: $SCRIPT_ROOT + "#",
+                postURL: $SCRIPT_ROOT + "/api/v1.0/delet_newvsimtest_info_table/",
                 TemplateURL: $SCRIPT_ROOT +"/api/v1.0/export_newVsimTestInfoDeleteTemplate/"
             }
         };
@@ -259,8 +259,8 @@ $(function () {
                 modalBodyID: "modalBody",
                 modalHeadTitle: '批量导入设置窗口',
                 getTempleTitle: '获取批量导入模板',
-                postURL: $SCRIPT_ROOT + "#",
-                TemplateURL: $SCRIPT_ROOT +"/api/v1.0/export_newVsimTestInfoInsertUpdateTemplate/"
+                postURL: $SCRIPT_ROOT + "/api/v1.0/insert_newvsimtest_info_table/",
+                TemplateURL: $SCRIPT_ROOT +"/api/v1.0/export_newVsimTestInfoInsertTemplate/"
             }
         };
         clickAction(optionClick);
@@ -276,8 +276,8 @@ $(function () {
                 modalBodyID: "modalBody",
                 modalHeadTitle: '批量更新设置窗口',
                 getTempleTitle: '获取批量更新模板',
-                postURL: $SCRIPT_ROOT + "#",
-                TemplateURL: $SCRIPT_ROOT +"/api/v1.0/export_newVsimTestInfoInsertUpdateTemplate/"
+                postURL: $SCRIPT_ROOT + "/api/v1.0/update_newvsimtest_info_table/",
+                TemplateURL: $SCRIPT_ROOT +"/api/v1.0/export_newVsimTestInfoUpdateTemplate/"
             }
         };
         clickAction(optionClick);
