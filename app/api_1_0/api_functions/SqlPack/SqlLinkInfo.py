@@ -14,7 +14,8 @@ DataApiFuncSqlLink = {
     "NewVsimTestInfo": {
         "Delete": {"db": "config_DevAmz", "database": "devdatabase", "sheet": "vsim_test_info"},
         "Update": {"db": "config_DevAmz", "database": "devdatabase", "sheet": "vsim_test_info"},
-        "Insert": {"db": "config_DevAmz", "database": "devdatabase", "sheet": "vsim_test_info"}
+        "Insert": {"db": "config_DevAmz", "database": "devdatabase", "sheet": "vsim_test_info"},
+        "query": {"db": "config_DevAmz", "database": "devdatabase", "sheet": "vsim_test_info"}
         }
 }
 get140countryFlowerStatics = {

@@ -11,12 +11,11 @@
     :license: ukl, see LICENSE for more details.
 """
 
-
 from flask import request
 from flask import json
 from . import api
 import flask_excel as excel
-#Python excel Mole
+# Python excel Mole
 from api_functions.exportExcelFunc import (get_excel140countryDataAndSorted,
                                            get_excelFlowerDataAndSorted,
                                            get_excelManulInfoDataAndSorted,
@@ -27,25 +26,26 @@ from api_functions.exportExcelFunc import (get_excel140countryDataAndSorted,
                                            get_excelCountrySrcStaticDataAndSorted,
                                            get_excelNewVsimTestInfoDeleteTemple,
                                            get_excelNewVsimTestInfoInsertTemple,
-                                           get_excelNewVsimTestInfoUpdateTemple)
+                                           get_excelNewVsimTestInfoUpdateTemple,
+                                           get_excelNewVsimTestInfo)
 
 
-@api.route('/export_countrySrcStatic/',methods=['POST'])
+@api.route('/export_countrySrcStatic/', methods=['POST'])
 def export_countrySrcStatic():
     if request.method == 'POST':
 
-        dic_data=json.loads(request.form['data'])
-        sortedDicData= get_excelCountrySrcStaticDataAndSorted(dic_data= dic_data)
+        dic_data = json.loads(request.form['data'])
+        sortedDicData = get_excelCountrySrcStaticDataAndSorted(dic_data=dic_data)
         return excel.make_response_from_array(sortedDicData, "xls", file_name="ExportCountrySrcStaticData")
     else:
         return False
 
 
-@api.route('/export_140country/',methods=['POST'])
+@api.route('/export_140country/', methods=['POST'])
 def export_140country():
     if request.method == 'POST':
 
-        dic_data=json.loads(request.form['data'])
+        dic_data = json.loads(request.form['data'])
         sortedDicData = get_excel140countryDataAndSorted(dic_data=dic_data)
 
         return excel.make_response_from_array(sortedDicData, "xls", file_name="Export140countryFlowerData")
@@ -54,10 +54,10 @@ def export_140country():
         return False
 
 
-@api.route('/export_Flower/',methods=['POST'])
+@api.route('/export_Flower/', methods=['POST'])
 def export_Flower():
     if request.method == 'POST':
-        dic_data=json.loads(request.form['data'])
+        dic_data = json.loads(request.form['data'])
         sortedDicData = get_excelFlowerDataAndSorted(dic_data=dic_data)
 
         return excel.make_response_from_array(sortedDicData, "xls", file_name="ExportFlowerData")
@@ -65,31 +65,29 @@ def export_Flower():
     return False
 
 
-@api.route('/export_ManualInfo/',methods=['POST'])
+@api.route('/export_ManualInfo/', methods=['POST'])
 def export_ManualInfo():
     if request.method == 'POST':
-        dic_data=json.loads(request.form['data'])
+        dic_data = json.loads(request.form['data'])
         sortedDicData = get_excelManulInfoDataAndSorted(dic_data=dic_data)
 
         return excel.make_response_from_array(sortedDicData, "xls", file_name="ExportManualInfoData")
     return False
 
 
-@api.route('/export_manualDeleteTemplate/',methods=['POST'])
+@api.route('/export_manualDeleteTemplate/', methods=['POST'])
 def export_manualDeleteTemplate():
     if request.method == 'POST':
-        #dic_data=json.loads(request.form['data'])
-        dic_data = [{'imsi':'460068029099402'},{'imsi':'416770118932592'}]
+        dic_data = [{'imsi': '460068029099402'}, {'imsi': '416770118932592'}]
         sortedDicData = get_excelManualDeleteTemple(dic_data=dic_data)
 
         return excel.make_response_from_array(sortedDicData, "xls", file_name="manualDeleteTemplate")
     return False
 
 
-@api.route('/export_manualInsertTemplate/',methods=['POST'])
+@api.route('/export_manualInsertTemplate/', methods=['POST'])
 def export_manualInsertTemplate():
     if request.method == 'POST':
-        #dic_data=json.loads(request.form['data'])
         dic_data = [{"imsi": "202052965490990",
                      unicode("负责人"): unicode("刘超"),
                      unicode("国家"): unicode("希腊"),
@@ -110,10 +108,10 @@ def export_manualInsertTemplate():
     return False
 
 
-@api.route('/export_FirsProbDic/',methods=['POST'])
+@api.route('/export_FirsProbDic/', methods=['POST'])
 def export_FirsProbDic():
     if request.method == 'POST':
-        dic_data=json.loads(request.form['data'])
+        dic_data = json.loads(request.form['data'])
         sortedDicData = get_excelFirsProbDicDataAndSorted(dic_data=dic_data)
 
         return excel.make_response_from_array(sortedDicData, "xls", file_name="ExportOnSysInfoData")
@@ -150,7 +148,7 @@ def export_newVsimTestInfoUpdateTemplate():
                      unicode("卡提供人"): unicode("丁洁"),
                      unicode("测试人"): unicode("凌刚"),
                      unicode("测试卡信息"): unicode("TELSTRA测试卡，2016.12.20到期"),
-                     unicode("本国/多国(0本国, 1多国)"): unicode("0"),
+                     unicode("卡类型(0本国, 1多国)"): unicode("0"),
                      unicode("国家"): unicode("澳大利亚"),
                      unicode("简称"): unicode("AU"),
                      unicode("运营商"): unicode("TELSTRA"),
@@ -169,7 +167,7 @@ def export_newVsimTestInfoUpdateTemplate():
                      unicode("lac"): unicode("338"),
                      unicode("cellid"): unicode("87282827"),
                      unicode("基本可用性(0 否, 1是)"): unicode("1"),
-                     unicode("1小时稳定性(0 否, 1是)"): unicode("1"),
+                     unicode("小时稳定性(0 否, 1是)"): unicode("1"),
                      unicode("协商速率"): unicode("3g convert dl:8640,ul:7936"),
                      unicode("协商速率一致性(0 否, 1是)"): unicode("1"),
                      unicode("失败原因"): unicode(""),
@@ -186,11 +184,10 @@ def export_newVsimTestInfoUpdateTemplate():
 @api.route('/export_newVsimTestInfoInsertTemplate/', methods=['POST'])
 def export_newVsimTestInfoInsertTemplate():
     if request.method == 'POST':
-        # dic_data=json.loads(request.form['data'])
         dic_data = [{unicode("卡提供人"): unicode("丁洁"),
                      unicode("测试人"): unicode("凌刚"),
                      unicode("测试卡信息"): unicode("TELSTRA测试卡，2016.12.20到期"),
-                     unicode("本国/多国(0本国, 1多国)"): unicode("0"),
+                     unicode("卡类型(0本国, 1多国)"): unicode("0"),
                      unicode("国家"): unicode("澳大利亚"),
                      unicode("简称"): unicode("AU"),
                      unicode("运营商"): unicode("TELSTRA"),
@@ -209,7 +206,7 @@ def export_newVsimTestInfoInsertTemplate():
                      unicode("lac"): unicode("338"),
                      unicode("cellid"): unicode("87282827"),
                      unicode("基本可用性(0 否, 1是)"): unicode("1"),
-                     unicode("1小时稳定性(0 否, 1是)"): unicode("1"),
+                     unicode("小时稳定性(0 否, 1是)"): unicode("1"),
                      unicode("协商速率"): unicode("3g convert dl:8640,ul:7936"),
                      unicode("协商速率一致性(0 否, 1是)"): unicode("1"),
                      unicode("失败原因"): unicode(""),
@@ -219,5 +216,17 @@ def export_newVsimTestInfoInsertTemplate():
 
         return excel.make_response_from_array(sortedDicData, "xls",
                                               file_name="NewVsimTestInfoInsertTemple")
+
+    return False
+
+
+@api.route('/export_newVsimTestInfo/', methods=['POST'])
+def export_newVsimTestInfo():
+    if request.method == 'POST':
+        dic_data = json.loads(request.form['data'])
+        sortedDicData = get_excelNewVsimTestInfo(dic_data=dic_data)
+
+        return excel.make_response_from_array(sortedDicData, "xls",
+                                              file_name="NewVsimTestInfo")
 
     return False

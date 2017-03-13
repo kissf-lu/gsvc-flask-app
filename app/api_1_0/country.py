@@ -16,7 +16,7 @@ from api_functions.getCountryProbDic import getProbFisrtDic
 # Python get Flower Model
 from api_functions.get_FlowerQueryFunction import getFlowers
 #
-from api_functions.newVsimTest import get_new_vsim_test_infor
+from api_functions.newVsimTest import get_new_vsim_test_info
 
 
 # ("以下为资源页面API接口-------------------------------------------------------------------------------------------------")
@@ -169,6 +169,6 @@ def get_newVsimTestInforTable():
         country = str(Dic_data['country'])
         person = str(Dic_data['person'])
 
-        return get_new_vsim_test_infor(person, country=country, imsi=imsi)
+        return get_new_vsim_test_info(person,country,imsi)
 
     return False

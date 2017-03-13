@@ -419,7 +419,7 @@ def get_excelNewVsimTestInfoUpdateTemple(dic_data):
                unicode("卡提供人"),
                unicode("测试人"),
                unicode("测试卡信息"),
-               unicode("本国/多国(0本国, 1多国)"),
+               unicode("卡类型(0本国, 1多国)"),
                unicode("国家"),
                unicode("简称"),
                unicode("运营商"),
@@ -438,7 +438,7 @@ def get_excelNewVsimTestInfoUpdateTemple(dic_data):
                unicode("lac"),
                unicode("cellid"),
                unicode("基本可用性(0 否, 1是)"),
-               unicode("1小时稳定性(0 否, 1是)"),
+               unicode("小时稳定性(0 否, 1是)"),
                unicode("协商速率"),
                unicode("协商速率一致性(0 否, 1是)"),
                unicode("失败原因"),
@@ -462,7 +462,7 @@ def get_excelNewVsimTestInfoInsertTemple(dic_data):
     sortKey = [unicode("卡提供人"),
                unicode("测试人"),
                unicode("测试卡信息"),
-               unicode("本国/多国(0本国, 1多国)"),
+               unicode("卡类型(0本国, 1多国)"),
                unicode("国家"),
                unicode("简称"),
                unicode("运营商"),
@@ -481,9 +481,53 @@ def get_excelNewVsimTestInfoInsertTemple(dic_data):
                unicode("lac"),
                unicode("cellid"),
                unicode("基本可用性(0 否, 1是)"),
-               unicode("1小时稳定性(0 否, 1是)"),
+               unicode("小时稳定性(0 否, 1是)"),
                unicode("协商速率"),
                unicode("协商速率一致性(0 否, 1是)"),
+               unicode("失败原因"),
+               unicode("备注")
+               ]
+    dateTimeKey = []
+    sorted_list_data = getListExcelData(dic_data=dicData,
+                                        sort_key=sortKey,
+                                        datetimekey=dateTimeKey)
+
+    return sorted_list_data
+
+
+def get_excelNewVsimTestInfo(dic_data):
+    """
+
+    :param dic_data:
+    :return:
+    """
+    dicData = dic_data
+    sortKey = [unicode("测试id"),
+               unicode("卡提供人"),
+               unicode("测试人"),
+               unicode("测试卡信息"),
+               unicode("本国_多国"),
+               unicode("国家"),
+               unicode("简称"),
+               unicode("运营商"),
+               unicode("plmn"),
+               unicode("网络制式"),
+               unicode("配置更改"),
+               unicode("imsi"),
+               unicode("账户"),
+               unicode("imei"),
+               unicode("设备类型"),
+               unicode("调卡成功时间"),
+               unicode("换卡时间"),
+               unicode("注册运营商"),
+               unicode("eplmn"),
+               unicode("注册网络"),
+               unicode("lac"),
+               unicode("cellid"),
+               unicode("基本可用性"),
+               unicode("小时稳定性"),
+               unicode("协商速率"),
+               unicode("协商速率一致性"),
                unicode("失败原因"),
                unicode("备注")
                ]

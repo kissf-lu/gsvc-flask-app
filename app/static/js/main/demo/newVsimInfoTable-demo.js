@@ -57,9 +57,9 @@ function initSelectView(init_select_class_list){
  *======================================================
  *JqxGrid columns FilterPanel setting;
  * @param filterPanel panel to init;
- * @param datafield : jqxgrid column datafield param;
+ * @param datafield : grid column datafield param;
  * @param filterGrid : jquery type of grid DOC ID;
- * @param SrcAdapter : jqxgrid SrcAdapter param ;
+ * @param SrcAdapter : grid SrcAdapter param ;
  *=============================================================*/
 var buildFilterPanel = function (filterPanel, datafield,filterGrid,SrcAdapter) {
     var textInput = $("<input style='margin:5px;'/>");
@@ -137,7 +137,7 @@ function initDropDownList(item_related_grid, item_jqx_drop_down){
         {label: '卡提供人', value: 'person_supplier', checked: true },
         {label: '测试人', value: 'person_test', checked: true },
         {label: '测试卡信息', value: 'card_info', checked: true },
-        {label: '本国/多国', value: 'vsim_type', checked: true },
+        {label: '卡类型', value: 'vsim_type', checked: true },
         {label: '国家', value: 'country_cn', checked: true },
         {label: '简称', value: 'country_iso', checked: true },
         {label: '运营商', value: 'operator', checked: true },
@@ -252,7 +252,7 @@ function initjqxGrid(initGrid, array){
     // grid views
     $jqGridItem.jqxGrid({
         width: "99.8%",
-        height: 600,
+        height: 500,
         source: SrcAdapter,
         filterable: true,
         columnsresize: true,
@@ -297,7 +297,7 @@ function initjqxGrid(initGrid, array){
             { text: '卡提供人', datafield: 'person_supplier' , filtertype: 'checkedlist', width: 80},
             { text: '测试人', datafield: 'person_test', filtertype: 'checkedlist', width: 80},
             { text: '测试卡信息', datafield: 'card_info', filtertype: 'checkedlist', width: 200 },
-            { text: '本国/多国', datafield: 'vsim_type', filtertype: 'checkedlist', width: 80 },
+            { text: '卡类型', datafield: 'vsim_type', filtertype: 'checkedlist', width: 80 },
             { text: '国家', datafield: 'country_cn', filtertype: 'checkedlist', width: 80 },
             { text: '简称', datafield: 'country_iso', filtertype: 'checkedlist', width: 80 },
             { text: '运营商', datafield: 'operator', filtertype: 'checkedlist', width: 80 },
@@ -326,7 +326,7 @@ function initjqxGrid(initGrid, array){
             { text: 'lac', datafield: 'lac', filtertype: 'checkedlist', width: 80 },
             { text: 'cellid', datafield: 'cellid', filtertype: 'checkedlist', width: 80 },
             { text: '基本可用性', datafield: 'service_usability', filtertype: 'checkedlist', width: 80 },
-            { text: '1小时稳定性', datafield: 'stability_onehour', filtertype: 'checkedlist', width: 80 },
+            { text: '小时稳定性', datafield: 'stability_onehour', filtertype: 'checkedlist', width: 80 },
             { text: '协商速率', datafield: 'agree_mbr', filtertype: 'checkedlist', width: 150 },
             { text: '协商速率一致性', datafield: 'agree_consistency', filtertype: 'checkedlist', width: 150 },
             { text: '失败原因', datafield: 'fail_reason', filtertype: 'checkedlist', width: 80 },
@@ -338,15 +338,14 @@ function initjqxGrid(initGrid, array){
 
 function newVsimTestInfoTableGetAjaxAPI(option) {
     var PostData = option.postData;
-    var person = PostData.person;
+    //var person = PostData.person;
     var country = PostData.country;
-    var imsi = PostData.imsi;
     //clear old warn content.
     globeVarNewVsimTestinfo.ID.alertModelID.children().detach();
 
-    if (person==''){
+    if (country==''){
         //
-        alert_func(globeVarNewVsimTestinfo.ID.alertModelID,"请设置测试人!");
+        alert_func(globeVarNewVsimTestinfo.ID.alertModelID,"请设置测试卡归属国家!");
     }else{
         globeVarNewVsimTestinfo.clearGridArrayData();
         globeVarNewVsimTestinfo.ID.newVsimTestInfoJqgridID.jqxGrid("clear");
@@ -431,7 +430,93 @@ function newVsimTestInfoTableGetAjaxAPI(option) {
             });
     }
 }
-
+function excelExportAPI(item_jqxgrid,item_app_growl) {
+    //
+    var rows = item_jqxgrid.jqxGrid('getdisplayrows');
+    var alldatanum= rows.length;
+    var view_data=[];
+    var json_data={'data':view_data};
+    var paginginformation = item_jqxgrid.jqxGrid('getpaginginformation');
+    // The page's number.
+    var pagenum = paginginformation.pagenum;
+    // The page's size.
+    var pagesize = paginginformation.pagesize;
+    // The number of all pages.
+    var pagescount = paginginformation.pagescount;
+    if (alldatanum==0){
+        //alter
+        alert_func(item_app_growl,'无输出数据！');
+    }
+    else{
+        for(var i = 0; i < rows.length; i++){
+            if (i==pagenum*pagesize){
+                for (var j = 0; j< pagesize; j++){
+                    if (i+j< alldatanum){
+                        view_data.push({
+                            测试id: rows[i+j].id_newvsimtest,
+                            卡提供人: rows[i+j].person_supplier,
+                            测试人: rows[i+j].person_test,
+                            测试卡信息: rows[i+j].card_info,
+                            卡类型: rows[i+j].vsim_type,
+                            国家: rows[i+j].country_cn,
+                            简称: rows[i+j].country_iso,
+                            运营商: rows[i+j].operator,
+                            plmn: rows[i+j].plmn,
+                            网络制式: rows[i+j].rat,
+                            配置更改: rows[i+j].config_change,
+                            imsi: rows[i+j].imsi,
+                            账户: rows[i+j].user_code,
+                            imei: rows[i+j].imei,
+                            设备类型: rows[i+j].device_type,
+                            调卡成功时间: rows[i+j].success_time,
+                            换卡时间: rows[i+j].change_time,
+                            注册运营商: rows[i+j].register_operator,
+                            eplmn: rows[i+j].eplmn,
+                            注册网络: rows[i+j].register_rat,
+                            lac: rows[i+j].lac,
+                            cellid: rows[i+j].cellid,
+                            基本可用性: rows[i+j].service_usability,
+                            小时稳定性: rows[i+j].stability_onehour,
+                            协商速率: rows[i+j].agree_mbr,
+                            协商速率一致性: rows[i+j].agree_consistency,
+                            失败原因: rows[i+j].fail_reason,
+                            备注: rows[i+j].remark
+                        })
+                    }
+                }
+            }
+        }
+        excelExport(json_data,item_app_growl);
+    }
+    return false;
+}
+/**     -------export xls files by submitting json data to server-------
+ *
+ * using submit method to submit json value to service and export xls to users.
+ * @param data: data like {'data':view_data} ;
+ * @param item_app_growl: jquery type warn DOC ID ;
+ * @return {boolean} return false to forbid DOC fresh;
+ */
+function excelExport(data,item_app_growl) {
+    var exportdata=data;
+    if (exportdata.data==[]){
+        // alter
+        alert_func(item_app_growl, '无输出数据！');
+    }
+    else{
+        var temp = document.createElement("form");
+        temp.action = $SCRIPT_ROOT +"/api/v1.0/export_newVsimTestInfo/";
+        temp.method = "post";
+        temp.style.display = "none";
+        var opt = document.createElement("textarea");
+        opt.name = "data";
+        opt.value = JSON.stringify(exportdata.data);
+        temp.appendChild(opt);
+        document.body.appendChild(temp);
+        temp.submit();
+    }
+    return false;
+}
 var globeVarNewVsimTestinfo = {
     'alertWinStr':'',                                //alert() function use alertWinStr value to show alert
     'gridArray': [],
@@ -443,7 +528,8 @@ var globeVarNewVsimTestinfo = {
         'newVsimTestInfoJqgridID' : $("#jqxgrid"),
         'modalID' : $('#newVsimTestInfo-Modal'),
         'dropDownID' : $("#jqxDropDownList"),
-        'alertModelID': $("#alert-model")
+        'alertModelID': $("#alert-model"),
+        'exportID': $("#Export")
     },
     'setalertWinStr': function (strAlert) {
         this.alertWinStr = strAlert;
@@ -486,5 +572,13 @@ $(function () {
             }
         };
         newVsimTestInfoTableGetAjaxAPI(ajaxParam);
-    })
+    });
+    //=================================================================
+    // excel files output
+    globeVarNewVsimTestinfo.ID.exportID.click(function () {
+        //alert("ok");
+        excelExportAPI(globeVarNewVsimTestinfo.ID.newVsimTestInfoJqgridID,
+            globeVarNewVsimTestinfo.ID.alertModelID);
+    });
+    //=================================================================
 });
