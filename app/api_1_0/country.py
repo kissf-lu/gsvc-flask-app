@@ -169,6 +169,6 @@ def get_newVsimTestInforTable():
         country = str(Dic_data['country'])
         person = str(Dic_data['person'])
 
-        return get_new_vsim_test_info(person,country,imsi)
+        return get_new_vsim_test_info(person, country, imsi)
 
     return False
