@@ -372,7 +372,7 @@ function initjqxGrid(initGrid, grid_array_data){
                     { text: '备注', datafield: 'remarks' , width: 100 },
                     { text: '电话号码', datafield: 'phone_num' , width: 100 },
                     { text: '付费类型', datafield: 'pay_type', filtertype: 'checkedlist' , width: 100 },
-                    { text: 'apn', datafield: 'apn' , width: 170 },
+                    { text: 'apn', datafield: 'apn', width: 170 },
                     { text: '上架日期', datafield: 'shelved_time', filtertype: 'date', cellsformat: 'yyyy-MM-dd HH:mm:ss', width: 170 },
                 ]
     });

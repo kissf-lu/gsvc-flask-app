@@ -15,8 +15,10 @@ from api_functions.getCountrySrcConIndexGrid import qurycountrySrcCon
 from api_functions.getCountryProbDic import getProbFisrtDic
 # Python get Flower Model
 from api_functions.get_FlowerQueryFunction import getFlowers
-#
+# new vsim test model
 from api_functions.newVsimTest import get_new_vsim_test_info
+# org ajax model
+from api_functions.selectAjax.getSelectData import get_org
 
 
 # ("以下为资源页面API接口-------------------------------------------------------------------------------------------------")
@@ -84,10 +86,11 @@ def get_countrySrcCon():
     :return:
     """
     if request.method == 'POST':
-        Dic_data = request.get_json()
-        country = str(Dic_data['country'])
+        DicData = request.get_json()
+        country = str(DicData['country'])
+        orgName = str(DicData['org'])
 
-        return qurycountrySrcCon(country)
+        return qurycountrySrcCon(country, orgName)
 
     return False
 
@@ -156,7 +159,6 @@ def get_FlowerQuery():
                       TimezoneOffset=TimezoneOffset)
 
 
-# ("以下为资源页面API接口-------------------------------------------------------------------------------------------------")
 @api.route('/get_newVsimTestInforTable/', methods=['POST'])
 def get_newVsimTestInforTable():
     """
@@ -172,3 +174,12 @@ def get_newVsimTestInforTable():
         return get_new_vsim_test_info(person, country, imsi)
 
     return False
+
+
+@api.route('/get_select2_orgdata/')
+def get_select2_orgdata():
+    """
+    本api为资源页获取手工维护表数据
+    :return:
+    """
+    return get_org()

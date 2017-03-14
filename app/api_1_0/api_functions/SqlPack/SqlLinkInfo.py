@@ -34,3 +34,6 @@ getonSysSrc = {
 getCountryProbDic = {
     "getSrc": {"db": "config_N", "database": "glocalme_css"}
 }
+selectAjax = {
+    "getSelectData":{"db": "config_N", "database": "glocalme_css"}
+}

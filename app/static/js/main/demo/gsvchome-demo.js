@@ -8,10 +8,10 @@
 */
 
 
-/**
+/**============================================================================*
 *告警通用文字,用于通知返回结果错误信息，
 *或查询审核告警信息
-*/
+*===========================================================================**/
 var lineChart_alert= '<div class="alert alert-warning" role="alert">'+
 			             '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
 			             '<span aria-hidden="true">&times;</span>'+
@@ -90,7 +90,7 @@ var buildFilterPanel = function (filterPanel, datafield) {
                     }
                     textInput.val("");
              });
-}
+};
 
 //国家卡资源统计表数据存储变量
 var countrySrcConGridArrayData = [];
@@ -164,19 +164,9 @@ function initcountrySrcConjqxGrid(){
                           return "<div style='margin:4px;'>" + (value + 1) + "</div>";
                       }
                     },
-                    { text: '国家', datafield: 'Country' , width: 70,
-                      filtertype: "custom",
-                      createfilterpanel: function (datafield, filterPanel) {
-                          buildFilterPanel(filterPanel, datafield);
-                      }
-                    },
-                    { text: '套餐名称', datafield: 'PackageName' ,width: 200,
-                      filtertype: "custom",
-                      createfilterpanel: function (datafield, filterPanel) {
-                          buildFilterPanel(filterPanel, datafield);
-                      }
-                    },
-                    { text: '套餐更新日期', datafield: 'NextUpdateTime', cellsformat: 'yyyy-MM-dd HH:mm:ss', filtertype: 'date', width: 200},
+                    { text: '国家', datafield: 'Country' , width: 70},
+                    { text: '套餐名称', datafield: 'PackageName' ,width: 200},
+                    { text: '套餐更新日期', datafield: 'NextUpdateTime', cellsformat: 'yyyy-MM-dd HH:mm:ss', filtertype: 'date', width: 150},
                     { text: '归属机构', datafield: 'ORG', filtertype: 'checkedlist', width: 100},
                     { text: '在架卡数', datafield: 'all_num',filterable: "range" , width: 80 },
                     { text: '未激活卡数', datafield: 'unact_num',filterable: "range" , width: 80 },
@@ -195,7 +185,11 @@ $("#countrySrcCondataGet").click(function () {
     // clear old data
     $("#country-alert").children().detach();
     var Country=$("#countrySrcConSelect").val();
-    var queryPost = {country: Country};
+    var Org = $('#OrgSelect').val();
+    var queryPost = {
+        country: Country,
+        org: Org
+    };
     //以下获取数据
     //清空countrySrcConGridArrayData数据，并且清空前端显示数据
     countrySrcConGridArrayData = [];
@@ -361,20 +355,42 @@ $(function () {
     //--------------------------初始化统计表单
     initcountrySrcConjqxGrid();
     //select 下拉列表筛选数据-国家：
-    var country_data = [{text: 'AD'},{text: 'AE'},{text: 'AF'},{text: 'AG'},{text: 'AI'},{text: 'AL'},{text: 'AM'},{text: 'AO'},{text: 'AQ'},{text: 'AR'},{text: 'AS'},{text: 'AT'},{text: 'AU'},{text: 'AW'},{text: 'AX'},{text: 'AZ'},{text: 'BA'},{text: 'BB'},{text: 'BD'},{text: 'BE'},{text: 'BF'},{text: 'BG'},{text: 'BH'},{text: 'BI'},{text: 'BJ'},{text: 'BL'},{text: 'BM'},{text: 'BN'},{text: 'BO'},{text: 'BQ'},{text: 'BR'},{text: 'BS'},{text: 'BT'},{text: 'BV'},{text: 'BW'},{text: 'BY'},{text: 'BZ'},{text: 'CA'},{text: 'CC'},{text: 'CD'},{text: 'CF'},{text: 'CG'},{text: 'CH'},{text: 'CI'},{text: 'CK'},{text: 'CL'},{text: 'CM'},{text: 'CN'},{text: 'CO'},{text: 'CR'},{text: 'CU'},{text: 'CV'},{text: 'CW'},{text: 'CX'},{text: 'CY'},{text: 'CZ'},{text: 'DE'},{text: 'DJ'},{text: 'DK'},{text: 'DM'},{text: 'DO'},{text: 'DZ'},{text: 'EC'},{text: 'EE'},{text: 'EG'},{text: 'EH'},{text: 'ER'},{text: 'ES'},{text: 'ET'},{text: 'FI'},{text: 'FJ'},{text: 'FK'},{text: 'FM'},{text: 'FO'},{text: 'FR'},{text: 'GA'},{text: 'GB'},{text: 'GD'},{text: 'GE'},{text: 'GF'},{text: 'GG'},{text: 'GH'},{text: 'GI'},{text: 'GL'},{text: 'GM'},{text: 'GN'},{text: 'GP'},{text: 'GQ'},{text: 'GR'},{text: 'GS'},{text: 'GT'},{text: 'GU'},{text: 'GW'},{text: 'GY'},{text: 'HK'},{text: 'HM'},{text: 'HN'},{text: 'HR'},{text: 'HT'},{text: 'HU'},{text: 'ID'},{text: 'IE'},{text: 'IL'},{text: 'IM'},{text: 'IN'},{text: 'IO'},{text: 'IQ'},{text: 'IR'},{text: 'IS'},{text: 'IT'},{text: 'JE'},{text: 'JM'},{text: 'JO'},{text: 'JP'},{text: 'KE'},{text: 'KG'},{text: 'KH'},{text: 'KI'},{text: 'KM'},{text: 'KN'},{text: 'KP'},{text: 'KR'},{text: 'KW'},{text: 'KY'},{text: 'KZ'},{text: 'LA'},{text: 'LB'},{text: 'LC'},{text: 'LI'},{text: 'LK'},{text: 'LR'},{text: 'LS'},{text: 'LT'},{text: 'LU'},{text: 'LV'},{text: 'LY'},{text: 'MA'},{text: 'MC'},{text: 'MD'},{text: 'ME'},{text: 'MF'},{text: 'MG'},{text: 'MH'},{text: 'MK'},{text: 'ML'},{text: 'MM'},{text: 'MN'},{text: 'MO'},{text: 'MP'},{text: 'MQ'},{text: 'MR'},{text: 'MS'},{text: 'MT'},{text: 'MU'},{text: 'MV'},{text: 'MW'},{text: 'MX'},{text: 'MY'},{text: 'MZ'},{text: 'NA'},{text: 'NC'},{text: 'NE'},{text: 'NF'},{text: 'NG'},{text: 'NI'},{text: 'NL'},{text: 'NO'},{text: 'NP'},{text: 'NR'},{text: 'NU'},{text: 'NZ'},{text: 'OM'},{text: 'PA'},{text: 'PC'},{text: 'PE'},{text: 'PF'},{text: 'PG'},{text: 'PH'},{text: 'PK'},{text: 'PL'},{text: 'PM'},{text: 'PN'},{text: 'PR'},{text: 'PS'},{text: 'PT'},{text: 'PW'},{text: 'PY'},{text: 'QA'},{text: 'RE'},{text: 'RO'},{text: 'RS'},{text: 'RU'},{text: 'RW'},{text: 'SA'},{text: 'SB'},{text: 'SC'},{text: 'SD'},{text: 'SE'},{text: 'SG'},{text: 'SH'},{text: 'SI'},{text: 'SJ'},{text: 'SK'},{text: 'SL'},{text: 'SM'},{text: 'SN'},{text: 'SO'},{text: 'SR'},{text: 'ST'},{text: 'SV'},{text: 'SX'},{text: 'SY'},{text: 'SZ'},{text: 'TC'},{text: 'TD'},{text: 'TF'},{text: 'TG'},{text: 'TH'},{text: 'TJ'},{text: 'TK'},{text: 'TL'},{text: 'TM'},{text: 'TN'},{text: 'TO'},{text: 'TR'},{text: 'TT'},{text: 'TV'},{text: 'TW'},{text: 'TZ'},{text: 'UA'},{text: 'UG'},{text: 'UM'},{text: 'US'},{text: 'UY'},{text: 'UZ'},{text: 'VA'},{text: 'VC'},{text: 'VE'},{text: 'VG'},{text: 'VI'},{text: 'VN'},{text: 'VU'},{text: 'WF'},{text: 'WS'},{text: 'YE'},{text: 'YT'},{text: 'ZA'},{text: 'ZM'},{text: 'ZW'}]
-    //select 下拉列表筛选数据-负责人：
-    var person_data = [{text: '刘超'},{text: '叶慧玲'},{text: '郑天琴'},{text: '曲薇'},{text: '黄柳青'},{text: '凌刚'},{text: '李红伟'},{text: '王成'},{text: '胡磊'}]
+    var country_data = [{text: 'AD'},{text: 'AE'},{text: 'AF'},{text: 'AG'},{text: 'AI'},{text: 'AL'},{text: 'AM'},{text: 'AO'},{text: 'AQ'},{text: 'AR'},{text: 'AS'},{text: 'AT'},{text: 'AU'},{text: 'AW'},{text: 'AX'},{text: 'AZ'},{text: 'BA'},{text: 'BB'},{text: 'BD'},{text: 'BE'},{text: 'BF'},{text: 'BG'},{text: 'BH'},{text: 'BI'},{text: 'BJ'},{text: 'BL'},{text: 'BM'},{text: 'BN'},{text: 'BO'},{text: 'BQ'},{text: 'BR'},{text: 'BS'},{text: 'BT'},{text: 'BV'},{text: 'BW'},{text: 'BY'},{text: 'BZ'},{text: 'CA'},{text: 'CC'},{text: 'CD'},{text: 'CF'},{text: 'CG'},{text: 'CH'},{text: 'CI'},{text: 'CK'},{text: 'CL'},{text: 'CM'},{text: 'CN'},{text: 'CO'},{text: 'CR'},{text: 'CU'},{text: 'CV'},{text: 'CW'},{text: 'CX'},{text: 'CY'},{text: 'CZ'},{text: 'DE'},{text: 'DJ'},{text: 'DK'},{text: 'DM'},{text: 'DO'},{text: 'DZ'},{text: 'EC'},{text: 'EE'},{text: 'EG'},{text: 'EH'},{text: 'ER'},{text: 'ES'},{text: 'ET'},{text: 'FI'},{text: 'FJ'},{text: 'FK'},{text: 'FM'},{text: 'FO'},{text: 'FR'},{text: 'GA'},{text: 'GB'},{text: 'GD'},{text: 'GE'},{text: 'GF'},{text: 'GG'},{text: 'GH'},{text: 'GI'},{text: 'GL'},{text: 'GM'},{text: 'GN'},{text: 'GP'},{text: 'GQ'},{text: 'GR'},{text: 'GS'},{text: 'GT'},{text: 'GU'},{text: 'GW'},{text: 'GY'},{text: 'HK'},{text: 'HM'},{text: 'HN'},{text: 'HR'},{text: 'HT'},{text: 'HU'},{text: 'ID'},{text: 'IE'},{text: 'IL'},{text: 'IM'},{text: 'IN'},{text: 'IO'},{text: 'IQ'},{text: 'IR'},{text: 'IS'},{text: 'IT'},{text: 'JE'},{text: 'JM'},{text: 'JO'},{text: 'JP'},{text: 'KE'},{text: 'KG'},{text: 'KH'},{text: 'KI'},{text: 'KM'},{text: 'KN'},{text: 'KP'},{text: 'KR'},{text: 'KW'},{text: 'KY'},{text: 'KZ'},{text: 'LA'},{text: 'LB'},{text: 'LC'},{text: 'LI'},{text: 'LK'},{text: 'LR'},{text: 'LS'},{text: 'LT'},{text: 'LU'},{text: 'LV'},{text: 'LY'},{text: 'MA'},{text: 'MC'},{text: 'MD'},{text: 'ME'},{text: 'MF'},{text: 'MG'},{text: 'MH'},{text: 'MK'},{text: 'ML'},{text: 'MM'},{text: 'MN'},{text: 'MO'},{text: 'MP'},{text: 'MQ'},{text: 'MR'},{text: 'MS'},{text: 'MT'},{text: 'MU'},{text: 'MV'},{text: 'MW'},{text: 'MX'},{text: 'MY'},{text: 'MZ'},{text: 'NA'},{text: 'NC'},{text: 'NE'},{text: 'NF'},{text: 'NG'},{text: 'NI'},{text: 'NL'},{text: 'NO'},{text: 'NP'},{text: 'NR'},{text: 'NU'},{text: 'NZ'},{text: 'OM'},{text: 'PA'},{text: 'PC'},{text: 'PE'},{text: 'PF'},{text: 'PG'},{text: 'PH'},{text: 'PK'},{text: 'PL'},{text: 'PM'},{text: 'PN'},{text: 'PR'},{text: 'PS'},{text: 'PT'},{text: 'PW'},{text: 'PY'},{text: 'QA'},{text: 'RE'},{text: 'RO'},{text: 'RS'},{text: 'RU'},{text: 'RW'},{text: 'SA'},{text: 'SB'},{text: 'SC'},{text: 'SD'},{text: 'SE'},{text: 'SG'},{text: 'SH'},{text: 'SI'},{text: 'SJ'},{text: 'SK'},{text: 'SL'},{text: 'SM'},{text: 'SN'},{text: 'SO'},{text: 'SR'},{text: 'ST'},{text: 'SV'},{text: 'SX'},{text: 'SY'},{text: 'SZ'},{text: 'TC'},{text: 'TD'},{text: 'TF'},{text: 'TG'},{text: 'TH'},{text: 'TJ'},{text: 'TK'},{text: 'TL'},{text: 'TM'},{text: 'TN'},{text: 'TO'},{text: 'TR'},{text: 'TT'},{text: 'TV'},{text: 'TW'},{text: 'TZ'},{text: 'UA'},{text: 'UG'},{text: 'UM'},{text: 'US'},{text: 'UY'},{text: 'UZ'},{text: 'VA'},{text: 'VC'},{text: 'VE'},{text: 'VG'},{text: 'VI'},{text: 'VN'},{text: 'VU'},{text: 'WF'},{text: 'WS'},{text: 'YE'},{text: 'YT'},{text: 'ZA'},{text: 'ZM'},{text: 'ZW'}];
+    var org_name = [
+        {text:'35ORG'},
+        {text:'a2network'},
+        {text:'CelloMobile'},
+        {text:'GFC_simbank'},
+        {text:'GLOBALWIFI'},
+        {text:'北京信威'},
+        {text:'GWIFI'},
+        {text:'JETFI桔豐科技'},
+        {text:'LianLian'},
+        {text:'POCWIFI'},
+        {text:'TestMvno'},
+        {text:'VisonData-ORG'},
+        {text:'YROAM'},
+        {text:'all'}
+    ];
     //select 下拉列表筛选数据-butype：
-    var butype_data = [{text: 'GTBU'}]
+    var butype_data = [{text: 'GTBU'}];
     //select 下拉列表筛选数据-国家：
-    var timedim_data = [{text: 'day'},{text: 'month'}]
+    var timedim_data = [{text: 'day'},{text: 'month'}];
     // ------------------------------下拉国家设置
     $(".form-country").select2({
-    data: country_data
+        data: country_data
     });
+
     $(".form-country").select2({
-    placeholder: "国家",
-    allowClear: true
+        placeholder: "国家",
+        allowClear: true
+    });
+    //-------------------------------org
+    $(".form-org").select2({
+        data:org_name
+    });
+    $(".form-org").select2({
+        allowClear: false
     });
     // ------------------------------butype 初始化
     $(".form-butype").select2({
@@ -415,7 +431,6 @@ $(function () {
     var radarOptions = {
         responsive: true
     };
-
     //var ctx5 = document.getElementById("radarChart").getContext("2d");
     //new Chart(ctx5, {type: 'radar', data: radarData, options:radarOptions});
     //
@@ -656,7 +671,7 @@ function countryChartQuerynotification_init(){
 
 //-------------------------------------------------ajax获取国家在板卡数、可用卡数数据
 $("#countryChartdataGet").click(function () {
-    var Country= $('#countryChartSelect').val()
+    var Country= $('#countryChartSelect').val();
     //  隐藏上一次告警栏
     $("#countryChartalert").children().detach();
     //必须进行国家选择才能查询！
@@ -791,7 +806,7 @@ function draw_countrySrcvsimStatic(data){
 function draw_countryFlowStatic(data){
 
     var getData = data;
-    var lablecountry_flow=$('select[name="country"]').val()
+    var lablecountry_flow=$('select[name="country"]').val();
     var N_countryVsimPackageflowStatuslabels=[];
     var N_countryVsimPackageflowStatustotal=[];
     var N_countryVsimPackageflowStatusleave=[];
@@ -816,7 +831,6 @@ function draw_countryFlowStatic(data){
             }
         ]
     };
-
     var barOptions = {
         events: false,
         tooltips: {
