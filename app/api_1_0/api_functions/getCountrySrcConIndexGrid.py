@@ -8,8 +8,13 @@ import mysql.connector
 
 
 def getJosonData(sysStr, Database, query_str):
+    """
 
-
+    :param sysStr:
+    :param Database:
+    :param query_str:
+    :return:
+    """
     jsonResults = qureResultAsJson(sysStr=sysStr,
                                    Database=Database,
                                    query_str=query_str,
@@ -17,14 +22,14 @@ def getJosonData(sysStr, Database, query_str):
     return jsonResults
 
 
-def mergeData(sourData,mergeData,mergekey,mergeindex):
+def mergeDataFunc(sourData, mergeData, mergekey, mergeindex):
     """
 
-    :param sourData: 基表
-    :param mergeData: 待合并表
-    :param mergekey: 聚合主键
-    :param mergeindex: 聚合结果项
-    :return: 返回合并表单sourData
+    :param sourData:
+    :param mergeData:
+    :param mergekey:
+    :param mergeindex:
+    :return:
     """
     havemeragenum = []
     for i in range(len(sourData)):
@@ -38,11 +43,11 @@ def mergeData(sourData,mergeData,mergekey,mergeindex):
                     if sourData[i][key] == mergeData[j][key]:
                         continue
                     else:
-                        ifmerge=False
+                        ifmerge = False
                         break
 
             if ifmerge:
-                havemeragenum.extend([j])#核实相同后记录核实行
+                havemeragenum.extend([j])  # 核实相同后记录核实行
                 for key in mergeindex:
                     if key in mergeData[j].keys():
                         premergeData.update({key: mergeData[j][key]})
@@ -56,10 +61,10 @@ def mergeData(sourData,mergeData,mergekey,mergeindex):
 def qureyNcountrySrcCon(sys_str, database, country, org_name):
     """
 
-    :param sys_databases: string
-    :param database: string
-    :param country: string
-    :param org_name: string
+    :param sys_str:
+    :param database:
+    :param country:
+    :param org_name:
     :return:
     """
 
@@ -89,10 +94,14 @@ def qureyNcountrySrcCon(sys_str, database, country, org_name):
         "                AND b.`next_update_time` > DATE(NOW())) "
         "                THEN a.`imsi` END)) AS 'ava_num', "
         "CASE WHEN 1 THEN '' END AS 'WarningFlow', "
-        "CAST(SUM(CASE WHEN `activate_status` = 0 THEN b.`init_flow` ELSE 0 END )/1024/1024/1024 AS DECIMAL(64,1))AS 'TotalFlower', "
+        "CAST(SUM(CASE WHEN `activate_status` = 0 "
+        "              THEN b.`init_flow` "
+        "              ELSE 0 END )/1024/1024/1024 AS DECIMAL(64,1))AS 'TotalFlower', "
         "CAST(SUM(b.`total_use_flow`)/1024/1024/1024 AS DECIMAL(64,1)) AS 'UsedFlower', "
         "CAST(SUM(b.`leave_flow`)/1024/1024/1024 AS DECIMAL(64,1))    AS 'LeftFlower', "
-        "CAST((SUM(b.`total_use_flow`)/SUM(CASE WHEN `activate_status` = 0 THEN b.`init_flow` ELSE 0 END ))*100  AS DECIMAL(64,1)) AS 'Percentage' "
+        "CAST((SUM(b.`total_use_flow`)/SUM(CASE WHEN `activate_status` = 0 "
+        "                                       THEN b.`init_flow` "
+        "                                       ELSE 0 END ))*100  AS DECIMAL(64,1)) AS 'Percentage' "
         "FROM `t_css_vsim` AS a "
         "LEFT  JOIN `t_css_vsim_packages` AS b  ON a.`imsi`= b.`imsi` "
         "LEFT  JOIN `t_css_group`         AS e  ON a.`group_id`= e.`id` "
@@ -117,10 +126,14 @@ def qureyNcountrySrcCon(sys_str, database, country, org_name):
         "                     AND b.`next_update_time` > DATE(NOW())) "
         "                THEN a.`imsi` END)) AS 'ava_num', "
         "CAST(c.`warning_flow`/1024/1024 AS UNSIGNED) AS 'warning_flow', "
-        "CAST(SUM(CASE WHEN `activate_status` = 0 THEN b.`init_flow` ELSE 0 END )/1024/1024/1024 AS DECIMAL(64,1))AS 'TotalFlower', "
+        "CAST(SUM(CASE WHEN `activate_status` = 0 "
+        "              THEN b.`init_flow` "
+        "              ELSE 0 END )/1024/1024/1024 AS DECIMAL(64,1))AS 'TotalFlower', "
         "CAST(SUM(b.`total_use_flow`)/1024/1024/1024 AS DECIMAL(64,1)) AS 'UsedFlower', "
         "CAST(SUM(b.`leave_flow`)/1024/1024/1024 AS DECIMAL(64,1))    AS 'LeftFlower', "
-        "CAST((SUM(b.`total_use_flow`)/SUM(CASE WHEN `activate_status` = 0 THEN b.`init_flow` ELSE 0 END ))*100  AS DECIMAL(64,1)) AS 'Percentage' "
+        "CAST((SUM(b.`total_use_flow`)/SUM(CASE WHEN `activate_status` = 0 "
+        "                                       THEN b.`init_flow` "
+        "                                        ELSE 0 END ))*100  AS DECIMAL(64,1)) AS 'Percentage' "
         "FROM `t_css_vsim` AS a "
         "LEFT  JOIN `t_css_vsim_packages` AS b  ON a.`imsi`= b.`imsi` "
         "LEFT  JOIN `t_css_group`         AS e  ON a.`group_id`= e.`id` "
@@ -146,7 +159,7 @@ def qureyNcountrySrcCon(sys_str, database, country, org_name):
         DicResults = {'info': {'err': True, 'errinfo': errInfo}, 'data': []}
         return DicResults
     else:
-        if qurey_result == []:
+        if not qurey_result:
             DicResults = {'info': {'err': False, 'errinfo': "No Query Data"}, 'data': []}
             return DicResults
         else:
@@ -165,12 +178,11 @@ def qureyNcountrySrcCon(sys_str, database, country, org_name):
             return DicResults
 
 
-
-def qurycountrySrcCon(country, org):
+def qurycountrySrcCon(country, org_name):
     """
-    国家概述面板 ， 新架构分机构卡资源统计 表格对应接口函数
-    国家套餐更新日期可用卡数等信息统计接口
+
     :param country:
+    :param org_name:
     :return:
     """
 
@@ -178,12 +190,6 @@ def qurycountrySrcCon(country, org):
     N_countrySrcCon = qureyNcountrySrcCon('config_N',
                                           'glocalme_css',
                                           country,
-                                          org)
+                                          org_name)
 
     return json.dumps(N_countrySrcCon, sort_keys=True, indent=4, default=json_util.default)
-
-
-
-
-
-
