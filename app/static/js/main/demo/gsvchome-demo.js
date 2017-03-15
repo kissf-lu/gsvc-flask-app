@@ -343,7 +343,7 @@ function excelExport(data) {
          }
      else{
           var temp = document.createElement("form");
-          temp.action = $SCRIPT_ROOT +"/api/v1.0/export_countrySrcStatic/"//"/test_exportExcel";
+          temp.action = $SCRIPT_ROOT +"/api/v1.0/export_countrySrcStatic/";  //test_exportExcel
           temp.method = "post";
           temp.style.display = "none";
           var opt = document.createElement("textarea");
@@ -494,9 +494,7 @@ $("#country_MaxusrlineChart_dataGet").click(function (){
                });//getJson函数结束
         }
 });
-
-
-//-----------------------------------------------------绘制峰值用户曲线图函数
+// 绘制峰值用户曲线图函数
 function draw_mutiLine_CountryMaxOnlineUser(data){
     //绘制国家维度可用卡数、总计卡数、在线峰值用户数曲线图
     var getData = data;
@@ -529,7 +527,7 @@ function draw_mutiLine_CountryMaxOnlineUser(data){
                 pointBackgroundColor: "rgba(126,79,148,1)",
                 pointBorderColor: "#fff",
                 data: availableCard_line
-            },
+            }
         ]
     };
 
@@ -567,12 +565,6 @@ function draw_mutiLine_CountryMaxOnlineUser(data){
 
 }
 
-//-------------------------------------------------------峰值用户画板模块--end---------------------------------------------
-
-
-//------------------------------------------------------国家维度画板模块------------------------------------------------
-//包含卡状态、套餐流量使用情况统计
-
 // ------------------------------------------------------------初始化天维度选择通知栏
 function countryChartQuerynotification_init(){
    //初始化通知
@@ -606,7 +598,7 @@ $("#countryChartdataGet").click(function () {
 
         $.getJSON($SCRIPT_ROOT + '/api/v1.0/get_CountryAvailableVsim/', //get方法url地址
                //data参数
-               {country: Country,
+               {country: Country
                 },
                //回掉函数
                function(data) {
@@ -926,7 +918,6 @@ function initDropDownList(item_related_grid, item_jqx_drop_down){
  * @param jqx_drop_down_list : source list to initialize Dropdownlist model
  *======================================================================**/
 function initDropdownlist(item_jqx_drop_down, jqx_drop_down_list) {
-
     item_jqx_drop_down.jqxDropDownList({
         checkboxes: true,
         source: jqx_drop_down_list,
@@ -1013,4 +1004,5 @@ $(function () {
         countrySrcConAjaxApi(ajaxParam);
     });
     daterange_init('-360d');
+
 });
