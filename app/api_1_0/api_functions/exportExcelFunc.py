@@ -203,6 +203,7 @@ def get_excel140countryDataAndSorted(dic_data):
                unicode('套餐类型'),
                unicode('网络集名'),
                unicode('ORG'),
+               unicode('占用状态'),
                unicode('state')]
 
     dateTimeKey = []

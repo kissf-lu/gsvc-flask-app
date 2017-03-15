@@ -3,6 +3,7 @@
 # import sys
 import json
 from bson import json_util
+import mysql.connector
 from SqlPack.SQLModel import qureResultAsJson
 import time
 import datetime
@@ -267,8 +268,6 @@ def get_140countryFlower(startDate, stopDate, data):
 def get_140countrySrc():
     """
     本函数获取系统中140国卡的imsi、org、state、groupname信息
-    :param stopDate:
-    :param startDate:
     :return:
     """
 
@@ -276,6 +275,7 @@ def get_140countrySrc():
                  "DISTINCT (CAST(a.`imsi` AS CHAR)) AS 'imsi',  "
                  "e.`org_name` AS 'org',  "
                  "a.`available_status` AS 'state',  "
+                 "(case when a.`occupy_status` = 0 then '未占用' else '已占用' end) AS 'occupy_status', "
                  "GROUP_CONCAT(DISTINCT b.`package_type_name` "
                  "ORDER BY b.`package_type_name` SEPARATOR ';') AS 'package_type', "
                  "c.`name` AS 'groupname'  "
@@ -295,6 +295,7 @@ def get_140countrySrc():
     imsiInfo = getJosonData(sys_str=imsiInfo_sysStr,
                             data_base=imsiInfo_Database,
                             query_str=query_str)
+    # print query_str
     return imsiInfo
 
 
@@ -323,6 +324,8 @@ def qury140countryFlowerStatics(begintime, endtime, TimezoneOffset):
     else:
         try:
             Info140Country = get_140countrySrc()
+        except mysql.connector.Error as err:
+            errInfoSrc = "Something went wrong: {}".format(err)
         except:
             errInfoSrc = "Unexpected error"
         if errInfoSrc:
@@ -345,7 +348,6 @@ def qury140countryFlowerStatics(begintime, endtime, TimezoneOffset):
                 errInfoFlower = "DataBase Connection Exceeded SocketTimeoutMS!"
             except:
                 errInfoFlower = "Unexpected error"
-
             if errInfoFlower:
                 DicResults = {'info': {'err': True, 'errinfo': errInfoFlower}, 'data': []}
                 return json.dumps(DicResults, sort_keys=True, indent=4, default=json_util.default)

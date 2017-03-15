@@ -8,6 +8,26 @@
 */
 
 
+/**=======================================================
+ *                          warn  func
+ *=========================================================
+ *bootstrap warn button type alert
+ * @param alert_button_item : is the jquery type DOC ID obtaining from jquery DOC;
+ * @param alert_doc: is alerting string to users;
+ *
+ *===================================================================================*/
+function  alert_func(alert_button_item,alert_doc) {
+    var $alertItem = alert_button_item;
+    var alertStr=('<div class="alert alert-warning" role="alert">'+
+        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+        '<span aria-hidden="true">&times;</span>'+
+        '</button>'+
+        '<p>'+alert_doc+'</p>'+
+        '</div>'
+    );
+    $alertItem.children().detach();
+    $alertItem.append(alertStr);
+}
 /**============================================================================*
 *告警通用文字,用于通知返回结果错误信息，
 *或查询审核告警信息
@@ -23,103 +43,104 @@ var daterange_data='<div class="input-group input-daterange" id="datepicker">'+
       '    <input type="text" class="input-sm form-control" name="end" id="input-daterange-end"/>'+
       '</div>';
 
-
-
-//----------------------------------------------------表格统计栏----------------------------------------------------------
-var buildFilterPanel = function (filterPanel, datafield) {
-        var textInput = $("<input style='margin:5px;'/>");
-        var applyinput = $("<div class='filter' style='height: 25px; margin-left: 20px; margin-top: 7px;'></div>");
-        var filterbutton = $('<span tabindex="0" style="padding: 4px 12px; margin-left: 2px;">筛选</span>');
-        applyinput.append(filterbutton);
-        var filterclearbutton = $('<span tabindex="0" style="padding: 4px 12px; margin-left: 5px;">清除筛选</span>');
-        applyinput.append(filterclearbutton);
-        filterPanel.append(textInput);
-        filterPanel.append(applyinput);
-        filterbutton.jqxButton({ height: 20 });
-        filterclearbutton.jqxButton({height: 20 });
-        var dataSource =
-         {
-         localdata: countrySrcConAdapter.records,
-         datatype: "json",
-         async: false
-         }
-        var dataadapter = new $.jqx.dataAdapter(dataSource,
-         {
-         autoBind: false,
-         autoSort: true,
-         autoSortField: datafield,
-         async: false,
-         uniqueDataFields: [datafield]
-         });
-        var column = $("#con-countrySRC-jqxgrid").jqxGrid('getcolumn', datafield);
-             textInput.jqxInput({ placeHolder: "Enter " + column.text, popupZIndex: 9999999, displayMember: datafield, source: dataadapter, height: 23, width: 175 });
-             textInput.keyup(function (event) {
-                 if (event.keyCode === 13) {
-                        filterbutton.trigger('click');
-                 }
-             });
-             filterbutton.click(function () {
-                    var filtergroup = new $.jqx.filter();
-                    var filter_or_operator = 1;
-                    var filtervalue = textInput.val();
-                    var filtercondition = 'contains';
-                    var filter1 = filtergroup.createfilter('stringfilter', filtervalue, filtercondition);
-                    filtergroup.addfilter(filter_or_operator, filter1);
-                    // add the filters.
-                    $("#con-countrySRC-jqxgrid").jqxGrid('addfilter', datafield, filtergroup);
-                    // apply the filters.
-                    $("#con-countrySRC-jqxgrid").jqxGrid('applyfilters');
-                    $("#con-countrySRC-jqxgrid").jqxGrid('closemenu');
-             });
-
-             filterbutton.keydown(function (event) {
-                  if (event.keyCode === 13) {
-                        filterbutton.trigger('click');
-                  }
-             });
-             filterclearbutton.click(function () {
-                    $("#con-countrySRC-jqxgrid").jqxGrid('removefilter', datafield);
-                    // apply the filters.
-                    $("#con-countrySRC-jqxgrid").jqxGrid('applyfilters');
-                    $("#con-countrySRC-jqxgrid").jqxGrid('closemenu');
-             });
-
-             filterclearbutton.keydown(function (event) {
-                    if (event.keyCode === 13) {
-                        filterclearbutton.trigger('click');
-                    }
-                    textInput.val("");
-             });
+/**=====================================================
+ *  -------FilterPanel set func-------
+ *======================================================
+ *JqxGrid columns FilterPanel setting;
+ * @param filterPanel panel to init;
+ * @param datafield : grid column datafield param;
+ * @param filterGrid : jquery type of grid DOC ID;
+ * @param SrcAdapter : grid SrcAdapter param ;
+ *=============================================================*/
+var buildFilterPanel = function (filterPanel, datafield,filterGrid,SrcAdapter) {
+    var textInput = $("<input style='margin:5px;'/>");
+    var applyinput = $("<div class='filter' style='height: 25px; margin-left: 20px; margin-top: 7px;'></div>");
+    var filterbutton = $('<span tabindex="0" style="padding: 4px 12px; margin-left: 2px;">筛选</span>');
+    applyinput.append(filterbutton);
+    var filterclearbutton = $('<span tabindex="0" style="padding: 4px 12px; margin-left: 5px;">清除筛选</span>');
+    applyinput.append(filterclearbutton);
+    filterPanel.append(textInput);
+    filterPanel.append(applyinput);
+    filterbutton.jqxButton({ height: 20 });
+    filterclearbutton.jqxButton({height: 20 });
+    var dataSource ={
+        localdata: SrcAdapter.records,
+        datatype: "json",
+        async: false
+    };
+    var dataadapter = new $.jqx.dataAdapter(dataSource,
+        {
+            autoBind: false,
+            autoSort: true,
+            autoSortField: datafield,
+            async: false,
+            uniqueDataFields: [datafield]
+        });
+    var $jqgrid140country = filterGrid;
+    var column = $jqgrid140country.jqxGrid('getcolumn', datafield);
+    textInput.jqxInput({ placeHolder: "Enter " + column.text, popupZIndex: 9999999, displayMember: datafield, source: dataadapter, height: 23, width: 175 });
+    textInput.keyup(function (event) {
+        if (event.keyCode === 13) {
+            filterbutton.trigger('click');
+        }
+    });
+    filterbutton.click(function () {
+        var filtergroup = new $.jqx.filter();
+        var filter_or_operator = 1;
+        var filtervalue = textInput.val();
+        var filtercondition = 'contains';
+        var filter1 = filtergroup.createfilter('stringfilter', filtervalue, filtercondition);
+        filtergroup.addfilter(filter_or_operator, filter1);
+        // add the filters.
+        $jqgrid140country.jqxGrid('addfilter', datafield, filtergroup);
+        //apply the filters.
+        $jqgrid140country.jqxGrid('applyfilters');
+        $jqgrid140country.jqxGrid('closemenu');
+    });
+    filterbutton.keydown(function (event) {
+        if (event.keyCode === 13) {
+            filterbutton.trigger('click');
+        }
+    });
+    filterclearbutton.click(function () {
+        $jqgrid140country.jqxGrid('removefilter', datafield);
+        // apply the filters.
+        $jqgrid140country.jqxGrid('applyfilters');
+        $jqgrid140country.jqxGrid('closemenu');
+    });
+    filterclearbutton.keydown(function (event) {
+        if (event.keyCode === 13) {
+            filterclearbutton.trigger('click');
+        }
+        textInput.val("");
+    });
 };
-
-//国家卡资源统计表数据存储变量
-var countrySrcConGridArrayData = [];
-//国家卡资源统计表格数据初始化
-var countrySrcConsource ={
-                localdata: countrySrcConGridArrayData,
-                datatype: "json",
-                datafields: [
-                    {name: 'Country', type: 'string' },
-                    {name: 'PackageName', type: 'string' },
-                    {name: 'NextUpdateTime', type: 'date' },
-                    {name: 'ORG', type: 'string' },
-                    {name: 'all_num', type: 'int' },
-                    {name: 'unact_num', type: 'int' },
-                    {name: 'ava_num', type: 'int' },
-                    {name: 'WarningFlow', type: 'int' },
-                    {name: 'TotalFlower', type: 'float' },
-                    {name: 'UsedFlower', type: 'float' },
-                    {name: 'LeftFlower', type: 'float' },
-                    {name: 'Percentage', type: 'float'}
-                ],
-};
-//装在国家统计表格数据jqxgrid data adapter
-var countrySrcConAdapter = new $.jqx.dataAdapter(countrySrcConsource);
 
 //------------------------------------------------------------初始化统计表单
-function initcountrySrcConjqxGrid(){
+function initcountrySrcConjqxGrid(item_grid, array){
+    //国家卡资源统计表格数据初始化
+    var countrySrcConsource ={
+        localdata: array,
+        datatype: "json",
+        datafields: [
+            {name: 'Country', type: 'string' },
+            {name: 'PackageName', type: 'string' },
+            {name: 'NextUpdateTime', type: 'date' },
+            {name: 'ORG', type: 'string' },
+            {name: 'all_num', type: 'int' },
+            {name: 'unact_num', type: 'int' },
+            {name: 'ava_num', type: 'int' },
+            {name: 'WarningFlow', type: 'int' },
+            {name: 'TotalFlower', type: 'float' },
+            {name: 'UsedFlower', type: 'float' },
+            {name: 'LeftFlower', type: 'float' },
+            {name: 'Percentage', type: 'float'}
+        ]
+    };
+    //装在国家统计表格数据jqxgrid data adapter
+    var countrySrcConAdapter = new $.jqx.dataAdapter(countrySrcConsource);
     // grid views
-    $("#con-countrySRC-jqxgrid").jqxGrid({
+    item_grid.jqxGrid({
                 filterable: true,
                 source: countrySrcConAdapter,
                 columnsresize: true,
@@ -139,7 +160,7 @@ function initcountrySrcConjqxGrid(){
                 },
                 autoshowfiltericon: true,
                 columnmenuopening: function (menu, datafield, height) {
-                    var column = $("#con-countrySRC-jqxgrid").jqxGrid('getcolumn', datafield);
+                    var column = item_grid.jqxGrid('getcolumn', datafield);
                     if (column.filtertype == "custom") {
                         menu.height(155);
                         setTimeout(function () {
@@ -166,7 +187,9 @@ function initcountrySrcConjqxGrid(){
                     },
                     { text: '国家', datafield: 'Country' , width: 70},
                     { text: '套餐名称', datafield: 'PackageName' ,width: 200},
-                    { text: '套餐更新日期', datafield: 'NextUpdateTime', cellsformat: 'yyyy-MM-dd HH:mm:ss', filtertype: 'date', width: 150},
+                    { text: '套餐更新日期', datafield: 'NextUpdateTime', cellsformat: 'yyyy-MM-dd HH:mm:ss',
+                        filtertype: 'date', width: 150
+                    },
                     { text: '归属机构', datafield: 'ORG', filtertype: 'checkedlist', width: 100},
                     { text: '在架卡数', datafield: 'all_num',filterable: "range" , width: 80 },
                     { text: '未激活卡数', datafield: 'unact_num',filterable: "range" , width: 80 },
@@ -178,102 +201,91 @@ function initcountrySrcConjqxGrid(){
                     { text: '流量使用率_%', datafield: 'Percentage',width: 100,filtertype: "range"}
                 ]
     });
+    return countrySrcConsource;
 }
 
-//--------------------------------------------------ajax-国家统计表格数据模
-$("#countrySrcCondataGet").click(function () {
-    // clear old data
-    $("#country-alert").children().detach();
-    var Country=$("#countrySrcConSelect").val();
-    var Org = $('#OrgSelect').val();
-    var queryPost = {
-        country: Country,
-        org: Org
-    };
+//ajax-国家统计表格数据模
+function countrySrcConAjaxApi(options_param) {
+    var queryPost = options_param.postData;
+    var Country = queryPost.country;
+    var Org = queryPost.org;
+    options_param.queryAlert.alertID.children().detach();
     //以下获取数据
     //清空countrySrcConGridArrayData数据，并且清空前端显示数据
-    countrySrcConGridArrayData = [];
-    $("#con-countrySRC-jqxgrid").jqxGrid("clear");
-    $('#con-countrySRC-jqxgrid').jqxGrid('showloadelement');
+    options_param.gridParam.setArrayData([]);
+    options_param.gridParam.gridID.jqxGrid("clear");
+    options_param.gridParam.gridID.jqxGrid("showloadelement");
     //disable query button
-    $("#countrySrcCondataGet").attr("disabled", true);
+    options_param.getDataBtID.attr("disabled", true);
     var AjaxRequest = $.ajax({
-                     type: "POST",
-                     //get方法url地址
-                     url: $SCRIPT_ROOT + "/api/v1.0/get_countrySrcCon/",
-                     //request set
-                     contentType: "application/json",
-                     //data参数
-                     data: JSON.stringify(queryPost),
-                     //server back data type
-                     dataType: "json"
-                 })
-                 .done(function(data){
-                     //清空countrySrcConGridArrayData数据，并且清空前端显示数据
-                     countrySrcConGridArrayData = [];
-                     $("#con-countrySRC-jqxgrid").jqxGrid("clear");
-                     var getData = data;
-                     if (getData.data.length==0){
-                               if (getData.info.err){
-                                   //delete old alter
-                                   $("#country-alert").children().detach();
-						           $("#country-alert").append(
-						               lineChart_alert +
-						               '<p>Error：'+ getData.info.errinfo +'</p></div>'
-						           );
-                               }
-                               else{
-                                   $("#country-alert").children().detach();
-						           $("#country-alert").append(
-						               lineChart_alert +
-						               '<p>无查询结果!</p></div>'
-						           );
-                               }
-                     }
-                     else{
-                         $.each( getData.data, function(i, item){
-                                       countrySrcConGridArrayData.push({
-                                           Country: item.Country,
-                                           PackageName: item.PackageName,
-                                           NextUpdateTime: item.NextUpdateTime,
-                                           ORG: item.ORG,
-                                           all_num: item.all_num,
-                                           unact_num: item.unact_num,
-                                           ava_num: item.ava_num,
-                                           WarningFlow: item.WarningFlow,
-                                           TotalFlower: item.TotalFlower,
-                                           UsedFlower: item.UsedFlower,
-                                           LeftFlower: item.LeftFlower,
-                                           Percentage: item.Percentage
-                                       });
-                           });//each函数完成
-                           // set the new data
-                           countrySrcConsource.localdata = countrySrcConGridArrayData;
-						   $('#con-countrySRC-jqxgrid').jqxGrid('updatebounddata');
-                     }
-                 })
-                 .fail(function(jqXHR, status){
-                     //清空countrySrcConGridArrayData数据，并且清空前端显示数据
-                     countrySrcConGridArrayData = [];
-                     $("#con-countrySRC-jqxgrid").jqxGrid("clear");
-                     $("#country-alert").children().detach();
-				     $("#country-alert").append(
-						 lineChart_alert +
-					     '<p> Servers False!</p></div>'
-					 );
-                 })
-                 .always(function() {
-                     $("#countrySrcCondataGet").attr("disabled", false);
-                 });
-});
-
-//------------------------------------------------------------刷新数据button模块--------------------------
+        type: "POST",
+        //get方法url地址
+        url: $SCRIPT_ROOT + "/api/v1.0/get_countrySrcCon/",
+        //request set
+        contentType: "application/json",
+        //data参数
+        data: JSON.stringify(queryPost),
+        //server back data type
+        dataType: "json"
+    })
+        .done(function(data){
+            //清空countrySrcConGridArrayData数据，并且清空前端显示数据
+            options_param.gridParam.setArrayData([]);
+            options_param.gridParam.gridID.jqxGrid("clear");
+            var getData = data;
+            if (getData.data.length==0){
+                if (getData.info.err){
+                    //delete old alter
+                    options_param.queryAlert.alertID.children().detach();
+                    alert_func(options_param.queryAlert.alertID, ('Error：'+ getData.info.errinfo));
+                }
+                else{
+                    options_param.queryAlert.alertID.children().detach();
+                    alert_func(options_param.queryAlert.alertID, ('无查询结果!'));
+                }
+            }
+            else{
+                var countrySrcConGridArrayData = [];
+                $.each( getData.data, function(i, item){
+                    countrySrcConGridArrayData.push({
+                        Country: item.Country,
+                        PackageName: item.PackageName,
+                        NextUpdateTime: item.NextUpdateTime,
+                        ORG: item.ORG,
+                        all_num: item.all_num,
+                        unact_num: item.unact_num,
+                        ava_num: item.ava_num,
+                        WarningFlow: item.WarningFlow,
+                        TotalFlower: item.TotalFlower,
+                        UsedFlower: item.UsedFlower,
+                        LeftFlower: item.LeftFlower,
+                        Percentage: item.Percentage
+                    });
+                });//each函数完成
+                // set the new data
+                options_param.gridParam.setArrayData(countrySrcConGridArrayData);
+                options_param.gridParam.gridSource.localdata = countrySrcConGridArrayData;
+                options_param.gridParam.gridID.jqxGrid('updatebounddata');
+            }
+        })
+        .fail(function(jqXHR, status){
+            //清空countrySrcConGridArrayData数据，并且清空前端显示数据
+            options_param.gridParam.setArrayData([]);
+            options_param.gridParam.gridID.jqxGrid("clear");
+            options_param.queryAlert.alertID.children().detach();
+            alert_func(options_param.queryAlert.alertID, ('Servers False!'));
+        })
+        .always(function() {
+            options_param.getDataBtID.attr("disabled", false);
+        });
+}
+/* 刷新数据button模块*/
 $('#countrySrcConFlash').click(function () {
     $('#con-countrySRC-jqxgrid').jqxGrid('updatebounddata');
 
 });
 
-//------------------------------------------------------------现网excel导出栏----------------------------
+/*现网excel导出栏*/
 $("#countrySrcConexcelExport").click(function () {
      var rows = $('#con-countrySRC-jqxgrid').jqxGrid('getdisplayrows');
      var alldatanum= rows.length;
@@ -344,104 +356,6 @@ function excelExport(data) {
        return false;
 }
 //------------------------------------------------------------excel导出栏--end--------------------------
-
-//--------------------------------------------------------------表格统计栏--end-------------------------------------------
-
-
-
-
-//--------------------------------------------------------------main-初始化主程序-----------------------------------------
-$(function () {
-    //--------------------------初始化统计表单
-    initcountrySrcConjqxGrid();
-    //select 下拉列表筛选数据-国家：
-    var country_data = [{text: 'AD'},{text: 'AE'},{text: 'AF'},{text: 'AG'},{text: 'AI'},{text: 'AL'},{text: 'AM'},{text: 'AO'},{text: 'AQ'},{text: 'AR'},{text: 'AS'},{text: 'AT'},{text: 'AU'},{text: 'AW'},{text: 'AX'},{text: 'AZ'},{text: 'BA'},{text: 'BB'},{text: 'BD'},{text: 'BE'},{text: 'BF'},{text: 'BG'},{text: 'BH'},{text: 'BI'},{text: 'BJ'},{text: 'BL'},{text: 'BM'},{text: 'BN'},{text: 'BO'},{text: 'BQ'},{text: 'BR'},{text: 'BS'},{text: 'BT'},{text: 'BV'},{text: 'BW'},{text: 'BY'},{text: 'BZ'},{text: 'CA'},{text: 'CC'},{text: 'CD'},{text: 'CF'},{text: 'CG'},{text: 'CH'},{text: 'CI'},{text: 'CK'},{text: 'CL'},{text: 'CM'},{text: 'CN'},{text: 'CO'},{text: 'CR'},{text: 'CU'},{text: 'CV'},{text: 'CW'},{text: 'CX'},{text: 'CY'},{text: 'CZ'},{text: 'DE'},{text: 'DJ'},{text: 'DK'},{text: 'DM'},{text: 'DO'},{text: 'DZ'},{text: 'EC'},{text: 'EE'},{text: 'EG'},{text: 'EH'},{text: 'ER'},{text: 'ES'},{text: 'ET'},{text: 'FI'},{text: 'FJ'},{text: 'FK'},{text: 'FM'},{text: 'FO'},{text: 'FR'},{text: 'GA'},{text: 'GB'},{text: 'GD'},{text: 'GE'},{text: 'GF'},{text: 'GG'},{text: 'GH'},{text: 'GI'},{text: 'GL'},{text: 'GM'},{text: 'GN'},{text: 'GP'},{text: 'GQ'},{text: 'GR'},{text: 'GS'},{text: 'GT'},{text: 'GU'},{text: 'GW'},{text: 'GY'},{text: 'HK'},{text: 'HM'},{text: 'HN'},{text: 'HR'},{text: 'HT'},{text: 'HU'},{text: 'ID'},{text: 'IE'},{text: 'IL'},{text: 'IM'},{text: 'IN'},{text: 'IO'},{text: 'IQ'},{text: 'IR'},{text: 'IS'},{text: 'IT'},{text: 'JE'},{text: 'JM'},{text: 'JO'},{text: 'JP'},{text: 'KE'},{text: 'KG'},{text: 'KH'},{text: 'KI'},{text: 'KM'},{text: 'KN'},{text: 'KP'},{text: 'KR'},{text: 'KW'},{text: 'KY'},{text: 'KZ'},{text: 'LA'},{text: 'LB'},{text: 'LC'},{text: 'LI'},{text: 'LK'},{text: 'LR'},{text: 'LS'},{text: 'LT'},{text: 'LU'},{text: 'LV'},{text: 'LY'},{text: 'MA'},{text: 'MC'},{text: 'MD'},{text: 'ME'},{text: 'MF'},{text: 'MG'},{text: 'MH'},{text: 'MK'},{text: 'ML'},{text: 'MM'},{text: 'MN'},{text: 'MO'},{text: 'MP'},{text: 'MQ'},{text: 'MR'},{text: 'MS'},{text: 'MT'},{text: 'MU'},{text: 'MV'},{text: 'MW'},{text: 'MX'},{text: 'MY'},{text: 'MZ'},{text: 'NA'},{text: 'NC'},{text: 'NE'},{text: 'NF'},{text: 'NG'},{text: 'NI'},{text: 'NL'},{text: 'NO'},{text: 'NP'},{text: 'NR'},{text: 'NU'},{text: 'NZ'},{text: 'OM'},{text: 'PA'},{text: 'PC'},{text: 'PE'},{text: 'PF'},{text: 'PG'},{text: 'PH'},{text: 'PK'},{text: 'PL'},{text: 'PM'},{text: 'PN'},{text: 'PR'},{text: 'PS'},{text: 'PT'},{text: 'PW'},{text: 'PY'},{text: 'QA'},{text: 'RE'},{text: 'RO'},{text: 'RS'},{text: 'RU'},{text: 'RW'},{text: 'SA'},{text: 'SB'},{text: 'SC'},{text: 'SD'},{text: 'SE'},{text: 'SG'},{text: 'SH'},{text: 'SI'},{text: 'SJ'},{text: 'SK'},{text: 'SL'},{text: 'SM'},{text: 'SN'},{text: 'SO'},{text: 'SR'},{text: 'ST'},{text: 'SV'},{text: 'SX'},{text: 'SY'},{text: 'SZ'},{text: 'TC'},{text: 'TD'},{text: 'TF'},{text: 'TG'},{text: 'TH'},{text: 'TJ'},{text: 'TK'},{text: 'TL'},{text: 'TM'},{text: 'TN'},{text: 'TO'},{text: 'TR'},{text: 'TT'},{text: 'TV'},{text: 'TW'},{text: 'TZ'},{text: 'UA'},{text: 'UG'},{text: 'UM'},{text: 'US'},{text: 'UY'},{text: 'UZ'},{text: 'VA'},{text: 'VC'},{text: 'VE'},{text: 'VG'},{text: 'VI'},{text: 'VN'},{text: 'VU'},{text: 'WF'},{text: 'WS'},{text: 'YE'},{text: 'YT'},{text: 'ZA'},{text: 'ZM'},{text: 'ZW'}];
-    var org_name = [
-        {text:'35ORG'},
-        {text:'a2network'},
-        {text:'CelloMobile'},
-        {text:'GFC_simbank'},
-        {text:'GLOBALWIFI'},
-        {text:'北京信威'},
-        {text:'GWIFI'},
-        {text:'JETFI桔豐科技'},
-        {text:'LianLian'},
-        {text:'POCWIFI'},
-        {text:'TestMvno'},
-        {text:'VisonData-ORG'},
-        {text:'YROAM'},
-        {text:'all'}
-    ];
-    //select 下拉列表筛选数据-butype：
-    var butype_data = [{text: 'GTBU'}];
-    //select 下拉列表筛选数据-国家：
-    var timedim_data = [{text: 'day'},{text: 'month'}];
-    // ------------------------------下拉国家设置
-    $(".form-country").select2({
-        data: country_data
-    });
-
-    $(".form-country").select2({
-        placeholder: "国家",
-        allowClear: true
-    });
-    //-------------------------------org
-    $(".form-org").select2({
-        data:org_name
-    });
-    $(".form-org").select2({
-        allowClear: false
-    });
-    // ------------------------------butype 初始化
-    $(".form-butype").select2({
-    data: butype_data
-    });
-    $(".form-butype").select2({
-    placeholder: "BU类别",
-    allowClear: true
-    });
-
-    //---------------------------- 时间颗粒度初始化
-    $(".form-timedim").select2({
-    data: timedim_data
-    });
-    $(".form-timedim").select2({
-    placeholder: "时间维度",
-    allowClear: true
-    });
-    //雷达画板设置、初始化
-    var radarData = {
-        labels: ["流量使用率", "单次分卡流量大小", "卡均流量", "卡均调用次数", "可用率"],
-        datasets: [
-            {
-                label: "套餐1",
-                backgroundColor: "rgba(220,220,220,0.2)",
-                borderColor: "rgba(220,220,220,1)",
-                data: [65, 39, 90,30 , 70]
-            },
-            {
-                label: "套餐二",
-                backgroundColor: "rgba(26,179,148,0.2)",
-                borderColor: "rgba(26,179,148,1)",
-                data: [28, 48, 40,60, 90]
-            }
-        ]
-    };
-
-    var radarOptions = {
-        responsive: true
-    };
-    //var ctx5 = document.getElementById("radarChart").getContext("2d");
-    //new Chart(ctx5, {type: 'radar', data: radarData, options:radarOptions});
-    //
-    //var today= new Date()
-    daterange_init('-360d');
-});
-//-----------------------------------------------------end main 函数-----------------------------------------------------
-
-
-
-//-----------------------------------------------------------峰值用户画板模块----------------------------------------------
 
 //----------------------------------------------------------------初始化daterange
 function daterange_init(day_set){
@@ -627,7 +541,7 @@ function draw_mutiLine_CountryMaxOnlineUser(data){
         return '无国家峰值用户卡数统计结果';
     }
     else{
-        var getCountryCon=getData.con
+        var getCountryCon=getData.con;
         $.each( getData.maxuser, function(i, item){
          //alert(item.onlinemax)
          mutiline_lable.push(
@@ -948,5 +862,155 @@ function draw_countryFlowStatic(data){
         return false;
 	}
 }
+function initSelect(select_class, select_data, select_options) {
+    select_class.select2(select_data);
+    select_class.select2(select_options);
 
-//-----------------------------------------------------国家维度画板--end--------------------------------------------------
+}
+function initSelectView(select_class){
+    //select country:
+    var country_data = [
+        {text: 'AD'},{text: 'AE'},{text: 'AF'},{text: 'AG'},{text: 'AI'},{text: 'AL'},{text: 'AM'},{text: 'AO'},{text: 'AQ'},{text: 'AR'},{text: 'AS'},{text: 'AT'},{text: 'AU'},{text: 'AW'},{text: 'AX'},{text: 'AZ'},{text: 'BA'},{text: 'BB'},{text: 'BD'},{text: 'BE'},{text: 'BF'},{text: 'BG'},{text: 'BH'},{text: 'BI'},{text: 'BJ'},{text: 'BL'},{text: 'BM'},{text: 'BN'},{text: 'BO'},{text: 'BQ'},{text: 'BR'},{text: 'BS'},{text: 'BT'},{text: 'BV'},{text: 'BW'},{text: 'BY'},{text: 'BZ'},{text: 'CA'},{text: 'CC'},{text: 'CD'},{text: 'CF'},{text: 'CG'},{text: 'CH'},{text: 'CI'},{text: 'CK'},{text: 'CL'},{text: 'CM'},{text: 'CN'},{text: 'CO'},{text: 'CR'},{text: 'CU'},{text: 'CV'},{text: 'CW'},{text: 'CX'},{text: 'CY'},{text: 'CZ'},{text: 'DE'},{text: 'DJ'},{text: 'DK'},{text: 'DM'},{text: 'DO'},{text: 'DZ'},{text: 'EC'},{text: 'EE'},{text: 'EG'},{text: 'EH'},{text: 'ER'},{text: 'ES'},{text: 'ET'},{text: 'FI'},{text: 'FJ'},{text: 'FK'},{text: 'FM'},{text: 'FO'},{text: 'FR'},{text: 'GA'},{text: 'GB'},{text: 'GD'},{text: 'GE'},{text: 'GF'},{text: 'GG'},{text: 'GH'},{text: 'GI'},{text: 'GL'},{text: 'GM'},{text: 'GN'},{text: 'GP'},{text: 'GQ'},{text: 'GR'},{text: 'GS'},{text: 'GT'},{text: 'GU'},{text: 'GW'},{text: 'GY'},{text: 'HK'},{text: 'HM'},{text: 'HN'},{text: 'HR'},{text: 'HT'},{text: 'HU'},{text: 'ID'},{text: 'IE'},{text: 'IL'},{text: 'IM'},{text: 'IN'},{text: 'IO'},{text: 'IQ'},{text: 'IR'},{text: 'IS'},{text: 'IT'},{text: 'JE'},{text: 'JM'},{text: 'JO'},{text: 'JP'},{text: 'KE'},{text: 'KG'},{text: 'KH'},{text: 'KI'},{text: 'KM'},{text: 'KN'},{text: 'KP'},{text: 'KR'},{text: 'KW'},{text: 'KY'},{text: 'KZ'},{text: 'LA'},{text: 'LB'},{text: 'LC'},{text: 'LI'},{text: 'LK'},{text: 'LR'},{text: 'LS'},{text: 'LT'},{text: 'LU'},{text: 'LV'},{text: 'LY'},{text: 'MA'},{text: 'MC'},{text: 'MD'},{text: 'ME'},{text: 'MF'},{text: 'MG'},{text: 'MH'},{text: 'MK'},{text: 'ML'},{text: 'MM'},{text: 'MN'},{text: 'MO'},{text: 'MP'},{text: 'MQ'},{text: 'MR'},{text: 'MS'},{text: 'MT'},{text: 'MU'},{text: 'MV'},{text: 'MW'},{text: 'MX'},{text: 'MY'},{text: 'MZ'},{text: 'NA'},{text: 'NC'},{text: 'NE'},{text: 'NF'},{text: 'NG'},{text: 'NI'},{text: 'NL'},{text: 'NO'},{text: 'NP'},{text: 'NR'},{text: 'NU'},{text: 'NZ'},{text: 'OM'},{text: 'PA'},{text: 'PC'},{text: 'PE'},{text: 'PF'},{text: 'PG'},{text: 'PH'},{text: 'PK'},{text: 'PL'},{text: 'PM'},{text: 'PN'},{text: 'PR'},{text: 'PS'},{text: 'PT'},{text: 'PW'},{text: 'PY'},{text: 'QA'},{text: 'RE'},{text: 'RO'},{text: 'RS'},{text: 'RU'},{text: 'RW'},{text: 'SA'},{text: 'SB'},{text: 'SC'},{text: 'SD'},{text: 'SE'},{text: 'SG'},{text: 'SH'},{text: 'SI'},{text: 'SJ'},{text: 'SK'},{text: 'SL'},{text: 'SM'},{text: 'SN'},{text: 'SO'},{text: 'SR'},{text: 'ST'},{text: 'SV'},{text: 'SX'},{text: 'SY'},{text: 'SZ'},{text: 'TC'},{text: 'TD'},{text: 'TF'},{text: 'TG'},{text: 'TH'},{text: 'TJ'},{text: 'TK'},{text: 'TL'},{text: 'TM'},{text: 'TN'},{text: 'TO'},{text: 'TR'},{text: 'TT'},{text: 'TV'},{text: 'TW'},{text: 'TZ'},{text: 'UA'},{text: 'UG'},{text: 'UM'},{text: 'US'},{text: 'UY'},{text: 'UZ'},{text: 'VA'},{text: 'VC'},{text: 'VE'},{text: 'VG'},{text: 'VI'},{text: 'VN'},{text: 'VU'},{text: 'WF'},{text: 'WS'},{text: 'YE'},{text: 'YT'},{text: 'ZA'},{text: 'ZM'},{text: 'ZW'},{text: 'noCountry'}
+        ];
+    //select org：
+    var org_name = [{text:'35ORG'}, {text:'a2network'}, {text:'CelloMobile'}, {text:'GFC_simbank'}, {text:'GLOBALWIFI'},
+        {text:'北京信威'}, {text:'GWIFI'}, {text:'JETFI桔豐科技'}, {text:'LianLian'}, {text:'POCWIFI'}, {text:'TestMvno'},
+        {text:'VisonData-ORG'}, {text:'YROAM'}, {text:'all'}
+        ];
+    //select time dim：
+    var timedim_data = [{text: 'day'},{text: 'month'}];
+    //select buType：
+    var butype_data = [{text: 'GTBU'}];
+    // select country views
+    initSelect(select_class.country, {data: country_data}, {placeholder: "国家简码", allowClear: true});
+    // select org views
+    initSelect(select_class.org, {data: org_name}, {allowClear: false});
+    // select buType views
+    initSelect(select_class.buType, {data: butype_data}, {placeholder: "BU类别", allowClear: true});
+    // select buType views
+    initSelect(select_class.timeDim, {data: timedim_data}, {placeholder: "时间维度", allowClear: true});
+}
+/**================================
+ *  -------初始化显示选择函数
+ *=================================
+ * @param item_related_grid
+ * @param item_jqx_drop_down
+ *======================================================================**/
+function initDropDownList(item_related_grid, item_jqx_drop_down){
+    // Create a jqxDropDownList
+    var jqxDropDownList=[
+        {label: '国家', value: 'Country', checked: true },
+        {label: '套餐名称', value: 'PackageName', checked: true },
+        {label: '套餐更新日期', value: 'NextUpdateTime', checked: true },
+        {label: '归属机构', value: 'ORG', checked: true },
+        {label: '在架卡数', value: 'all_num', checked: true },
+        {label: '未激活卡数', value: 'unact_num', checked: true },
+        {label: '可用卡数', value: 'ava_num', checked: true },
+        {label: '流量预警阀值', value: 'WarningFlow', checked: true },
+        {label: '总计流量', value: 'TotalFlower', checked: true },
+        {label: '使用流量', value: 'UsedFlower', checked: true },
+        {label: '剩余流量', value: 'LeftFlower', checked: true },
+        {label: '流量使用率', value: 'Percentage', checked: true }
+    ];
+    initDropdownlist(item_jqx_drop_down, jqxDropDownList);
+
+    item_jqx_drop_down.on('checkChange', function (event) {
+
+        actionDropDownList(item_related_grid, event);
+    });
+
+}
+/**=====================================================================
+ *
+ * @param item_jqx_drop_down : initialized DOC ID of jquery type jqx dropdown ID
+ * @param jqx_drop_down_list : source list to initialize Dropdownlist model
+ *======================================================================**/
+function initDropdownlist(item_jqx_drop_down, jqx_drop_down_list) {
+
+    item_jqx_drop_down.jqxDropDownList({
+        checkboxes: true,
+        source: jqx_drop_down_list,
+        autoOpen:true,
+        animationType:'fade',
+        filterable: true,
+        dropDownHeight: 300,
+        Width:150
+    });
+}
+/**=====================================
+ *
+ * @param item_related_grid
+ * @param event
+ *=======================================================**/
+function actionDropDownList(item_related_grid, event) {
+
+    item_related_grid.jqxGrid('beginupdate');
+    if (event.args.checked) {
+        item_related_grid.jqxGrid('showcolumn', event.args.value);
+    }
+    else {
+        item_related_grid.jqxGrid('hidecolumn', event.args.value);
+    }
+    item_related_grid.jqxGrid('endupdate');
+}
+
+//--------------------------------------------------------------main-初始化主程序-----------------------------------------
+$(function () {
+    var VarGsvcHome = {
+        alertWinStr:'',      //alert() function use alertWinStr value to show alert
+        gridArray: [],
+        item:{
+            countrySelectClass : $(".form-country"),
+            orgSelectClass: $(".form-org"),
+            buSelectClass: $(".form-butype"),
+            timeDimClass: $(".form-timedim"),
+            gridID: $("#con-countrySRC-jqxgrid"),
+            dropDownListID: $("#jqxDropDownList"),
+            getGridDataID: $("#countrySrcCondataGet"),
+            alertID: $("#country-alert")
+        },
+        setGridArrayData: function (arrayData) {
+            this.gridArray=arrayData;
+        },
+        setAlertWinStr: function (strAlert) {
+            this.alertWinStr = strAlert;
+        }
+    };
+    var selectClass = {
+        country: VarGsvcHome.item.countrySelectClass,
+        org: VarGsvcHome.item.orgSelectClass,
+        buType: VarGsvcHome.item.buSelectClass,
+        timeDim: VarGsvcHome.item.timeDimClass
+    };
+    // 初始化 select
+    initSelectView(selectClass);
+    //============================
+    // 初始化统计表单
+    var gsvcHomeGridSource = initcountrySrcConjqxGrid(VarGsvcHome.item.gridID, VarGsvcHome.gridArray);
+    //==================================================================================================
+    // 初始化下拉选择显示
+    initDropDownList(VarGsvcHome.item.gridID, VarGsvcHome.item.dropDownListID);
+    //=================================================================
+    VarGsvcHome.item.getGridDataID.click(function () {
+        var ajaxParam ={
+            getDataBtID: VarGsvcHome.item.getGridDataID,
+            gridParam:{
+                gridID: VarGsvcHome.item.gridID,
+                arrayData: VarGsvcHome.gridArray,
+                gridSource: gsvcHomeGridSource,
+                setArrayData: VarGsvcHome.setGridArrayData
+            },
+            postData:{
+                country: VarGsvcHome.item.countrySelectClass.val(),
+                org: VarGsvcHome.item.orgSelectClass.val()
+            },
+            queryAlert:{
+                alertID: VarGsvcHome.item.alertID,
+                str: VarGsvcHome.alertWinStr,
+                setStr: VarGsvcHome.setAlertWinStr
+            }
+        };
+        countrySrcConAjaxApi(ajaxParam);
+    });
+    daterange_init('-360d');
+});

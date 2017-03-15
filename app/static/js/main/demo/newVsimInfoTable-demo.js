@@ -47,7 +47,7 @@ function initSelectView(init_select_class_list){
     init_select_class_list.person.select2({
         data: person_data
     });
-    $(".select-person").select2({
+    init_select_class_list.person.select2({
         placeholder: "测试人",
         allowClear: true
     });
@@ -342,7 +342,6 @@ function newVsimTestInfoTableGetAjaxAPI(option) {
     var country = PostData.country;
     //clear old warn content.
     globeVarNewVsimTestinfo.ID.alertModelID.children().detach();
-
     if (country==''){
         //
         alert_func(globeVarNewVsimTestinfo.ID.alertModelID,"请设置测试卡归属国家!");
