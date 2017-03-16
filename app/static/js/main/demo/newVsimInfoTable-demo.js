@@ -516,6 +516,9 @@ function excelExport(data,item_app_growl) {
     }
     return false;
 }
+function flashGrid(grid_id) {
+    grid_id.jqxGrid('updatebounddata');
+}
 var globeVarNewVsimTestinfo = {
     'alertWinStr':'',                                //alert() function use alertWinStr value to show alert
     'gridArray': [],
@@ -528,7 +531,8 @@ var globeVarNewVsimTestinfo = {
         'modalID' : $('#newVsimTestInfo-Modal'),
         'dropDownID' : $("#jqxDropDownList"),
         'alertModelID': $("#alert-model"),
-        'exportID': $("#Export")
+        'exportID': $("#Export"),
+        'flashGridID': $("#Flash")
     },
     'setalertWinStr': function (strAlert) {
         this.alertWinStr = strAlert;
@@ -572,8 +576,13 @@ $(function () {
         };
         newVsimTestInfoTableGetAjaxAPI(ajaxParam);
     });
+    //===============================================
+    //flash grid
+    globeVarNewVsimTestinfo.ID.flashGridID.click(function () {
+        flashGrid(globeVarNewVsimTestinfo.ID.newVsimTestInfoJqgridID);
+    });
     //=================================================================
-    // excel files output
+    //excel files output
     globeVarNewVsimTestinfo.ID.exportID.click(function () {
         //alert("ok");
         excelExportAPI(globeVarNewVsimTestinfo.ID.newVsimTestInfoJqgridID,

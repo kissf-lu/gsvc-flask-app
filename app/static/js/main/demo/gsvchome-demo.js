@@ -36,6 +36,7 @@ var lineChart_alert= '<div class="alert alert-warning" role="alert">'+
 			             '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
 			             '<span aria-hidden="true">&times;</span>'+
 			             '</button>';
+
 var daterange_data='<div class="input-group input-daterange" id="datepicker">'+
       '    <span class="input-group-addon"><strong>时间范围--起始</strong></span>'+
       '    <input type="text" class="input-sm form-control" name="start" id="input-daterange-start"/>'+
@@ -203,8 +204,12 @@ function initcountrySrcConjqxGrid(item_grid, array){
     });
     return countrySrcConsource;
 }
-
-//ajax-国家统计表格数据模
+//
+/**ajax-国家统计表格数据模
+ * ==================================================
+ *
+ * @param options_param
+ *=============================================**/
 function countrySrcConAjaxApi(options_param) {
     var queryPost = options_param.postData;
     var Country = queryPost.country;
@@ -279,14 +284,93 @@ function countrySrcConAjaxApi(options_param) {
             options_param.getDataBtID.attr("disabled", false);
         });
 }
-/* 刷新数据button模块*/
-$('#countrySrcConFlash').click(function () {
-    $('#con-countrySRC-jqxgrid').jqxGrid('updatebounddata');
-
-});
+function flashGsvcHomeGrid(grid_id) {
+    grid_id.jqxGrid('updatebounddata');
+}
+//
+/**excel export api
+ * ==================================================
+ *
+ * @param item_jqxgrid
+ * @param item_alert
+ * @returns {boolean}
+ *=================================================**/
+function excelGsvcHomeExportAPI(item_jqxgrid,item_alert) {
+    //
+    var rows = item_jqxgrid.jqxGrid('getdisplayrows');
+    var alldatanum= rows.length;
+    var view_data=[];
+    var json_data={'data':view_data};
+    var paginginformation = item_jqxgrid.jqxGrid('getpaginginformation');
+    // The page's number.
+    var pagenum = paginginformation.pagenum;
+    // The page's size.
+    var pagesize = paginginformation.pagesize;
+    // The number of all pages.
+    var pagescount = paginginformation.pagescount;
+    if (alldatanum==0){
+        //alter
+        alert_func(item_alert,'无输出数据！');
+    }
+    else{
+        for(var i = 0; i < rows.length; i++){
+            if (i==pagenum*pagesize){
+                for (var j = 0; j< pagesize; j++){
+                    if (i+j< alldatanum){
+                        view_data.push(
+                            {
+                                国家: rows[i+j].Country,
+                                套餐名称: rows[i+j].PackageName,
+                                套餐更新日期: rows[i+j].NextUpdateTime,
+                                归属机构: rows[i+j].ORG,
+                                在架卡数: rows[i+j].all_num,
+                                未激活卡数: rows[i+j].unact_num,
+                                可用卡数: rows[i+j].ava_num,
+                                流量预警阀值_MB: rows[i+j].WarningFlow,
+                                总计流量_GB: rows[i+j].TotalFlower,
+                                使用流量_GB: rows[i+j].UsedFlower,
+                                剩余流量_GB: rows[i+j].LeftFlower,
+                                流量使用率:rows[i+j].Percentage
+                            }
+                        )
+                    }
+                }
+            }
+        }
+        excelExport(json_data,item_alert);
+    }
+    return false;
+}
+/**     -------export xls files by submitting json data to server-------
+ *
+ * using submit method to submit json value to service and export xls to users.
+ * @param data: data like {'data':view_data} ;
+ * @param item_alert: jquery type warn DOC ID ;
+ * @return {boolean} return false to forbid DOC fresh;
+ */
+function excelExport(data,item_alert) {
+    var exportdata=data;
+    if (exportdata.data==[]){
+        // alter
+        alert_func(item_alert, '无输出数据！');
+    }
+    else{
+        var temp = document.createElement("form");
+        temp.action = $SCRIPT_ROOT +"/api/v1.0/export_newVsimTestInfo/";
+        temp.method = "post";
+        temp.style.display = "none";
+        var opt = document.createElement("textarea");
+        opt.name = "data";
+        opt.value = JSON.stringify(exportdata.data);
+        temp.appendChild(opt);
+        document.body.appendChild(temp);
+        temp.submit();
+    }
+    return false;
+}
 
 /*现网excel导出栏*/
-$("#countrySrcConexcelExport").click(function () {
+$("#").click(function () {
      var rows = $('#con-countrySRC-jqxgrid').jqxGrid('getdisplayrows');
      var alldatanum= rows.length;
      var view_data=[];
@@ -944,7 +1028,6 @@ function actionDropDownList(item_related_grid, event) {
     }
     item_related_grid.jqxGrid('endupdate');
 }
-
 //--------------------------------------------------------------main-初始化主程序-----------------------------------------
 $(function () {
     var VarGsvcHome = {
@@ -958,7 +1041,9 @@ $(function () {
             gridID: $("#con-countrySRC-jqxgrid"),
             dropDownListID: $("#jqxDropDownList"),
             getGridDataID: $("#countrySrcCondataGet"),
-            alertID: $("#country-alert")
+            alertID: $("#country-alert"),
+            flashGridID: $("#countrySrcConFlash"),
+            excelExportID: $("#countrySrcConexcelExport")
         },
         setGridArrayData: function (arrayData) {
             this.gridArray=arrayData;
@@ -981,7 +1066,8 @@ $(function () {
     //==================================================================================================
     // 初始化下拉选择显示
     initDropDownList(VarGsvcHome.item.gridID, VarGsvcHome.item.dropDownListID);
-    //=================================================================
+    //=========================================================================
+    //获取统计数据
     VarGsvcHome.item.getGridDataID.click(function () {
         var ajaxParam ={
             getDataBtID: VarGsvcHome.item.getGridDataID,
@@ -1003,6 +1089,17 @@ $(function () {
         };
         countrySrcConAjaxApi(ajaxParam);
     });
+    //===================================
+    //flash grid
+    VarGsvcHome.item.flashGridID.click(function () {
+        flashGsvcHomeGrid(VarGsvcHome.item.gridID);
+    });
+    //====================================
+    //excel 导出
+    VarGsvcHome.item.excelExportID.click(function () {
+        excelGsvcHomeExportAPI(VarGsvcHome.item.gridID, VarGsvcHome.item.alertID)
+    });
+    //===============================================================
+    //初始化时间选择
     daterange_init('-360d');
-
 });
