@@ -28,22 +28,6 @@ function  alert_func(alert_button_item,alert_doc) {
     $alertItem.children().detach();
     $alertItem.append(alertStr);
 }
-/**============================================================================*
-*告警通用文字,用于通知返回结果错误信息，
-*或查询审核告警信息
-*===========================================================================**/
-var lineChart_alert= '<div class="alert alert-warning" role="alert">'+
-			             '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
-			             '<span aria-hidden="true">&times;</span>'+
-			             '</button>';
-
-var daterange_data='<div class="input-group input-daterange" id="datepicker">'+
-      '    <span class="input-group-addon"><strong>时间范围--起始</strong></span>'+
-      '    <input type="text" class="input-sm form-control" name="start" id="input-daterange-start"/>'+
-      '    <span class="input-group-addon"><strong>结束</strong></span>'+
-      '    <input type="text" class="input-sm form-control" name="end" id="input-daterange-end"/>'+
-      '</div>';
-
 /**=====================================================
  *  -------FilterPanel set func-------
  *======================================================
@@ -117,7 +101,7 @@ var buildFilterPanel = function (filterPanel, datafield,filterGrid,SrcAdapter) {
     });
 };
 
-//------------------------------------------------------------初始化统计表单
+//初始化统计表单
 function initcountrySrcConjqxGrid(item_grid, array){
     //国家卡资源统计表格数据初始化
     var countrySrcConsource ={
@@ -129,8 +113,9 @@ function initcountrySrcConjqxGrid(item_grid, array){
             {name: 'NextUpdateTime', type: 'date' },
             {name: 'ORG', type: 'string' },
             {name: 'all_num', type: 'int' },
-            {name: 'unact_num', type: 'int' },
             {name: 'ava_num', type: 'int' },
+            {name: 'flow_unenought_num', type: 'int' },
+            {name: 'unact_num', type: 'int' },
             {name: 'WarningFlow', type: 'int' },
             {name: 'TotalFlower', type: 'float' },
             {name: 'UsedFlower', type: 'float' },
@@ -193,8 +178,9 @@ function initcountrySrcConjqxGrid(item_grid, array){
                     },
                     { text: '归属机构', datafield: 'ORG', filtertype: 'checkedlist', width: 100},
                     { text: '在架卡数', datafield: 'all_num',filterable: "range" , width: 80 },
-                    { text: '未激活卡数', datafield: 'unact_num',filterable: "range" , width: 80 },
                     { text: '可用卡数', datafield: 'ava_num',filterable: "range" , width: 80 },
+                    { text: '流量不足卡数', datafield: 'flow_unenought_num',filterable: "range" , width: 90 },
+                    { text: '未激活卡数', datafield: 'unact_num',filterable: "range" , width: 80 },
                     { text: '流量预警阀值_MB', datafield: 'WarningFlow',filterable: "range" , width: 120 },
                     { text: '总计流量_GB', datafield: 'TotalFlower',width: 100,filtertype: "range"},
                     { text: '使用流量_GB', datafield: 'UsedFlower',width: 100,filtertype: "range"},
@@ -205,11 +191,11 @@ function initcountrySrcConjqxGrid(item_grid, array){
     return countrySrcConsource;
 }
 //
-/**ajax-国家统计表格数据模
- * ==================================================
+/**==============================================
+ * ---------------ajax-国家统计表格数据模----------
  *
  * @param options_param
- *=============================================**/
+ *=================================================**/
 function countrySrcConAjaxApi(options_param) {
     var queryPost = options_param.postData;
     var Country = queryPost.country;
@@ -258,8 +244,9 @@ function countrySrcConAjaxApi(options_param) {
                         NextUpdateTime: item.NextUpdateTime,
                         ORG: item.ORG,
                         all_num: item.all_num,
-                        unact_num: item.unact_num,
                         ava_num: item.ava_num,
+                        flow_unenought_num: item.flow_unenought_num,
+                        unact_num: item.unact_num,
                         WarningFlow: item.WarningFlow,
                         TotalFlower: item.TotalFlower,
                         UsedFlower: item.UsedFlower,
@@ -284,12 +271,16 @@ function countrySrcConAjaxApi(options_param) {
             options_param.getDataBtID.attr("disabled", false);
         });
 }
+/**=========================================
+ *
+ * @param grid_id
+ *==========================================**/
 function flashGsvcHomeGrid(grid_id) {
     grid_id.jqxGrid('updatebounddata');
 }
 //
-/**excel export api
- * ==================================================
+/**==================================================
+ * -------------excel export api---------------
  *
  * @param item_jqxgrid
  * @param item_alert
@@ -324,8 +315,9 @@ function excelGsvcHomeExportAPI(item_jqxgrid,item_alert) {
                                 套餐更新日期: rows[i+j].NextUpdateTime,
                                 归属机构: rows[i+j].ORG,
                                 在架卡数: rows[i+j].all_num,
-                                未激活卡数: rows[i+j].unact_num,
                                 可用卡数: rows[i+j].ava_num,
+                                流量不足卡数: rows[i+j].flow_unenought_num,
+                                未激活卡数: rows[i+j].unact_num,
                                 流量预警阀值_MB: rows[i+j].WarningFlow,
                                 总计流量_GB: rows[i+j].TotalFlower,
                                 使用流量_GB: rows[i+j].UsedFlower,
@@ -341,13 +333,14 @@ function excelGsvcHomeExportAPI(item_jqxgrid,item_alert) {
     }
     return false;
 }
-/**     -------export xls files by submitting json data to server-------
+/**============================================================================
+ *  -------export xls files by submitting json data to server-------
  *
  * using submit method to submit json value to service and export xls to users.
  * @param data: data like {'data':view_data} ;
  * @param item_alert: jquery type warn DOC ID ;
  * @return {boolean} return false to forbid DOC fresh;
- */
+ *==============================================================================**/
 function excelExport(data,item_alert) {
     var exportdata=data;
     if (exportdata.data==[]){
@@ -368,218 +361,154 @@ function excelExport(data,item_alert) {
     }
     return false;
 }
-
-/*现网excel导出栏*/
-$("#").click(function () {
-     var rows = $('#con-countrySRC-jqxgrid').jqxGrid('getdisplayrows');
-     var alldatanum= rows.length;
-     var view_data=[];
-     var json_data={'data':view_data}
-     var paginginformation = $('#con-countrySRC-jqxgrid').jqxGrid('getpaginginformation');
-     // The page's number.
-     var pagenum = paginginformation.pagenum;
-     // The page's size.
-     var pagesize = paginginformation.pagesize;
-     // The number of all pages.
-     var pagescount = paginginformation.pagescount;
-     if (alldatanum==0){
-         //delete old alter
-        $("#country-alert").children().detach();
-        $("#country-alert").append((lineChart_alert+'<p>无输出数据！</p></div>'));
-     }
-     else{
-         for(var i = 0; i < rows.length; i++){
-             if (i==pagenum*pagesize){
-                 for (var j = 0; j< pagesize; j++){
-                     if (i+j< alldatanum){
-                         view_data.push({
-                             国家: rows[i+j].Country,
-                             套餐名称: rows[i+j].PackageName,
-                             套餐更新日期: rows[i+j].NextUpdateTime,
-                             归属机构: rows[i+j].ORG,
-                             在架卡数: rows[i+j].all_num,
-                             未激活卡数: rows[i+j].unact_num,
-                             可用卡数: rows[i+j].ava_num,
-                             流量预警阀值_MB: rows[i+j].WarningFlow,
-                             总计流量_GB: rows[i+j].TotalFlower,
-                             使用流量_GB: rows[i+j].UsedFlower,
-                             剩余流量_GB: rows[i+j].LeftFlower,
-                             流量使用率:rows[i+j].Percentage
-                         })
-                     }
-
-                 }
-             }
-         }
-         //$("#con-countrySRC-jqxgrid").jqxGrid('exportdata', 'xls', 'con-countrySRC', true, view_data);
-         excelExport(json_data);
-     }
-     return false;
- });
- //post函数导出excel
-function excelExport(data) {
-     var exportdata=data;
-
-     if (exportdata.data==[]){
-         //delete old alter
-         $("#app-growl").children().detach();
-         $("#app-growl").append((alertStr+'<p>无输出数据！</p></div>'));
-         }
-     else{
-          var temp = document.createElement("form");
-          temp.action = $SCRIPT_ROOT +"/api/v1.0/export_countrySrcStatic/";  //test_exportExcel
-          temp.method = "post";
-          temp.style.display = "none";
-          var opt = document.createElement("textarea");
-          opt.name = "data";
-          opt.value = JSON.stringify(exportdata.data);
-          temp.appendChild(opt);
-          document.body.appendChild(temp);
-          temp.submit();
-      }
-       return false;
-}
-//------------------------------------------------------------excel导出栏--end--------------------------
-
-//----------------------------------------------------------------初始化daterange
-function daterange_init(day_set){
-    $('#country_lineChart_date .input-daterange'). datepicker({
-                keyboardNavigation: false,
-                startDate: day_set,
-                endDate: '+01d',
-                forceParse: false,
-                format: 'yyyy-mm-dd',
-                language: 'zh-CN',
-                autoclose: true,
-                clearBtn: true
+/**==================================================
+ * ------------daterange_init-----------------
+ *
+ * @param data_range_item
+ * @param day_set
+ *===================================================**/
+function daterange_init(data_range_item, day_set){
+    data_range_item. datepicker({
+        keyboardNavigation: false,
+        startDate: day_set,
+        endDate: '+01d',
+        forceParse: false,
+        format: 'yyyy-mm-dd',
+        language: 'zh-CN',
+        autoclose: true,
+        todayHighlight: true,
+        clearBtn: true
     });
 }
-
-// ------------------------------------------------------------初始化天维度选择通知栏
-function timeDimnotification_init(){
+//初始化通知栏
+function jqxNotification_init(jqxNotification_itme, optin_autoClose){
    //初始化通知
-   $("#MaxUsrjqxNotification").jqxNotification({
-                width: "100%", position: "top-right", blink: true , appendContainer: "#container", opacity: 0.9,
-                autoOpen: false, animationOpenDelay: 800, autoClose: true, autoCloseDelay: 3000, template: "info"
+    jqxNotification_itme.jqxNotification({
+       width: "100%", 
+       position: "top-right", 
+       blink: true , 
+       appendContainer: "#container", 
+       opacity: 0.9,
+       autoOpen: false, 
+       animationOpenDelay: 800, 
+       autoClose: optin_autoClose,
+       autoCloseDelay: 3000, 
+       template: "info"
     });
 
-};
-// ------------------------------------------------------------初始化查询状态通知栏
-function MaxUsrQuerynotification_init(){
-   //初始化通知
-   $("#MaxUsrQueryjqxNotification").jqxNotification({
-                width: "100%", position: "top-right", blink: true , appendContainer: "#Querycontainer", opacity: 0.9,
-                autoOpen: false, animationOpenDelay: 800, autoClose: false, autoCloseDelay: 3000, template: "info"
-    });
-};
+}
+//
+function jqxNotificationAPI(notification_item, notification_content_item, not_doc, option_autoClose) {
+    //close last notification
+    notification_item.jqxNotification("closeLast");
+    //clear old data
+    notification_content_item.children().detach();
+    //attend new data
+    notification_content_item.append(
+        '<strong>' + not_doc+ '</strong>'
+    );
+    //init notification
+    jqxNotification_init(notification_item, option_autoClose);
+    //open notifications
+    notification_item.jqxNotification("open");
 
-//---------------------------------------------------------峰值用户时间设置函数
-$('#timeDim').on('select2:select', function (evt) {
-  // Do something
-  $("#MaxUsrnotificationContent").children().detach();
-  var TimeDim = $('#timeDim').val();
-  if (TimeDim == 'month'){
-      //$("#country_lineChart_date").children().detach();
-      $("#MaxUsrnotificationContent").append(
-          '<strong>'+'时间颗粒已经设置为：月'+'</strong>'
-      );
-      //
-      timeDimnotification_init();
-      $("#MaxUsrjqxNotification").jqxNotification("open");
-
-  }
-  else{
-      $("#MaxUsrnotificationContent").append(
-          '<strong>'+'时间颗粒已经设置为：天'+'</strong>'
-      );
-      timeDimnotification_init();
-      $("#MaxUsrjqxNotification").jqxNotification("open");
-  }
-});
-
-//---------------------------------------------ajax获取国家线性图形统计数据api1.0
-$("#country_MaxusrlineChart_dataGet").click(function (){
-    var Country=$('#countryMaxusr').val();
-    var Begintime = $('input[name="start"]').val();
-    var Endtime = $('input[name="end"]').val();
-    var BuType = $('#butypeMaxusr').val();
-    var TimeDim = $('#timeDim').val();
-
-    //  隐藏上一次告警栏
-    $("#country-lineChart-alert").children().detach();
-    // 隐藏上次通知
-    $("#MaxUsrQueryjqxNotification").jqxNotification("closeLast");
+}
+//峰值用户时间设置函数
+function selectEvnNotification(select_item, evt, notification_item, notification_content_item) {
+    var TimeDim = select_item.val();
+    var notification_doc = '';
+    if (TimeDim == 'month'){
+        notification_doc = '时间颗粒已经设置为：月';
+        jqxNotificationAPI(
+            notification_item,
+            notification_content_item,
+            notification_doc,
+            true
+        );
+    }else {
+        notification_doc = '时间颗粒已经设置为：天';
+        jqxNotificationAPI(notification_item,
+            notification_content_item,
+            notification_doc,
+            true
+        );
+    }
+}
+function maxUserLineCharAjaxAPI(options_ajax) {
+    var Country=options_ajax.PostData.country;
+    var Begintime = options_ajax.PostData.begintime;
+    var Endtime = options_ajax.PostData.endtime;
+    var BuType = options_ajax.PostData.butype;
+    var TimeDim = options_ajax.PostData.timedim;
     //必须进行国家选择才能查询！
-    if (Country==""){
-        $("#country-lineChart-alert").append(
-			lineChart_alert+
-			    '<p>请选择要查询的国家!</p>'+
-			'</div>'
-			);
+    if (Country===""){
+        // alter
+        alert_func(options_ajax.item.alertID, '请选择要查询的国家!');
     }
-    else if (Begintime==""){
-        $("#country-lineChart-alert").append(
-			lineChart_alert+
-			    '<p>请选择要查询的起始时间!</p>'+
-			'</div>'
-			);
+    else if (Begintime===""){
+        alert_func(options_ajax.item.alertID, '选择要查询的起始时间!');
     }
-    else if (Endtime==""){
-        $("#country-lineChart-alert").append(
-			lineChart_alert+
-			    '<p>请选择要查询的截止时间!</p>'+
-			'</div>'
-			);
+    else if (Endtime===""){
+        alert_func(options_ajax.item.alertID, '请选择要查询的截止时间!');
     }
-    else if (TimeDim==""){
-        $("#country-lineChart-alert").append(
-			lineChart_alert+
-			    '<p>请选择要查询的时间维度!</p>'+
-			'</div>'
-			);
+    else if (TimeDim===""){
+        alert_func(options_ajax.item.alertID, '请选择要查询的时间维度!');
     }
-    else if (BuType==""){
-        $("#country-lineChart-alert").append(
-			lineChart_alert+
-			    '<p>请选择要查询的BU类型!</p>'+
-			'</div>'
-			);
+    else if (BuType===''){
+        alert_func(options_ajax.item.alertID, '请选择要查询的BU类型!');
     }
     else{
-        $("#MaxUsrQuerynotificationContent").children().detach();
-        $("#MaxUsrQuerynotificationContent").append(
-          '<strong>'+'数据获取中......'+'</strong>'
-          );
-        MaxUsrQuerynotification_init();
-        $("#MaxUsrQueryjqxNotification").jqxNotification("open");
-        $.getJSON($SCRIPT_ROOT + '/api/v1.0/get_mutiLine_maxUser/', //get方法url地址
-               //data参数
-               {country: Country,
-                begintime: Begintime,
-                endtime: Endtime,
-                butype: BuType,
-                timedim: TimeDim
-                },
-               //回掉函数
-               function(data) {
-                           var getData = data;
-                           var alert_str = "";
-                           if (getData.maxuser.length==0){
-                               $("#MaxUsrQueryjqxNotification").jqxNotification("closeLast");
-						       $("#country-lineChart-alert").append(
-						       lineChart_alert+
-						           '<p>无国家峰值用户查询结果，请重新设置查询条件!</p>'+
-						       '</div>'
-						       );
-                           }
-                           else{
-                               var str_maxUserReturn=draw_mutiLine_CountryMaxOnlineUser(getData);
-                           }
-               });//getJson函数结束
-        }
-});
+        options_ajax.item.alertID.children().detach();
+        //disable query button
+        options_ajax.item.getDataBtID.attr("disabled", true);
+        var notification_doc = '数据获取中......';
+        jqxNotificationAPI(
+            options_ajax.item.notificationID,
+            options_ajax.item.notificationContentID,
+            notification_doc,
+            false
+        );
+        var AjaxRequest = $.ajax({
+            type: 'POST',
+            //get方法url地址
+            url: options_ajax.url,
+            //request set
+            contentType: 'application/json',
+            //data参数
+            data: JSON.stringify(options_ajax.PostData),
+            //server back data type
+            dataType: 'json'
+        })
+            .done(function(data){
+                options_ajax.item.notificationID.jqxNotification("closeLast");
+                var getData = data;
+                if (getData.data.length==0){
+                    if (getData.info.err){
+                        alert_func(options_ajax.item.alertID, ('Error：'+ getData.info.errinfo));
+                    }
+                    else{
+                        alert_func(options_ajax.item.alertID, ('无查询结果!'));
+                    }
+                }
+                else{
+                    drawParam = {
+                        drawLineID: options_ajax.item.canvasLineID,
+                        drawDivID: options_ajax.item.canvasDivID
+                    };
+                    var str_maxUserReturn=draw_mutiLine_CountryMaxOnlineUser(getData.data, drawParam);
+                }
+            })
+            .fail(function(jqXHR, status){
+                //清空countrySrcConGridArrayData数据，并且清空前端显示数据
+                alert_func(options_ajax.item.alertID, ('Servers False!'));
+            })
+            .always(function() {
+                options_ajax.item.getDataBtID.attr("disabled", false);
+            });
+    }
+}
 // 绘制峰值用户曲线图函数
-function draw_mutiLine_CountryMaxOnlineUser(data){
+function draw_mutiLine_CountryMaxOnlineUser(data, draw_param){
     //绘制国家维度可用卡数、总计卡数、在线峰值用户数曲线图
     var getData = data;
     var mutiline_lable= [];
@@ -614,52 +543,54 @@ function draw_mutiLine_CountryMaxOnlineUser(data){
             }
         ]
     };
-
     var lineOptions = {
         responsive: true
     };
-
-    if (getData.maxuser.length == 0){
+    if (getData.max_user.length == 0){
         return '无国家峰值用户卡数统计结果';
     }
     else{
-        var getCountryCon=getData.con;
-        $.each( getData.maxuser, function(i, item){
-         //alert(item.onlinemax)
-         mutiline_lable.push(
-             item.sampletime
-         );
-         maxUser_line.push(
-             item.onlinemax
-         );
-         totalCard_line.push(
-             getData.con[0]["on_shelf_num"]
-         );
-         availableCard_line.push(
-             getData.con[0]["ava_num"]
-         )
-       });//each函数完成
-       $("#MaxUsrQueryjqxNotification").jqxNotification("closeLast");
-       $("#country_lineChart").remove();
-       $("#mutil_inecharts_div").append('<canvas id="country_lineChart" height="80" ></canvas>');
+        $.each( getData.max_user, function(i, item){
+            //alert(item.onlinemax)
+            mutiline_lable.push(
+                item.sampletime                         // 时间轴
+            );
+            maxUser_line.push(
+                item.onlinemax                          //峰值用户曲线
+            );
+            totalCard_line.push(
+                getData.sim_con[0]["on_shelf_num"]      // 直线在架卡
+            );
+            availableCard_line.push(
+                getData.sim_con[0]["ava_num"]           // 直线可用卡
+            );
+        });//each函数完成
+        draw_param.drawLineID.remove();
+        draw_param.drawDivID.append('<canvas id="country_lineChart" height="80" ></canvas>');
        var ctx_country_lineChart = document.getElementById("country_lineChart").getContext("2d");
        new Chart(ctx_country_lineChart, {type: 'line', data: lineData, options:lineOptions});
        return false;
     }
-
 }
-
-// ------------------------------------------------------------初始化天维度选择通知栏
+//初始化天维度选择通知栏
 function countryChartQuerynotification_init(){
    //初始化通知
    $("#countryChartQueryjqxNotification").jqxNotification({
-                width: "100%", position: "top-right", blink: true , appendContainer: "#countryChartcontainer", opacity: 0.9,
-                autoOpen: false, animationOpenDelay: 800, autoClose: false, autoCloseDelay: 3000, template: "info"
+       width: "100%",
+       position: "top-right",
+       blink: true ,
+       appendContainer: "#countryChartcontainer",
+       opacity: 0.9,
+       autoOpen: false,
+       animationOpenDelay: 800,
+       autoClose: false,
+       autoCloseDelay: 3000,
+       template: "info"
     });
 
-};
+}
 
-//-------------------------------------------------ajax获取国家在板卡数、可用卡数数据
+//ajax获取国家在板卡数、可用卡数数据
 $("#countryChartdataGet").click(function () {
     var Country= $('#countryChartSelect').val();
     //  隐藏上一次告警栏
@@ -710,7 +641,7 @@ $("#countryChartdataGet").click(function () {
 						           '</div>'
 						       );
                                }
-                           };
+                           }
                });//getJson函数结束
         }
 });
@@ -794,7 +725,6 @@ function draw_countrySrcvsimStatic(data){
 }
 //---------------------------------------------------绘制可用卡套餐流量情况bar图
 function draw_countryFlowStatic(data){
-
     var getData = data;
     var lablecountry_flow=$('select[name="country"]').val();
     var N_countryVsimPackageflowStatuslabels=[];
@@ -1031,19 +961,32 @@ function actionDropDownList(item_related_grid, event) {
 //--------------------------------------------------------------main-初始化主程序-----------------------------------------
 $(function () {
     var VarGsvcHome = {
-        alertWinStr:'',      //alert() function use alertWinStr value to show alert
+        alertWinStr:'',
         gridArray: [],
         item:{
-            countrySelectClass : $(".form-country"),
-            orgSelectClass: $(".form-org"),
-            buSelectClass: $(".form-butype"),
-            timeDimClass: $(".form-timedim"),
-            gridID: $("#con-countrySRC-jqxgrid"),
-            dropDownListID: $("#jqxDropDownList"),
-            getGridDataID: $("#countrySrcCondataGet"),
-            alertID: $("#country-alert"),
-            flashGridID: $("#countrySrcConFlash"),
-            excelExportID: $("#countrySrcConexcelExport")
+            countrySelectClass : $('.form-country'),
+            orgSelectClass: $('.form-org'),
+            buSelectClass: $('.form-butype'),
+            timeDimClass: $('.form-timedim'),
+            gridID: $('#con-countrySRC-jqxgrid'),
+            dropDownListID: $('#jqxDropDownList'),
+            getGridDataID: $('#countrySrcCondataGet'),
+            alertID: $('#country-alert'),
+            flashGridID: $('#countrySrcConFlash'),
+            excelExportID: $('#countrySrcConexcelExport'),
+            timeDimID: $('#timeDim'),
+            dateRangeLineID: $('#DatePicker'),
+            notificationMaxUserID: $('#MaxUsrjqxNotification'),
+            notificationContentMaxUserID: $('#MaxUsrnotificationContent'),
+            notificationMaxUserQueryID: $('#MaxUsrQueryjqxNotification'),
+            notificationContentMaxUserQueryID: $('#MaxUsrQuerynotificationContent'),
+            maxUserLineDataGetID: $('#country_MaxusrlineChart_dataGet'),
+            alertMaxUserLineID: $('#country-lineChart-alert'),
+            countryMaxUser: $('#countryMaxusr'),
+            begintimeMaxUser: $('#input-daterange-start'),
+            endtimeMaxUser: $('#input-daterange-end'),
+            butypeMaxUser: $('#butypeMaxusr'),
+            timedimMaxUser: $('#timeDim')
         },
         setGridArrayData: function (arrayData) {
             this.gridArray=arrayData;
@@ -1101,5 +1044,36 @@ $(function () {
     });
     //===============================================================
     //初始化时间选择
-    daterange_init('-360d');
+    daterange_init(VarGsvcHome.item.dateRangeLineID, '-360d');
+    //时间颗粒度选择通知
+    VarGsvcHome.item.timeDimID.on('select2:select', function (evt) {
+        selectEvnNotification(
+            VarGsvcHome.item.timeDimID, evt,
+            VarGsvcHome.item.notificationMaxUserID,
+            VarGsvcHome.item.notificationContentMaxUserID
+        );
+    });
+    //=================================================================================================
+    //获取峰值用户复合曲线数据
+    VarGsvcHome.item.maxUserLineDataGetID.click(function () {
+        var ajaxParam ={
+            item:{
+                getDataBtID: VarGsvcHome.item.getGridDataID,
+                notificationID: VarGsvcHome.item.notificationMaxUserQueryID,
+                notificationContentID: VarGsvcHome.item.notificationContentMaxUserQueryID,
+                alertID: VarGsvcHome.item.alertMaxUserLineID,
+                canvasLineID: $('#country_lineChart'),
+                canvasDivID: $('#mutil_inecharts_div')
+            },
+            PostData:{
+                country: VarGsvcHome.item.countryMaxUser.val(),
+                begintime: VarGsvcHome.item.begintimeMaxUser.val(),
+                endtime: VarGsvcHome.item.endtimeMaxUser.val(),
+                butype: VarGsvcHome.item.butypeMaxUser.val(),
+                timedim: VarGsvcHome.item.timedimMaxUser.val()
+            },
+            url: ($SCRIPT_ROOT + '/api/v1.0/get_mutiLine_maxUser/')
+        };
+        maxUserLineCharAjaxAPI(ajaxParam);
+    });
 });

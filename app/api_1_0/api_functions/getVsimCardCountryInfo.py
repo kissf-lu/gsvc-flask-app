@@ -3,6 +3,7 @@
 
 import json
 from bson import json_util
+import mysql.connector
 from SqlPack.SQLModel import qureResultAsJson
 
 S_sysStr = 'config_S'
@@ -265,7 +266,9 @@ def getMutiLineMaxUser(country, begintime, endtime, butype_set, timedim_set):
     butype_set = butype_set
     timedim_set = timedim_set
     query_str_MaxUser = (
-        "SELECT b.country,DATE_FORMAT(b.sampletime, " + timedim_set + ") AS sampletime , MAX(b.onlinemax) AS onlinemax "
+        "SELECT b.country,"
+        "       DATE_FORMAT(b.sampletime, " + timedim_set + ") AS sampletime , "
+        "       MAX(b.onlinemax) AS onlinemax "
         "FROM ( "
         "SELECT a.`country`, a.`createtime` AS sampletime, CAST(SUM(a.`onlinemax`) AS UNSIGNED) AS onlinemax "
         "FROM `gsvcdatabase`.`max_onlingusr_hour` AS a "
@@ -274,7 +277,7 @@ def getMutiLineMaxUser(country, begintime, endtime, butype_set, timedim_set):
         "   " + butype_set +
         "GROUP BY a.`country`, a.`createtime` ) AS b "
         "GROUP BY b.country ,DATE_FORMAT(b.sampletime, " + timedim_set + ")")
-
+    print (query_str_MaxUser)
     jsonResults_MaxUser = getJosonData(sysStr=amzami_sysStr, Database=amzami_Database, query_str=query_str_MaxUser)
 
     return jsonResults_MaxUser
@@ -289,66 +292,60 @@ def getindexHtmlMutiLineData(country, begintime, endtime, **kwargs):
     :param kwargs:
     :return:
     """
-    # (maxonline 曲线数据获取-----------------------------------------------------------------------------------)
+    # (maxonline 曲线数据获取)
     BU = ''
     butype_set = " "  # BU类型设置
     timedim_set = "'%Y-%m-%d'"  # 时间维度设置
+    MaxUser = []
+    VsimCon = []
+    DicResults = {}
+    errInfo = ''
     if 'butype' in kwargs.keys():
         butype = kwargs['butype']
         BU = kwargs['butype']
-        if butype != "":
+        if butype:
             if butype == 'GTBU':
                 butype = '2'
                 butype_set = butype_set + " AND a.`butype`= " + butype + " "
-            elif butype == 'S':
-                butype_set = butype_set + " AND a.`butype`<>'2' "
-
-            else:
-                butype_set = butype_set + " "
 
     if 'timedim' in kwargs.keys():
         timedim = kwargs['timedim']
         if timedim != "":
             if timedim == 'month':
                 timedim_set = "'%Y-%m'"
-    jsonResults_MaxUser=getMutiLineMaxUser(country=country,
-                                           begintime=begintime,
-                                           endtime=endtime,
-                                           butype_set=butype_set,
-                                           timedim_set=timedim_set)
-    VsimCon=[]
-    # (当前国家总计卡数、可用卡数数据获取-----------------------------------------------------------------------)
-    if BU == 'ALL':
-        jsonResultsGTBUonshelfandAvaCard = getMutiLineNonshelfandAvaCard(country=country)
-        jsonResultsSonshelfandAvaCard = getMutiLineSonshelfandAvaCard(country=country)
-        tempData = {"GTBU":jsonResultsGTBUonshelfandAvaCard, "S": jsonResultsSonshelfandAvaCard}
-        if tempData["GTBU"] != []:
-            if tempData["S"] != []:
-                for i in range(len(tempData["GTBU"])):
-                    for j in range(len(tempData["S"])):
-                        sumData = [{"on_shelf_num": (tempData["GTBU"][i]["on_shelf_num"] +
-                                                    tempData["S"][i]["on_shelf_num"]),
-                                  "ava_num": (tempData["GTBU"][i]["ava_num"] + tempData["S"][i]["ava_num"])}]
-                        VsimCon = {"ALL": sumData}
-            else:
-                VsimCon = {"ALL": tempData["GTBU"]}
-        else:
-            if tempData["S"] != []:
-                VsimCon = {"ALL": tempData["S"]}
-            else:
-                VsimCon = {"ALL": []}
-
-    elif BU == 'GTBU':
-        jsonResultsGTBUonshelfandAvaCard = getMutiLineNonshelfandAvaCard(country=country)
-        VsimCon = {"GTBU": jsonResultsGTBUonshelfandAvaCard}
+    try:
+        MaxUser = getMutiLineMaxUser(country=country,
+                                     begintime=begintime,
+                                     endtime=endtime,
+                                     butype_set=butype_set,
+                                     timedim_set=timedim_set)
+    except KeyError as keyerr:
+        errInfo = ("when query MaxUser raise KeyError:{}".format(keyerr))
+    except mysql.connector.Error as err:
+        errInfo = ("Something went wrong when query MaxUser: {}".format(err))
+    if errInfo:
+        DicResults = {'info': {'err': True, 'errinfo': errInfo},
+                      'data': []}
     else:
-        jsonResultsSonshelfandAvaCard = getMutiLineSonshelfandAvaCard(country=country)
-        VsimCon = {"S": jsonResultsSonshelfandAvaCard}
+        if not MaxUser:
+            DicResults = {'info': {'err': False, 'errinfo': "No MaxUser Data"},
+                          'data': []}
 
-    conData = VsimCon[BU]
+        else:
+            try:
+                if BU == 'ALL':
+                    VsimCon = getMutiLineNonshelfandAvaCard(country=country)
+                else:
+                    VsimCon = getMutiLineNonshelfandAvaCard(country=country)
+            except KeyError as keyerr:
+                errInfo = ("when query VsimCon raise KeyError:{}".format(keyerr))
+            except mysql.connector.Error as err:
+                errInfo = ("Something went wrong when query VsimCon: {}".format(err))
+            if errInfo:
+                DicResults = {'info': {'err': True, 'errinfo': errInfo},
+                              'data': []}
+            else:
+                DicResults = {'info': {'err': False, 'errinfo': ''},
+                              'data': {'max_user': MaxUser, 'sim_con': VsimCon}}
 
-    JsonRow_MaxUser = {"maxuser": jsonResults_MaxUser,
-                       "con": conData
-                       }
-
-    return json.dumps(JsonRow_MaxUser, sort_keys=True, indent=4, default=json_util.default)
+    return json.dumps(DicResults, sort_keys=True, indent=4, default=json_util.default)

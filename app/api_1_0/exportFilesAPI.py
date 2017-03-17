@@ -33,7 +33,6 @@ from api_functions.exportExcelFunc import (get_excel140countryDataAndSorted,
 @api.route('/export_countrySrcStatic/', methods=['POST'])
 def export_countrySrcStatic():
     if request.method == 'POST':
-
         dic_data = json.loads(request.form['data'])
         sortedDicData = get_excelCountrySrcStaticDataAndSorted(dic_data=dic_data)
         return excel.make_response_from_array(sortedDicData, "xls", file_name="ExportCountrySrcStaticData")

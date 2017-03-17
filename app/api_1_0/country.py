@@ -64,19 +64,24 @@ def get_chart_country():
     return getVsimCountryStatic(country)
 
 
-@api.route('/get_mutiLine_maxUser/')
+@api.route('/get_mutiLine_maxUser/', methods=['POST'])
 def get_mutiLine_maxUser():
     """
     本api为绘制index主页峰值用户、卡数曲线接口
     :return: 峰值用户、在板卡数、可用卡数JSON数据
     """
-    country = request.args.get('country', '', type=str)
-    begintime = request.args.get('begintime', '', type=str)
-    endtime = request.args.get('endtime', '', type=str)
-    butype = request.args.get('butype', '', type=str)
-    timedim = request.args.get('timedim', '', type=str)
+    if request.method == 'POST':
+        DicData = request.get_json()
+        country = str(DicData['country'])
+        begintime = str(DicData['begintime'])
+        endtime = str(DicData['endtime'])
+        butype = str(DicData['butype'])
+        timedim = str(DicData['timedim'])
 
-    return getindexHtmlMutiLineData(country, begintime, endtime, butype=butype, timedim=timedim)
+        return getindexHtmlMutiLineData(country, begintime, endtime, butype=butype, timedim=timedim)
+
+
+
 
 
 @api.route('/get_countrySrcCon/', methods=['POST'])
