@@ -200,6 +200,7 @@ function countrySrcConAjaxApi(options_param) {
     var queryPost = options_param.postData;
     var Country = queryPost.country;
     var Org = queryPost.org;
+    alert(Country+Org);
     options_param.queryAlert.alertID.children().detach();
     //以下获取数据
     //清空countrySrcConGridArrayData数据，并且清空前端显示数据
@@ -349,7 +350,7 @@ function excelExport(data,item_alert) {
     }
     else{
         var temp = document.createElement("form");
-        temp.action = $SCRIPT_ROOT +"/api/v1.0/export_newVsimTestInfo/";
+        temp.action = $SCRIPT_ROOT +"/api/v1.0/export_countrySrcStatic/";
         temp.method = "post";
         temp.style.display = "none";
         var opt = document.createElement("textarea");
@@ -380,25 +381,28 @@ function daterange_init(data_range_item, day_set){
         clearBtn: true
     });
 }
-//初始化通知栏
-function jqxNotification_init(jqxNotification_itme, optin_autoClose){
+//初始化通知栏API
+function jqxNotification_init(notification_item, container_item, option_autoClose){
    //初始化通知
-    jqxNotification_itme.jqxNotification({
+    notification_item.jqxNotification({
        width: "100%", 
        position: "top-right", 
        blink: true , 
-       appendContainer: "#container", 
+       appendContainer: container_item,
        opacity: 0.9,
        autoOpen: false, 
        animationOpenDelay: 800, 
-       autoClose: optin_autoClose,
+       autoClose: option_autoClose,
        autoCloseDelay: 3000, 
        template: "info"
     });
-
 }
-//
-function jqxNotificationAPI(notification_item, notification_content_item, not_doc, option_autoClose) {
+//通知函数调用接口
+function jqxNotificationAPI(notification_item,
+                            notification_content_item,
+                            container_item,
+                            not_doc,
+                            option_autoClose) {
     //close last notification
     notification_item.jqxNotification("closeLast");
     //clear old data
@@ -408,13 +412,16 @@ function jqxNotificationAPI(notification_item, notification_content_item, not_do
         '<strong>' + not_doc+ '</strong>'
     );
     //init notification
-    jqxNotification_init(notification_item, option_autoClose);
+    jqxNotification_init(notification_item, container_item, option_autoClose);
     //open notifications
     notification_item.jqxNotification("open");
-
 }
 //峰值用户时间设置函数
-function selectEvnNotification(select_item, evt, notification_item, notification_content_item) {
+function selectEvnNotification(select_item,
+                               evt,
+                               notification_item,
+                               notification_content_item,
+                               notification_container_item) {
     var TimeDim = select_item.val();
     var notification_doc = '';
     if (TimeDim == 'month'){
@@ -422,88 +429,96 @@ function selectEvnNotification(select_item, evt, notification_item, notification
         jqxNotificationAPI(
             notification_item,
             notification_content_item,
+            notification_container_item,
             notification_doc,
             true
         );
     }else {
         notification_doc = '时间颗粒已经设置为：天';
-        jqxNotificationAPI(notification_item,
+        jqxNotificationAPI(
+            notification_item,
             notification_content_item,
+            notification_container_item,
             notification_doc,
             true
         );
     }
 }
-function maxUserLineCharAjaxAPI(options_ajax) {
-    var Country=options_ajax.PostData.country;
-    var Begintime = options_ajax.PostData.begintime;
-    var Endtime = options_ajax.PostData.endtime;
-    var BuType = options_ajax.PostData.butype;
-    var TimeDim = options_ajax.PostData.timedim;
+/**==
+ *
+ * @param options_ajax
+ *==========================================================**/
+function maxUserLineCharAjaxAPI(options_max_user_ajax) {
+    var Country=options_max_user_ajax.PostData.country;
+    var Begintime = options_max_user_ajax.PostData.begintime;
+    var Endtime = options_max_user_ajax.PostData.endtime;
+    var BuType = options_max_user_ajax.PostData.butype;
+    var TimeDim = options_max_user_ajax.PostData.timedim;
     //必须进行国家选择才能查询！
     if (Country===""){
         // alter
-        alert_func(options_ajax.item.alertID, '请选择要查询的国家!');
+        alert_func(options_max_user_ajax.item.alertID, '请选择要查询的国家!');
     }
     else if (Begintime===""){
-        alert_func(options_ajax.item.alertID, '选择要查询的起始时间!');
+        alert_func(options_max_user_ajax.item.alertID, '选择要查询的起始时间!');
     }
     else if (Endtime===""){
-        alert_func(options_ajax.item.alertID, '请选择要查询的截止时间!');
+        alert_func(options_max_user_ajax.item.alertID, '请选择要查询的截止时间!');
     }
     else if (TimeDim===""){
-        alert_func(options_ajax.item.alertID, '请选择要查询的时间维度!');
+        alert_func(options_max_user_ajax.item.alertID, '请选择要查询的时间维度!');
     }
     else if (BuType===''){
-        alert_func(options_ajax.item.alertID, '请选择要查询的BU类型!');
+        alert_func(options_max_user_ajax.item.alertID, '请选择要查询的BU类型!');
     }
     else{
-        options_ajax.item.alertID.children().detach();
+        options_max_user_ajax.item.alertID.children().detach();
         //disable query button
-        options_ajax.item.getDataBtID.attr("disabled", true);
+        options_max_user_ajax.item.getDataBtID.attr("disabled", true);
         var notification_doc = '数据获取中......';
         jqxNotificationAPI(
-            options_ajax.item.notificationID,
-            options_ajax.item.notificationContentID,
+            options_max_user_ajax.item.notificationID,
+            options_max_user_ajax.item.notificationContentID,
+            options_max_user_ajax.item.notificationContainerID,
             notification_doc,
             false
         );
         var AjaxRequest = $.ajax({
             type: 'POST',
             //get方法url地址
-            url: options_ajax.url,
+            url: options_max_user_ajax.url,
             //request set
             contentType: 'application/json',
             //data参数
-            data: JSON.stringify(options_ajax.PostData),
+            data: JSON.stringify(options_max_user_ajax.PostData),
             //server back data type
             dataType: 'json'
         })
             .done(function(data){
-                options_ajax.item.notificationID.jqxNotification("closeLast");
+                options_max_user_ajax.item.notificationID.jqxNotification("closeLast");
                 var getData = data;
                 if (getData.data.length==0){
                     if (getData.info.err){
-                        alert_func(options_ajax.item.alertID, ('Error：'+ getData.info.errinfo));
+                        alert_func(options_max_user_ajax.item.alertID, ('Error：'+ getData.info.errinfo));
                     }
                     else{
-                        alert_func(options_ajax.item.alertID, ('无查询结果!'));
+                        alert_func(options_max_user_ajax.item.alertID, ('无查询结果!'));
                     }
                 }
                 else{
                     drawParam = {
-                        drawLineID: options_ajax.item.canvasLineID,
-                        drawDivID: options_ajax.item.canvasDivID
+                        drawLineID: options_max_user_ajax.item.canvasLineID,
+                        drawDivID: options_max_user_ajax.item.canvasDivID
                     };
                     var str_maxUserReturn=draw_mutiLine_CountryMaxOnlineUser(getData.data, drawParam);
                 }
             })
             .fail(function(jqXHR, status){
                 //清空countrySrcConGridArrayData数据，并且清空前端显示数据
-                alert_func(options_ajax.item.alertID, ('Servers False!'));
+                alert_func(options_max_user_ajax.item.alertID, ('Servers False!'));
             })
             .always(function() {
-                options_ajax.item.getDataBtID.attr("disabled", false);
+                options_max_user_ajax.item.getDataBtID.attr("disabled", false);
             });
     }
 }
@@ -572,302 +587,88 @@ function draw_mutiLine_CountryMaxOnlineUser(data, draw_param){
        return false;
     }
 }
-//初始化天维度选择通知栏
-function countryChartQuerynotification_init(){
-   //初始化通知
-   $("#countryChartQueryjqxNotification").jqxNotification({
-       width: "100%",
-       position: "top-right",
-       blink: true ,
-       appendContainer: "#countryChartcontainer",
-       opacity: 0.9,
-       autoOpen: false,
-       animationOpenDelay: 800,
-       autoClose: false,
-       autoCloseDelay: 3000,
-       template: "info"
-    });
-
-}
-
-//ajax获取国家在板卡数、可用卡数数据
-$("#countryChartdataGet").click(function () {
-    var Country= $('#countryChartSelect').val();
-    //  隐藏上一次告警栏
-    $("#countryChartalert").children().detach();
-    //必须进行国家选择才能查询！
-    if (Country==""){
-        $("#countryChartalert").append(
-			lineChart_alert+
-			    '<p>请选择要查询的国家!</p>'+
-			'</div>'
-			);
-    }
-    else{
-        $("#countryChartQuerynotificationContent").children().detach();
-        $("#countryChartQuerynotificationContent").append(
-          '<strong>'+'数据获取中......'+'</strong>'
-          );
-        countryChartQuerynotification_init();
-        $("#countryChartQueryjqxNotification").jqxNotification("open");
-
-        $.getJSON($SCRIPT_ROOT + '/api/v1.0/get_CountryAvailableVsim/', //get方法url地址
-               //data参数
-               {country: Country
-                },
-               //回掉函数
-               function(data) {
-                           var getData = data;
-                           var alert_str = "";
-                           if (getData.country.VsimPackageflowStatus.N.length == 0){
-                               $("#countryChartQueryjqxNotification").jqxNotification("closeLast");
-						       $("#countryChartalert").append(
-						       lineChart_alert+
-						           '<p>无查询结果，请重新设置查询条件!</p>'+
-						       '</div>'
-						       );
-                           }
-                           else{
-                               $("#countryChartQueryjqxNotification").jqxNotification("closeLast");
-                               //var str_Srcvsim=draw_countrySrcvsimStatic(getData.country.srcvsim);
-                               var str_Flow=draw_countryFlowStatic(getData.country.VsimPackageflowStatus);
-                               // 如果在绘图监测中str_Srcvsim 或 str_Flow 调用函数返回无记录结果的，输出到告警栏中，就设置告诫提示
-                               // 当每个绘图都有数据时返回值为false
-                               if ( (str_Flow)){
-                                   alert_str=alert_str+str_Flow;
-                                   $("#countryChartalert").append(
-                                   lineChart_alert+
-						               '<p>'+alert_str+'请改变条件查询！</p>'+
-						           '</div>'
-						       );
-                               }
-                           }
-               });//getJson函数结束
-        }
-});
-
-//---------------------------------------------绘制国家在板卡、可用卡、空闲卡BAR图形
-function draw_countrySrcvsimStatic(data){
-    var getData = data;
-    //var lableDoughnut=$("#countryChartSelect").val()
-    var vsim_tatic_labels=["在架卡数","可用卡数","空闲卡数"];
-    var N_vsim_country_data=[];
-    var S_vsim_country_data=[];
-
-    var doughnutData = {
-        labels: vsim_tatic_labels,
-        datasets: [
-        {
-            label: "新架构",
-            backgroundColor: 'rgba(26,179,148,0.5)',
-            borderColor: "rgba(26,179,148,0.7)",
-            pointBackgroundColor: "rgba(26,179,148,1)",
-            pointBorderColor: "#fff",
-            data: N_vsim_country_data
-        }
-        ]
-    };
-    var doughnutOptions = {
-        events: false,
-        tooltips: {
-        enabled: false
-    },
-    hover: {
-        animationDuration: 0
-    },
-    animation: {
-        duration: 1,
-        onComplete: function () {
-            var chartInstance = this.chart,
-                ctx = chartInstance.ctx;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'bottom';
-
-            this.data.datasets.forEach(function (dataset, i) {
-                var meta = chartInstance.controller.getDatasetMeta(i);
-                meta.data.forEach(function (bar, index) {
-                    var data = dataset.data[index];
-                    ctx.fillStyle = dataset.backgroundColor;
-                    ctx.fillText(data, bar._model.x, bar._model.y - 5);
-                });
-            });
-        }
-    }
-    };
-    if ((getData.N.length == 0) && (getData.S.length == 0)){
-        //做一次画板数据清空
-		$("#doughnutChart_json").remove();
-        $("#doughnutChart_div").append('<canvas id="doughnutChart_json" height="180"></canvas>');
-        return '无国家卡数统计结果! ';
-    }
-    else{
-        $.each( getData.N, function(i, item){
-                                       N_vsim_country_data.push(
-                                       Number(item.all_num),
-                                       Number(item.available_num),
-                                       Number(item.unoccupy_num)
-                                       );
-                           });//each函数完成
-        $.each( getData.S, function(i, item){
-                                       S_vsim_country_data.push(
-                                       Number(item.all_num),
-                                       Number(item.available_num),
-                                       Number(item.unoccupy_num)
-                                       );
-                           });//each函数完成
-        //做一次画板数据清空、新加入数据绘制
-        $("#doughnutChart_json").remove();
-        $("#doughnutChart_div").append('<canvas id="doughnutChart_json" height="180"></canvas>');
-        var ctx = document.getElementById("doughnutChart_json").getContext("2d");
-        new Chart(ctx, {type: 'bar', data: doughnutData, options:doughnutOptions});
-    }
-    return false;
-}
-//---------------------------------------------------绘制可用卡套餐流量情况bar图
-function draw_countryFlowStatic(data){
-    var getData = data;
-    var lablecountry_flow=$('select[name="country"]').val();
-    var N_countryVsimPackageflowStatuslabels=[];
-    var N_countryVsimPackageflowStatustotal=[];
-    var N_countryVsimPackageflowStatusleave=[];
-
-
-    var barData = {
-        labels: N_countryVsimPackageflowStatuslabels,
-        datasets: [
-            {
-                label: "初始流量/GB",
-                backgroundColor: 'rgba(26,179,148,0.5)',
-                pointBorderColor: "rgba(26,179,148,0.7)",
-                data: N_countryVsimPackageflowStatustotal
+/**
+ * ajaxParam = {
+            item:{
+                dataGetID: VarGsvcHome.item.charPop.countryChartdataGetID,
+                chartAlertID: VarGsvcHome.item.charPop.countryChartAlertID,
+                countryID: VarGsvcHome.item.charPop.countrySelectID,
+                notificationID: VarGsvcHome.item.charPop.notificationID,
+                notificationContentID: VarGsvcHome.item.charPop.notificationContentID,
+                notificationContainerID: VarGsvcHome.item.charPop.notificationContainerID
             },
-            {
-                label: "剩余流量/GB",
-                backgroundColor: 'rgba(90, 110, 110, 0.5)',
-                borderColor: 'rgba(90, 110, 110, 0.7)',
-                pointBackgroundColor: "rgba(90, 110, 110, 1)",
-                pointBorderColor: "#fff",
-                data: N_countryVsimPackageflowStatusleave
+            url: ($SCRIPT_ROOT + '/api/v1.0/get_CountryAvailableVsim/'),
+            postData: {
+                country:VarGsvcHome.item.charPop.countrySelectID.val()
             }
-        ]
-    };
-    var barOptions = {
-        events: false,
-        tooltips: {
-        enabled: true
-    },
-    hover: {
-        animationDuration: 0
-    },
-    animation: {
-        duration: 1,
-        onComplete: function () {
-            var chartInstance = this.chart,
-                ctx = chartInstance.ctx;
-                //ctx.font = //Chart.helpers.fontString(self.fontSize, self.fontStyle, self.fontFamily);
-                //ctx.fillStyle = "#79D1CF"
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'bottom';
-
-            this.data.datasets.forEach(function (dataset, i) {
-                var meta = chartInstance.controller.getDatasetMeta(i);
-                meta.data.forEach(function (bar, index) {
-                    var data = dataset.data[index];
-                    ctx.fillStyle = dataset.backgroundColor;
-                    ctx.fillText(data, bar._model.x, bar._model.y - 5);
-                });
+        };
+ * @param package_flower_ajax_options
+ */
+function countryPackageFlowerStaticAjaxAPI(package_flower_ajax_options) {
+    var Country = package_flower_ajax_options.postData.country;
+    if (Country===""){
+        alert_func(package_flower_ajax_options.item.chartAlertID, ('请选择要查询的国家!'));
+    }else {
+        package_flower_ajax_options.item.chartAlertID.children().detach();
+        package_flower_ajax_options.item.dataGetID.attr("disabled", true);
+        jqxNotificationAPI(
+            package_flower_ajax_options.item.notificationID,
+            package_flower_ajax_options.item.notificationContentID,
+            package_flower_ajax_options.item.notificationContainerID,
+            '数据获取中......',
+            false);
+        var AjaxRequest = $.ajax({
+            method: 'GET',
+            //get方法url地址
+            url: package_flower_ajax_options.url,
+            //request set
+            contentType: 'application/json',
+            //data参数
+            data: package_flower_ajax_options.postData,
+            //server back data type
+            dataType: 'json'
+        })
+            .done(function(data){
+                package_flower_ajax_options.item.notificationID.jqxNotification("closeLast");
+                var getData = data;
+                if (getData.data.length==0){
+                    if (getData.info.err){
+                        alert_func(package_flower_ajax_options.item.chartAlertID, ('Error：'+ getData.info.errinfo));
+                    }
+                    else{
+                        alert_func(package_flower_ajax_options.item.chartAlertID, ('无查询结果!'));
+                    }
+                }
+                else{
+                    var flowerStaticData = [];
+                    $.each( getData.data, function(i, item){
+                        flowerStaticData.push({
+                            Country: item.Country,
+                            PackageName: item.PackageName,
+                            NextUpdateTime: item.NextUpdateTime,
+                            ORG: item.ORG,
+                            Percentage: item.Percentage
+                        });
+                    });//each函数完成
+                    alert("期待后续更新！");
+                }
+            })
+            .fail(function(jqXHR, status){
+                //清空countrySrcConGridArrayData数据，并且清空前端显示数据
+                alert_func(package_flower_ajax_options.item.chartAlertID, ('Servers False!'));
+            })
+            .always(function() {
+                package_flower_ajax_options.item.notificationID.jqxNotification("closeLast");
+                package_flower_ajax_options.item.dataGetID.attr("disabled", false);
             });
-        }
     }
-    };
-
-    var S_countryVsimPackageflowStatuslabels=[];
-    var S_countryVsimPackageflowStatustotal=[];
-    var S_countryVsimPackageflowStatusleave=[];
-
-    var S_barData = {
-        labels: S_countryVsimPackageflowStatuslabels,
-        datasets: [
-            {
-                label: "初始流量/GB",
-                backgroundColor: 'rgba(26,179,148,0.5)',
-                pointBorderColor: "rgba(26,179,148,0.7)",
-                data: S_countryVsimPackageflowStatustotal
-            },
-            {
-                label: "剩余流量/GB",
-                backgroundColor: 'rgba(90, 110, 110, 0.5)',
-                borderColor: 'rgba(90, 110, 110, 0.7)',
-                pointBackgroundColor: "rgba(90, 110, 110, 1)",
-                pointBorderColor: "#fff",
-                data: S_countryVsimPackageflowStatusleave
-            }
-        ]
-    };
-
-    var S_barOptions = {
-        //responsive: true,
-        events: false,
-        tooltips: {
-        enabled: false
-    },
-    hover: {
-        animationDuration: 0
-    },
-    animation: {
-        duration: 1,
-        onComplete: function () {
-            var chartInstance = this.chart,
-                ctx = chartInstance.ctx;
-                //ctx.font = //Chart.helpers.fontString(self.fontSize, self.fontStyle, self.fontFamily);
-                //ctx.fillStyle = "#79D1CF"
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'bottom';
-
-            this.data.datasets.forEach(function (dataset, i) {
-                var meta = chartInstance.controller.getDatasetMeta(i);
-                meta.data.forEach(function (bar, index) {
-                    var data = dataset.data[index];
-                    ctx.fillStyle = dataset.backgroundColor;
-                    ctx.fillText(data, bar._model.x, bar._model.y - 5);
-                });
-            });
-        }
-    }
-    };
-
-
-    if ((getData.N.length == 0)){
-		$("#N_PackagesFlower_barChart").remove();
-        $("#N_PackagesFlower_barChart_div").append('<canvas id="N_PackagesFlower_barChart" height="180"></canvas>');
-        $("#S_PackagesFlower_barChart").remove();
-        $("#S_PackagesFlower_barChart_div").append('<canvas id="S_PackagesFlower_barChart" height="180"></canvas>');
-        return '无国家流量统计结果!';
-	}
-	else{
-	    $.each( getData.N, function(i, item){
-         /**alert(item.package_name)
-         */
-         N_countryVsimPackageflowStatuslabels.push(
-             item.package_name.substring(0,11)
-         );
-         N_countryVsimPackageflowStatustotal.push(
-             item.totalflow
-         );
-         N_countryVsimPackageflowStatusleave.push(
-             item.totalleaveflow
-         );
-       });
-       /**
-       *each函数完成
-       */
-        $("#N_PackagesFlower_barChart").remove();
-        $("#N_PackagesFlower_barChart_div").append('<canvas id="N_PackagesFlower_barChart" height="180"></canvas>');
-        var ctx2 = document.getElementById("N_PackagesFlower_barChart").getContext("2d");
-        new Chart(ctx2, {type: 'bar', data: barData, options:barOptions});
-        return false;
-	}
 }
+/**===========================================================
+ *
+ * @param select_class
+ * @param select_data
+ * @param select_options
+ *==============================================================**/
 function initSelect(select_class, select_data, select_options) {
     select_class.select2(select_data);
     select_class.select2(select_options);
@@ -924,7 +725,6 @@ function initDropDownList(item_related_grid, item_jqx_drop_down){
 
         actionDropDownList(item_related_grid, event);
     });
-
 }
 /**=====================================================================
  *
@@ -968,25 +768,42 @@ $(function () {
             orgSelectClass: $('.form-org'),
             buSelectClass: $('.form-butype'),
             timeDimClass: $('.form-timedim'),
-            gridID: $('#con-countrySRC-jqxgrid'),
-            dropDownListID: $('#jqxDropDownList'),
-            getGridDataID: $('#countrySrcCondataGet'),
-            alertID: $('#country-alert'),
-            flashGridID: $('#countrySrcConFlash'),
-            excelExportID: $('#countrySrcConexcelExport'),
-            timeDimID: $('#timeDim'),
-            dateRangeLineID: $('#DatePicker'),
-            notificationMaxUserID: $('#MaxUsrjqxNotification'),
-            notificationContentMaxUserID: $('#MaxUsrnotificationContent'),
-            notificationMaxUserQueryID: $('#MaxUsrQueryjqxNotification'),
-            notificationContentMaxUserQueryID: $('#MaxUsrQuerynotificationContent'),
-            maxUserLineDataGetID: $('#country_MaxusrlineChart_dataGet'),
-            alertMaxUserLineID: $('#country-lineChart-alert'),
-            countryMaxUser: $('#countryMaxusr'),
-            begintimeMaxUser: $('#input-daterange-start'),
-            endtimeMaxUser: $('#input-daterange-end'),
-            butypeMaxUser: $('#butypeMaxusr'),
-            timedimMaxUser: $('#timeDim')
+            grid:{
+                countryStatic: $('#countrySrcConSelect'),
+                orgStatic: $('#OrgSelect'),
+                gridID: $('#con-countrySRC-jqxgrid'),
+                dropDownListID: $('#jqxDropDownList'),
+                getGridDataID: $('#countrySrcCondataGet'),
+                alertID: $('#country-alert'),
+                flashGridID: $('#countrySrcConFlash'),
+                excelExportID: $('#countrySrcConexcelExport')
+            },
+            maxUser:{
+                timeDimID: $('#timeDim'),
+                dateRangeLineID: $('#DatePicker'),
+                notificationMaxUserID: $('#MaxUsrjqxNotification'),
+                notificationContentMaxUserID: $('#MaxUsrnotificationContent'),
+                notificationContainerMaxUserID: $('#containerMaxUser'),
+                notificationMaxUserQueryID: $('#MaxUsrQueryjqxNotification'),
+                notificationContentMaxUserQueryID: $('#MaxUsrQuerynotificationContent'),
+                notificationContainerMaxUserQueryID: $('#containerMaxUserQuery'),
+                maxUserLineDataGetID: $('#country_MaxusrlineChart_dataGet'),
+                alertMaxUserLineID: $('#country-lineChart-alert'),
+                countryMaxUserID: $('#countryMaxusr'),
+                begintimeMaxUserID: $('#input-daterange-start'),
+                endtimeMaxUserID: $('#input-daterange-end'),
+                butypeMaxUserID: $('#butypeMaxusr'),
+                canvasID: $('#mutil_inecharts_div'),
+                canvasLineID: $('#country_lineChart')
+            },
+            charPop:{
+                countryChartdataGetID: $("#countryChartdataGet"),
+                countryChartAlertID: $("#countryChartAlert"),
+                countrySelectID: $('#countryChartSelect'),
+                notificationID: $("#countryPopChartQueryNotification"),
+                notificationContentID: $("#countryPopChartQueryNotificationContent"),
+                notificationContainerID: $("#countryChartContainer")
+            }
         },
         setGridArrayData: function (arrayData) {
             this.gridArray=arrayData;
@@ -1005,27 +822,27 @@ $(function () {
     initSelectView(selectClass);
     //============================
     // 初始化统计表单
-    var gsvcHomeGridSource = initcountrySrcConjqxGrid(VarGsvcHome.item.gridID, VarGsvcHome.gridArray);
+    var gsvcHomeGridSource = initcountrySrcConjqxGrid(VarGsvcHome.item.grid.gridID, VarGsvcHome.gridArray);
     //==================================================================================================
     // 初始化下拉选择显示
-    initDropDownList(VarGsvcHome.item.gridID, VarGsvcHome.item.dropDownListID);
+    initDropDownList(VarGsvcHome.item.grid.gridID, VarGsvcHome.item.grid.dropDownListID);
     //=========================================================================
     //获取统计数据
-    VarGsvcHome.item.getGridDataID.click(function () {
+    VarGsvcHome.item.grid.getGridDataID.click(function () {
         var ajaxParam ={
-            getDataBtID: VarGsvcHome.item.getGridDataID,
+            getDataBtID: VarGsvcHome.item.grid.getGridDataID,
             gridParam:{
-                gridID: VarGsvcHome.item.gridID,
+                gridID: VarGsvcHome.item.grid.gridID,
                 arrayData: VarGsvcHome.gridArray,
                 gridSource: gsvcHomeGridSource,
                 setArrayData: VarGsvcHome.setGridArrayData
             },
             postData:{
-                country: VarGsvcHome.item.countrySelectClass.val(),
-                org: VarGsvcHome.item.orgSelectClass.val()
+                country: VarGsvcHome.item.grid.countryStatic.val(),
+                org: VarGsvcHome.item.grid.orgStatic.val()
             },
             queryAlert:{
-                alertID: VarGsvcHome.item.alertID,
+                alertID: VarGsvcHome.item.grid.alertID,
                 str: VarGsvcHome.alertWinStr,
                 setStr: VarGsvcHome.setAlertWinStr
             }
@@ -1034,46 +851,69 @@ $(function () {
     });
     //===================================
     //flash grid
-    VarGsvcHome.item.flashGridID.click(function () {
-        flashGsvcHomeGrid(VarGsvcHome.item.gridID);
+    VarGsvcHome.item.grid.flashGridID.click(function () {
+        flashGsvcHomeGrid(VarGsvcHome.item.grid.gridID);
     });
     //====================================
     //excel 导出
-    VarGsvcHome.item.excelExportID.click(function () {
-        excelGsvcHomeExportAPI(VarGsvcHome.item.gridID, VarGsvcHome.item.alertID)
+    VarGsvcHome.item.grid.excelExportID.click(function () {
+        excelGsvcHomeExportAPI(
+            VarGsvcHome.item.grid.gridID,
+            VarGsvcHome.item.grid.alertID)
     });
     //===============================================================
     //初始化时间选择
-    daterange_init(VarGsvcHome.item.dateRangeLineID, '-360d');
+    daterange_init(VarGsvcHome.item.maxUser.dateRangeLineID, '-360d');
     //时间颗粒度选择通知
-    VarGsvcHome.item.timeDimID.on('select2:select', function (evt) {
+    VarGsvcHome.item.maxUser.timeDimID.on('select2:select', function (evt) {
         selectEvnNotification(
-            VarGsvcHome.item.timeDimID, evt,
-            VarGsvcHome.item.notificationMaxUserID,
-            VarGsvcHome.item.notificationContentMaxUserID
+            VarGsvcHome.item.maxUser.timeDimID,
+            evt,
+            VarGsvcHome.item.maxUser.notificationMaxUserID,
+            VarGsvcHome.item.maxUser.notificationContentMaxUserID,
+            VarGsvcHome.item.maxUser.notificationContainerMaxUserID
         );
     });
-    //=================================================================================================
+    //=======================================================
     //获取峰值用户复合曲线数据
-    VarGsvcHome.item.maxUserLineDataGetID.click(function () {
-        var ajaxParam ={
+    VarGsvcHome.item.maxUser.maxUserLineDataGetID.click(function () {
+        var gsvcHomeajaxParam ={
             item:{
-                getDataBtID: VarGsvcHome.item.getGridDataID,
-                notificationID: VarGsvcHome.item.notificationMaxUserQueryID,
-                notificationContentID: VarGsvcHome.item.notificationContentMaxUserQueryID,
-                alertID: VarGsvcHome.item.alertMaxUserLineID,
-                canvasLineID: $('#country_lineChart'),
-                canvasDivID: $('#mutil_inecharts_div')
+                getDataBtID: VarGsvcHome.item.maxUser.maxUserLineDataGetID,
+                notificationID: VarGsvcHome.item.maxUser.notificationMaxUserQueryID,
+                notificationContentID: VarGsvcHome.item.maxUser.notificationContentMaxUserQueryID,
+                notificationContainerID: VarGsvcHome.item.maxUser.notificationContainerMaxUserQueryID,
+                alertID: VarGsvcHome.item.maxUser.alertMaxUserLineID,
+                canvasLineID: VarGsvcHome.item.maxUser.canvasLineID,
+                canvasDivID: VarGsvcHome.item.maxUser.canvasID
             },
             PostData:{
-                country: VarGsvcHome.item.countryMaxUser.val(),
-                begintime: VarGsvcHome.item.begintimeMaxUser.val(),
-                endtime: VarGsvcHome.item.endtimeMaxUser.val(),
-                butype: VarGsvcHome.item.butypeMaxUser.val(),
-                timedim: VarGsvcHome.item.timedimMaxUser.val()
+                country: VarGsvcHome.item.maxUser.countryMaxUserID.val(),
+                begintime: VarGsvcHome.item.maxUser.begintimeMaxUserID.val(),
+                endtime: VarGsvcHome.item.maxUser.endtimeMaxUserID.val(),
+                butype: VarGsvcHome.item.maxUser.butypeMaxUserID.val(),
+                timedim: VarGsvcHome.item.maxUser.timeDimID.val()
             },
             url: ($SCRIPT_ROOT + '/api/v1.0/get_mutiLine_maxUser/')
         };
-        maxUserLineCharAjaxAPI(ajaxParam);
+        maxUserLineCharAjaxAPI(gsvcHomeajaxParam);
+    });
+    //===============================================================
+    VarGsvcHome.item.charPop.countryChartdataGetID.click(function () {
+        var ajaxParam = {
+            item:{
+                dataGetID: VarGsvcHome.item.charPop.countryChartdataGetID,
+                chartAlertID: VarGsvcHome.item.charPop.countryChartAlertID,
+                countryID: VarGsvcHome.item.charPop.countrySelectID,
+                notificationID: VarGsvcHome.item.charPop.notificationID,
+                notificationContentID: VarGsvcHome.item.charPop.notificationContentID,
+                notificationContainerID: VarGsvcHome.item.charPop.notificationContainerID
+            },
+            url: ($SCRIPT_ROOT + '/api/v1.0/get_country_flower_static/'),
+            postData: {
+                country: VarGsvcHome.item.charPop.countrySelectID.val()
+            }
+        };
+        countryPackageFlowerStaticAjaxAPI(ajaxParam);
     });
 });

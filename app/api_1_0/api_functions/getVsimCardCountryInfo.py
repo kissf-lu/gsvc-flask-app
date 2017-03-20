@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import json
+import decimal
 from bson import json_util
 import mysql.connector
 from SqlPack.SQLModel import qureResultAsJson
@@ -80,35 +81,7 @@ def getNVsimCountryStatic(country):
     return jsonResults_Nvsim
 
 
-def getSVsimCountryStatic(country):
-    """
-
-    :param country:
-    :return:
-    """
-    queryCoutry = country
-    if queryCoutry == "":
-        where = ""
-    else:
-        where = "AND a.`country_code2`=" + "'" + queryCoutry + "' "
-    query_str_vsim = ("SELECT  "
-                      "a.`country_code2`AS 'country', "
-                      "COUNT(1) AS 'all_num', "
-                      "COUNT(CASE WHEN a.`state`='00000' OR a.`state`='10000' THEN 1 END )AS 'available_num', "
-                      "COUNT(CASE WHEN a.`state`='00000'                      THEN 2 END )AS 'unoccupy_num' "
-                      "FROM `t_resvsim` AS a "
-                      "LEFT JOIN `t_resvsimpackagetype`AS c ON c.`itemid`=a.`packagetype` "
-                      "LEFT JOIN `t_resvsimowner`AS e ON e.`sourceid`=a.`imsi` "
-                      "WHERE a.`state` LIKE '_0__0' "
-                      "     AND (c.`name` NOT  REGEXP '.*[0-9]国.*') "
-                      "     AND e.`sourceid` IS NULL " + where + " "
-                      "GROUP BY a.`country_code2`")
-    jsonResults_Svsim = getJosonData(sysStr=S_sysStr, Database=S_Database, query_str=query_str_vsim)
-
-    return jsonResults_Svsim
-
-
-def getNVsimPackageflowStatus(country):
+def getVsimPackageflowStatus(country):
     """
 
     :return:
@@ -119,66 +92,63 @@ def getNVsimPackageflowStatus(country):
     else:
         where = "AND `iso2`=" + "'" + queryCoutry + "' "
 
-    query_str_flow = ("SELECT  "
-                      "   b.`package_type_name` AS 'package_name', "
-                      "   CAST(SUM(b.`init_flow`)/1024/1024/1024 AS UNSIGNED) AS 'totalflow',  "
-                      "   CAST(SUM(b.`leave_flow`)/1024/1024/1024 AS UNSIGNED) AS 'totalleaveflow'  "
-                      "FROM `t_css_vsim`AS a  "
-                      "LEFT  JOIN `t_css_vsim_packages` b "
-                      "	ON a.`imsi`=b.`imsi`  "
-                      "WHERE  "
-                      "   a.`bam_status`=0  "
-                      "   AND a.`slot_status`=0   "
-                      "   AND (b.`package_type_name` IS NOT NULL) " + where + " "
-                      "GROUP BY b.`package_type_name` "
-                      "ORDER BY CAST(SUM(b.`init_flow`)/1024/1024/1024 AS UNSIGNED) DESC  ")
+    query_str_flow = (
+        "SELECT "
+        "a.`iso2`              AS 'Country', "
+        "b.`package_type_name` AS 'PackageName', "
+        "DATE_FORMAT(b.`next_update_time`,'%Y-%m-%d %H')  AS 'NextUpdateTime', "
+        "e.`org_name`          AS 'ORG', "
+        "CAST((SUM(b.`total_use_flow`)/SUM(CASE WHEN `activate_status` = 0 THEN b.`init_flow` ELSE 0 END ))*100  AS DECIMAL(64,1)) AS 'Percentage' "
+        "FROM `t_css_vsim` AS a "
+        "LEFT  JOIN `t_css_vsim_packages` AS b  ON a.`imsi`= b.`imsi` "
+        "LEFT  JOIN `t_css_group`         AS e  ON a.`group_id`= e.`id` "
+        "LEFT  JOIN `t_css_package_type`  AS c  ON c.`id` = b.`package_type_id` "
+        "WHERE   a.`bam_status` = '0' "
+        "        AND a.`slot_status` = '0'  "
+        "        " + where + " "
+        "        AND b.`package_type_name` IS NOT NULL "
+        "        AND b.`init_flow` IS NOT NULL "
+        "        AND e.`org_name` = 'GTBU' "
+        "GROUP BY a.`iso2`,b.`package_type_name`,DATE_FORMAT(b.`next_update_time`,'%Y-%m-%d %H'), e.`org_name` "
+    )
 
-    NVsimPackageflowStatus = getJosonData(sysStr=N_sysStr, Database=N_Database, query_str=query_str_flow)
+    VsimPackageflowStatus = getJosonData(sysStr=N_sysStr, Database=N_Database, query_str=query_str_flow)
 
-    return NVsimPackageflowStatus
-
-
-def getSVsimPackageflowStatus(country):
-    """
-
-    :return:
-    """
-    queryCoutry = country
-    if queryCoutry == "":
-        where = ""
-    else:
-        where = "AND a.`country_code2`=" + "'" + queryCoutry + "' "
-
-    query_str_flow = ("SELECT  "
-                      "c.`name` AS 'package_name', "
-                      "CAST(SUM(c.`flowsize`)/1024 AS UNSIGNED) AS 'totalflow', "
-                      "CAST(SUM(b.`packagesizeavaiable`)/1024/1024/1024 AS UNSIGNED) AS 'totalleaveflow' "
-                      "FROM `t_resvsim` AS a "
-                      "LEFT JOIN `t_resvsimdispatcher` AS b ON b.`imsi`=a.`imsi` "
-                      "LEFT JOIN `t_resvsimpackagetype`AS c ON c.`itemid`=a.`packagetype` "
-                      "LEFT JOIN `t_resvsimowner`AS e ON e.`sourceid`=a.`imsi`  "
-                      "WHERE  a.`state`LIKE '_0__0' "
-                      "       AND (c.`name` NOT  REGEXP '.*[0-9]国.*') "
-                      "       AND e.`sourceid` IS NULL " + where + " "
-                      "GROUP BY c.`name` "
-                      "ORDER BY CAST(SUM(c.`flowsize`)/1024 AS UNSIGNED) DESC ")
-    SVsimPackageflowStatus = getJosonData(sysStr=S_sysStr, Database=S_Database, query_str=query_str_flow)
-
-    return SVsimPackageflowStatus
+    return VsimPackageflowStatus
 
 
 def getVsimCountryStatic(country, **kwargs):
     """
-
+    为主页gsvc HOME popchart图形接口
     :param country: 按国家进行数据统计
     :param kwargs: 后续根据需求变化增加变量
     :return:
     """
     queryCoutry = country
-    jsonResults_NVsimPackageflowStatus = getNVsimPackageflowStatus(country=queryCoutry)
-    jsonResults_VsimPackageflowStatus = {"N": jsonResults_NVsimPackageflowStatus}
-    JsonRow = {"country": {"VsimPackageflowStatus": jsonResults_VsimPackageflowStatus}}
-    return json.dumps(JsonRow, sort_keys=True, indent=4, default=json_util.default)
+    errInfo = ''
+    vsimFlowerStatic = []
+    try:
+        vsimFlowerStatic = getVsimPackageflowStatus(queryCoutry)
+    except KeyError as keyerr:
+        errInfo = ("when query MaxUser raise KeyError:{}".format(keyerr))
+    except mysql.connector.Error as err:
+        errInfo = ("Something went wrong when query MaxUser: {}".format(err))
+    if errInfo:
+        DicResults = {'info': {'err': True, 'errinfo': errInfo},
+                      'data': []}
+    else:
+        if not vsimFlowerStatic:
+            DicResults = {'info': {'err': False, 'errinfo': "No Data"},
+                          'data': []}
+
+        else:
+            for fs in vsimFlowerStatic:
+                if type(fs['Percentage']) is decimal.Decimal:
+                    fs['Percentage'] = float(fs['Percentage'])
+                    
+            DicResults = {'info': {'err': False, 'errinfo': ''},
+                          'data': vsimFlowerStatic}
+    return json.dumps(DicResults, sort_keys=True, indent=4, default=json_util.default)
 
 
 def getMutiLineNonshelfandAvaCard(country):
@@ -298,7 +268,6 @@ def getindexHtmlMutiLineData(country, begintime, endtime, **kwargs):
     timedim_set = "'%Y-%m-%d'"  # 时间维度设置
     MaxUser = []
     VsimCon = []
-    DicResults = {}
     errInfo = ''
     if 'butype' in kwargs.keys():
         butype = kwargs['butype']

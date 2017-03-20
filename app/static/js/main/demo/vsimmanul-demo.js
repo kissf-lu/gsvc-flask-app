@@ -301,7 +301,7 @@ function initjqxGrid(initGrid, grid_array_data){
                 },
                 autoshowfiltericon: true,
                 columnmenuopening: function (menu, datafield, height) {
-                    var column = $("#jqxgrid").jqxGrid('getcolumn', datafield);
+                    var column = initGrid.jqxGrid('getcolumn', datafield);
                     if (column.filtertype == "custom") {
                         menu.height(155);
                         setTimeout(function () {
@@ -467,9 +467,7 @@ $("#excelExport").click(function () {
       }
        return false;
 }
-//--------------------------------------------------------excel栏--end
-
-
+//excel栏
 function actionManulAjaxAPI(grid_manul_array_data, jqxgrid_manul_src_source, post_data, item_manul_jqgrid,
                             query_mnual_grid_data_action, item_manul_alert) {
     // clear old data
@@ -595,7 +593,7 @@ var OnSysjqxgrid_buildFilterPanel = function (filterPanel, datafield) {
          localdata: onSysSrcAdapter.records,
          datatype: "json",
          async: false
-         }
+         };
         var dataadapter = new $.jqx.dataAdapter(dataSource,
          {
          autoBind: false,
@@ -612,7 +610,6 @@ var OnSysjqxgrid_buildFilterPanel = function (filterPanel, datafield) {
                         filterbutton.trigger('click');
                  }
              });
-
              filterbutton.click(function () {
                     var filtergroup = new $.jqx.filter();
                     var filter_or_operator = 1;
@@ -651,44 +648,45 @@ var OnSysjqxgrid_buildFilterPanel = function (filterPanel, datafield) {
 //---------------------------------------------------------现网表格数据初始化
 //存储后台返回数据
 var onSysgridArrayData = [];
-var onSysSrcsource ={
-                localdata: onSysgridArrayData,
-                datatype: "json",
-                datafields: [
-                    {name: 'imsi', type: 'string' },
-                    {name: 'country', type: 'string' },
-                    {name: 'package_type_name', type: 'string' },
-                    {name: 'state', type: 'string' },
-                    {name: 'occupy_status', type: 'string' },
-                    {name: 'slot_status', type: 'string' },
-                    {name: 'activate_status', type: 'string' },
-                    {name: 'identify_status', type: 'string' },
-                    {name: 'business_status', type: 'string' },
-                    {name: 'bam_status', type: 'string' },
-                    {name: 'package_status', type: 'string' },
-                    {name: 'activate_type', type: 'string' },
-                    {name: 'use_locally', type: 'string' },
-                    {name: 'vsim_type', type: 'string' },
-                    {name: 'init_flow', type: 'number' },
-                    {name: 'total_use_flow', type: 'number' },
-                    {name: 'leave_flow', type: 'number' },
-                    {name: 'activate_time', type: 'date' },
-                    {name: 'update_time', type: 'date' },
-                    {name: 'next_update_time', type: 'date' },
-                    {name: 'iccid', type: 'string' },
-                    {name: 'bam_code', type: 'string' },
-                    {name: 'slot_num', type: 'number' },
-                    {name: 'org_name', type: 'string' },
-                    {name: 'remarks', type: 'string' }
-                ]
-};
-//装载现网机jqxgrid data adapter:
-var onSysSrcAdapter = new $.jqx.dataAdapter(onSysSrcsource);
+
 
 //初始化现网表格函数
-function initonSysjqxGrid(){
+function initonSysjqxGrid(grid_item, grid_array){
+    var onSysSrcsource ={
+        localdata: grid_array,
+        datatype: "json",
+        datafields: [
+            {name: 'imsi', type: 'string' },
+            {name: 'country', type: 'string' },
+            {name: 'package_type_name', type: 'string' },
+            {name: 'state', type: 'string' },
+            {name: 'occupy_status', type: 'string' },
+            {name: 'slot_status', type: 'string' },
+            {name: 'activate_status', type: 'string' },
+            {name: 'identify_status', type: 'string' },
+            {name: 'business_status', type: 'string' },
+            {name: 'bam_status', type: 'string' },
+            {name: 'package_status', type: 'string' },
+            {name: 'activate_type', type: 'string' },
+            {name: 'use_locally', type: 'string' },
+            {name: 'vsim_type', type: 'string' },
+            {name: 'init_flow', type: 'number' },
+            {name: 'total_use_flow', type: 'number' },
+            {name: 'leave_flow', type: 'number' },
+            {name: 'activate_time', type: 'date' },
+            {name: 'update_time', type: 'date' },
+            {name: 'next_update_time', type: 'date' },
+            {name: 'iccid', type: 'string' },
+            {name: 'bam_code', type: 'string' },
+            {name: 'slot_num', type: 'number' },
+            {name: 'org_name', type: 'string' },
+            {name: 'remarks', type: 'string' }
+        ]
+    };
+    //装载现网机jqxgrid data adapter:
+    var onSysSrcAdapter = new $.jqx.dataAdapter(onSysSrcsource);
     // grid views
-    $("#OnSysjqxgrid").jqxGrid({
+    grid_item.jqxGrid({
                 width: "99.8%",
                 autoheight: true,
                 source: onSysSrcAdapter,
@@ -707,7 +705,7 @@ function initonSysjqxGrid(){
                 },
                 autoshowfiltericon: true,
                 columnmenuopening: function (menu, datafield, height) {
-                    var column = $("#OnSysjqxgrid").jqxGrid('getcolumn', datafield);
+                    var column = grid_item.jqxGrid('getcolumn', datafield);
                     if (column.filtertype == "custom") {
                         menu.height(155);
                         setTimeout(function () {
@@ -1002,7 +1000,6 @@ $(function () {
         person: $classPerson
     };
     initSelectView(initSelectClassList);
-
     var $itemManulJqgrid = $("#jqxgrid");
     var $itemOnsysJqxgrid = $('#OnSysjqxgrid');
     var $itemmanualDropDown = $("#jqxDropDownList");
@@ -1031,8 +1028,9 @@ $(function () {
             $itemManulJqgrid,
             $queryMnualGridDataAction,
             $itemManulAlert);
-
         return false;
     });
-    initonSysjqxGrid();
+    //初始化系统统计表单
+    var gridOnsysArrayData = [];
+    var GridOnsysSrcSource= initonSysjqxGrid($itemOnsysJqxgrid,gridOnsysArrayData);
 });

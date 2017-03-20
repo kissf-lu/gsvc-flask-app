@@ -53,7 +53,7 @@ def get_onSysSrc():
 
 
 # ("以下为主页页面API接口-------------------------------------------------------------------------------------------------")
-@api.route('/get_CountryAvailableVsim/')
+@api.route('/get_country_flower_static/')
 def get_chart_country():
     """
     本api用于获取主页国家维度画板统计图数据：本国卡状态统计、老系统/新架构本国可用卡套餐流量统计
@@ -79,9 +79,6 @@ def get_mutiLine_maxUser():
         timedim = str(DicData['timedim'])
 
         return getindexHtmlMutiLineData(country, begintime, endtime, butype=butype, timedim=timedim)
-
-
-
 
 
 @api.route('/get_countrySrcCon/', methods=['POST'])
