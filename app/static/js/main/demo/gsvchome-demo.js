@@ -506,11 +506,11 @@ function maxUserLineCharAjaxAPI(options_max_user_ajax) {
                     }
                 }
                 else{
-                    drawParam = {
+                    var drawParam = {
                         drawLineID: options_max_user_ajax.item.canvasLineID,
                         drawDivID: options_max_user_ajax.item.canvasDivID
                     };
-                    var str_maxUserReturn=draw_mutiLine_CountryMaxOnlineUser(getData.data, drawParam);
+                    draw_mutiLine_CountryMaxOnlineUser(getData.data, drawParam);
                 }
             })
             .fail(function(jqXHR, status){
