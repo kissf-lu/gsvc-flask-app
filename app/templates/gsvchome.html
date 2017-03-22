@@ -36,9 +36,9 @@
                             <i class="fa fa-wrench"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-user">
-                            <li><small><strong>表格显示设置</strong></small>
+                            <li style="text-align:center"><small><strong>表格显示设置</strong></small>
                             </li>
-                            <br/>
+                            <li><div><br/></div></li>
                             <li>
                                 <div id='jqxDropDownList'>
                                 </div>
@@ -58,27 +58,21 @@
                     </small>
                     <div class="row">
                         <div class="col-sm-5 m-b-xs">
-                            <select class="form-country" name="country" id="countrySrcConSelect" style="width:120px;">
+                            <select class="form-country" title="country" id="countrySrcConSelect" style="width:120px;">
                                 <option ></option>
                             </select>
 
-                            <select class="form-org" name="country" id="OrgSelect" style="width:120px;">
+                            <select class="form-org" title="org" id="OrgSelect" style="width:120px;">
                                 <option value="GTBU" selected="selected">GTBU</option>
                             </select>
                         </div>
                         <div class="col-sm-4 m-b-xs">
+                        </div>
+                        <div style="text-align:center" class="col-sm-3 m-b-xs">
                             <div data-toggle="buttons" class="btn-group">
-                                <button id="countrySrcCondataGet" type="button" class="btn btn-primary ">
+                                <button id="countrySrcCondataGet" type="button" class="btn btn-sm btn-primary pull-right m-t-n-xs ">
                                     查询
                                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                                </button>
-                                <button id="countrySrcConFlash" type="button" class="btn btn-default ">
-                                    刷新
-                                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
-                                </button>
-                                <button id="countrySrcConexcelExport" type="button" class="btn btn-default">
-                                    导出
-                                    <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
                                 </button>
                             </div>
                         </div>
@@ -86,6 +80,18 @@
                 </div>
             </div>
         </div>
+</div>
+<div align="center" class="row">
+    <div data-toggle="buttons" class="btn-group">
+        <button id="countrySrcConFlash" type="button" class="btn btn-sm btn-default ">
+            刷新
+            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+        </button>
+        <button id="countrySrcConexcelExport" type="button" class="btn btn-sm btn-default">
+            导出
+            <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
+        </button>
+    </div>
 </div>
 <div class="table-responsive">
     <div id='con-countrySRC-grid'>
@@ -193,21 +199,21 @@
                             <div class="form-group" id="country_lineChart_date">
                                 <div class="input-group input-daterange" id="DatePicker">
                                     <span class="input-group-addon"><strong>时间范围--起始</strong></span>
-                                    <input type="text" class="input-sm form-control" name="start" id="input-daterange-start"/>
+                                    <input type="text" class="input-sm form-control" title="start" id="input-daterange-start"/>
                                     <span class="input-group-addon"><strong>结束</strong></span>
-                                    <input type="text" class="input-sm form-control" name="end" id="input-daterange-end"/>
+                                    <input type="text" class="input-sm form-control" title="end" id="input-daterange-end"/>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-5 m-b-xs">
                             <form role="form" class="form-inline">
-                                <select class="form-butype" name="country" id="butypeMaxusr" style="width:100px;">
+                                <select class="form-butype" title="bu_type" id="butypeMaxusr" style="width:100px;">
                                     <option ></option>
                                 </select>
-                                <select class="form-timedim" name="country" id="timeDim" style="width:100px;">
+                                <select class="form-timedim" title="time_dim" id="timeDim" style="width:100px;">
                                     <option ></option>
                                 </select>
-                                <select class="form-country" name="country" id="countryMaxusr" style="width:100px;">
+                                <select class="form-country" title="country" id="countryMaxusr" style="width:100px;">
                                     <option ></option>
                                 </select>
                                 <button id="country_MaxusrlineChart_dataGet" type="button" class="btn btn-sm btn-primary pull-right m-t-n-xs" style="height:29px; background:#24ceab;">

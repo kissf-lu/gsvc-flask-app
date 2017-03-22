@@ -145,7 +145,7 @@ def getVsimCountryStatic(country, **kwargs):
             for fs in vsimFlowerStatic:
                 if type(fs['Percentage']) is decimal.Decimal:
                     fs['Percentage'] = float(fs['Percentage'])
-                    
+
             DicResults = {'info': {'err': False, 'errinfo': ''},
                           'data': vsimFlowerStatic}
     return json.dumps(DicResults, sort_keys=True, indent=4, default=json_util.default)

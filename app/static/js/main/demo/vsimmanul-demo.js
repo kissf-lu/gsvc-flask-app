@@ -19,7 +19,6 @@ var alertStr=('<div class="alert alert-warning" role="alert">'+
 				   '</button>');
 
 function  alert_func(alert_button_item,alert_doc) {
-    var $alertItem = alert_button_item;
     var alertStr=('<div class="alert alert-warning" role="alert">'+
         '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
         '<span aria-hidden="true">&times;</span>'+
@@ -27,8 +26,8 @@ function  alert_func(alert_button_item,alert_doc) {
         '<p>'+alert_doc+'</p>'+
         '</div>'
     );
-    $alertItem.children().detach();
-    $alertItem.append(alertStr);
+    alert_button_item.children().detach();
+    alert_button_item.append(alertStr);
 }
 /**===========================================================
  *
@@ -47,24 +46,23 @@ function initSelectView(init_select_class_list){
         {text: '凌刚'}, {text: '李红伟'}, {text: '王成'}, {text: '尚晨晨'}
         ];
     // select views
-    init_select_class_list.country.select2({
+    init_select_class_list.class.classCountry.select2({
         data: country_data
 
     });
-    init_select_class_list.country.select2({
+    init_select_class_list.class.classCountry.select2({
         placeholder: "国家",
         allowClear: true
 
     });
     //select 模块
-    init_select_class_list.person.select2({
+    init_select_class_list.class.classPerson.select2({
         data: person_data
     });
-    $(".select-person").select2({
+    init_select_class_list.class.classPerson.select2({
         placeholder: "负责人",
         allowClear: true
     });
-
 }
 /**==================================================
  *  -------虚拟机下拉选选择菜单显示设置函数
@@ -161,7 +159,7 @@ function initDropdownlist(item_jqx_drop_down, jqx_drop_down_list) {
         animationType:'fade',
         filterable: true,
         dropDownHeight: 300,
-        Width:150,
+        Width:150
     });
 }
 
@@ -176,7 +174,15 @@ function actionDropDownList(item_related_grid, event) {
     }
     item_related_grid.jqxGrid('endupdate');
 }
-
+/**=====================================================
+ *  -------FilterPanel set func-------
+ *======================================================
+ *JqxGrid columns FilterPanel setting;
+ * @param filterPanel panel to init;
+ * @param datafield : grid column datafield param;
+ * @param filterGrid : jquery type of grid DOC ID;
+ * @param SrcAdapter : grid SrcAdapter param ;
+ *=============================================================*/
 var buildFilterPanel = function (filterPanel, datafield,filterGrid,SrcAdapter) {
     var textInput = $("<input style='margin:5px;'/>");
     var applyinput = $("<div class='filter' style='height: 25px; margin-left: 20px; margin-top: 7px;'></div>");
@@ -201,8 +207,7 @@ var buildFilterPanel = function (filterPanel, datafield,filterGrid,SrcAdapter) {
             async: false,
             uniqueDataFields: [datafield]
         });
-    var $jqgrid140country = filterGrid;
-    var column = $jqgrid140country.jqxGrid('getcolumn', datafield);
+    var column = filterGrid.jqxGrid('getcolumn', datafield);
     textInput.jqxInput({ placeHolder: "Enter " + column.text, popupZIndex: 9999999, displayMember: datafield, source: dataadapter, height: 23, width: 175 });
     textInput.keyup(function (event) {
         if (event.keyCode === 13) {
@@ -217,10 +222,10 @@ var buildFilterPanel = function (filterPanel, datafield,filterGrid,SrcAdapter) {
         var filter1 = filtergroup.createfilter('stringfilter', filtervalue, filtercondition);
         filtergroup.addfilter(filter_or_operator, filter1);
         // add the filters.
-        $jqgrid140country.jqxGrid('addfilter', datafield, filtergroup);
+        filterGrid.jqxGrid('addfilter', datafield, filtergroup);
         //apply the filters.
-        $jqgrid140country.jqxGrid('applyfilters');
-        $jqgrid140country.jqxGrid('closemenu');
+        filterGrid.jqxGrid('applyfilters');
+        filterGrid.jqxGrid('closemenu');
     });
     filterbutton.keydown(function (event) {
         if (event.keyCode === 13) {
@@ -228,10 +233,10 @@ var buildFilterPanel = function (filterPanel, datafield,filterGrid,SrcAdapter) {
         }
     });
     filterclearbutton.click(function () {
-        $jqgrid140country.jqxGrid('removefilter', datafield);
+        filterGrid.jqxGrid('removefilter', datafield);
         // apply the filters.
-        $jqgrid140country.jqxGrid('applyfilters');
-        $jqgrid140country.jqxGrid('closemenu');
+        filterGrid.jqxGrid('applyfilters');
+        filterGrid.jqxGrid('closemenu');
     });
     filterclearbutton.keydown(function (event) {
         if (event.keyCode === 13) {
@@ -244,10 +249,10 @@ var buildFilterPanel = function (filterPanel, datafield,filterGrid,SrcAdapter) {
 
 //-----------------------------------------------------------虚拟机表格设置
 //initjqxGrid完成表格数据加载表格、设置表格插件属性、列表属性、、、、
-function initjqxGrid(initGrid, grid_array_data){
+function initjqxGrid(initGrid){
     //定义表格与后台关联数据key值及对应前台显示数据类型
     var Srcsource ={
-        localdata: grid_array_data,
+        localdata: [],
         datatype: "json",
         datafields: [
             { name: 'imsi', type: 'string' },
@@ -277,7 +282,7 @@ function initjqxGrid(initGrid, grid_array_data){
             { name: 'shelved_time', type: 'date' }
         ]
     };
-//装在虚拟机jqxgrid data adapter
+    //装在虚拟机jqxgrid data adapter
     var SrcAdapter = new $.jqx.dataAdapter(Srcsource);
     // grid views
     initGrid.jqxGrid({
@@ -376,125 +381,120 @@ function initjqxGrid(initGrid, grid_array_data){
                     { text: '电话号码', datafield: 'phone_num' , width: 100 },
                     { text: '付费类型', datafield: 'pay_type', filtertype: 'checkedlist' , width: 100 },
                     { text: 'apn', datafield: 'apn', width: 170 },
-                    { text: '上架日期', datafield: 'shelved_time', filtertype: 'date', cellsformat: 'yyyy-MM-dd HH:mm:ss', width: 170 },
+                    { text: '上架日期', datafield: 'shelved_time', filtertype: 'date', cellsformat: 'yyyy-MM-dd HH:mm:ss', width: 170 }
                 ]
     });
 
     return Srcsource;
 }
-
-
-//---------------------------------------------------------虚拟机excel导出数据模块栏-----------------------------
-$("#excelExport").click(function () {
-     var rows = $('#jqxgrid').jqxGrid('getdisplayrows');
-     var alldatanum= rows.length;
-     var view_data=[];
-     var json_data={'data':view_data}
-     var paginginformation =
-     $('#jqxgrid').jqxGrid('getpaginginformation');
-     // The page's number.
-     var pagenum = paginginformation.pagenum;
-     // The page's size.
-     var pagesize = paginginformation.pagesize;
-     // The number of all pages.
-     var pagescount = paginginformation.pagescount;
-     if (alldatanum==0){
-         //delete old alter
-        $("#app-growl").children().detach();
-         $("#app-growl").append((alertStr+'<p>无输出数据！</p></div>'));
-     }
-     else{
-         for(var i = 0; i < rows.length; i++){
-             if (i==pagenum*pagesize){
-                 for (var j = 0; j< pagesize; j++){
-                     if (i+j< alldatanum){
-                         view_data.push({
-                         imsi: rows[i+j].imsi,
-                         country_iso: rows[i+j].country_iso,
-                         country_cn: rows[i+j].country_cn,
-                         GSVC负责人: rows[i+j].person_gsvc,
-                         运营负责人: rows[i+j].person_operator,
-                         系统: rows[i+j].sys,
-                         state: rows[i+j].state,
-                         slot_state: rows[i+j].slot_state,
-                         是否代理商卡: rows[i+j].owner_attr,
-                         是否多国卡: rows[i+j].country_attr,
-                         卡批次: rows[i+j].vsim_batch_num,
-                         BAM编码: rows[i+j].bam_code,
-                         卡位: rows[i+j].slot_num,
-                         operator: rows[i+j].operator,
-                         iccid: rows[i+j].iccid,
-                         套餐:rows[i+j].package_type,
-                         套餐外付费类型:rows[i+j].charge_noflower,
-                         激活日期:rows[i+j].activated_time,
-                         上次套餐更新日期: rows[i+j].last_update_time,
-                         下次套餐更新日期: rows[i+j].next_update_time,
-                         备注:rows[i+j].remarks,
-                         电话号码:rows[i+j].phone_num,
-                         付费类型:rows[i+j].pay_type,
-                         apn:rows[i+j].apn,
-                         上架日期:rows[i+j].shelved_time,
-                         })
-                     }
-
-                 }
-             }
-         }
-         //$("#jqxgrid").jqxGrid('exportdata', 'xls', 'SRCVsimInfo', true, view_data);
-         excelExport(json_data);
-     }
-     return false;
- });
-
- function excelExport(data) {
-     var exportdata=data;
-     if (exportdata.data==[]){
-         //
-         $("#app-growl").children().detach();
-         $("#app-growl").append((alertStr+'<p>无输出数据！</p></div>'));
-         }
-     else{
-          var temp = document.createElement("form");
-          temp.action = $SCRIPT_ROOT +"/api/v1.0/export_ManualInfo/"
-          temp.method = "post";
-          temp.style.display = "none";
-          var opt = document.createElement("textarea");
-          opt.name = "data";
-          opt.value = JSON.stringify(exportdata.data);
-          temp.appendChild(opt);
-          document.body.appendChild(temp);
-          temp.submit();
-      }
-       return false;
-}
-//excel栏
-function actionManulAjaxAPI(grid_manul_array_data, jqxgrid_manul_src_source, post_data, item_manul_jqgrid,
-                            query_mnual_grid_data_action, item_manul_alert) {
-    // clear old data
-    var Country = post_data.country;
-    var Person = post_data.person;
-    var PostData = post_data;
-    var $itemGrid= item_manul_jqgrid;
-    var $itemQueryButton = query_mnual_grid_data_action;
-    var $itemAlert = item_manul_alert;
-    var GridData = grid_manul_array_data;
-
-    $itemAlert.children().detach();
-    if (Country==''){
-        //
-        alert_func($itemAlert,"请设置查询国家!");
-    }
-    //目前剔除必须填写负责人选项
-    else if (false){
-        //
-        alert_func($itemAlert,"请设置查询负责人!");
+function manualGridExcelExport(grid_item, alert_item, url) {
+    var rows = grid_item.jqxGrid('getdisplayrows');
+    var alldatanum= rows.length;
+    var view_data=[];
+    var json_data={'data':view_data};
+    var paginginformation = grid_item.jqxGrid('getpaginginformation');
+    // The page's number.
+    var pagenum = paginginformation.pagenum;
+    // The page's size.
+    var pagesize = paginginformation.pagesize;
+    // The number of all pages.
+    var pagescount = paginginformation.pagescount;
+    if (alldatanum==0){
+        //delete old alter
+        alert_func(
+            alert_item,
+            '无输出数据!'
+        );
     }
     else{
-        GridData = [];
-        $itemGrid.jqxGrid("clear");
-        $itemGrid.jqxGrid('showloadelement');
+        for(var i = 0; i < rows.length; i++){
+            if (i==pagenum*pagesize){
+                for (var j = 0; j< pagesize; j++){
+                    if (i+j< alldatanum){
+                        view_data.push({
+                            imsi: rows[i+j].imsi,
+                            country_iso: rows[i+j].country_iso,
+                            country_cn: rows[i+j].country_cn,
+                            GSVC负责人: rows[i+j].person_gsvc,
+                            运营负责人: rows[i+j].person_operator,
+                            系统: rows[i+j].sys,
+                            state: rows[i+j].state,
+                            slot_state: rows[i+j].slot_state,
+                            是否代理商卡: rows[i+j].owner_attr,
+                            是否多国卡: rows[i+j].country_attr,
+                            卡批次: rows[i+j].vsim_batch_num,
+                            BAM编码: rows[i+j].bam_code,
+                            卡位: rows[i+j].slot_num,
+                            operator: rows[i+j].operator,
+                            iccid: rows[i+j].iccid,
+                            套餐:rows[i+j].package_type,
+                            套餐外付费类型:rows[i+j].charge_noflower,
+                            激活日期:rows[i+j].activated_time,
+                            上次套餐更新日期: rows[i+j].last_update_time,
+                            下次套餐更新日期: rows[i+j].next_update_time,
+                            备注:rows[i+j].remarks,
+                            电话号码:rows[i+j].phone_num,
+                            付费类型:rows[i+j].pay_type,
+                            apn:rows[i+j].apn,
+                            上架日期:rows[i+j].shelved_time
+                        })
+                    }
+
+                }
+            }
+        }
+        excelExport(json_data, alert_item, url);
+    }
+    return false;
+}
+/**============================================================================
+ *  -------export xls files by submitting json data to server-------
+ *
+ * using submit method to submit json value to service and export xls to users.
+ * @param data: data like {'data':view_data} ;
+ * @param item_alert: jquery type warn DOC ID ;
+ * @return {boolean} return false to forbid DOC fresh;
+ *==============================================================================**/
+function excelExport(data,item_alert, url) {
+    var exportdata=data;
+    if (exportdata.data==[]){
+        // alter
+        alert_func(item_alert, '无输出数据！');
+    }
+    else{
+        var temp = document.createElement("form");
+        temp.action = url;
+        temp.method = "post";
+        temp.style.display = "none";
+        var opt = document.createElement("textarea");
+        opt.name = "data";
+        opt.value = JSON.stringify(exportdata.data);
+        temp.appendChild(opt);
+        document.body.appendChild(temp);
+        temp.submit();
+    }
+    return false;
+}
+
+function actionManulAjaxAPI(grid_src_array, manual_ajax_param) {
+    // clear old data
+    var Country = manual_ajax_param.postData.country;
+    var Person = manual_ajax_param.postData.person;
+    if (Country==''){
+        //
+        alert_func(
+            manual_ajax_param.item.manualAlertID,
+            "请设置查询国家!"
+        );
+    } else{
+        var gridArray = [];
+        // clear old data
+        manual_ajax_param.item.gridManualID.jqxGrid("clear");
+        //清空遗留告警
+        manual_ajax_param.item.manualAlertID.children().detach();
+        manual_ajax_param.item.gridManualID.jqxGrid('showloadelement');
         //disable query button before return data
-        $itemQueryButton.attr("disabled", true);
+        manual_ajax_param.item.gridDataGetID.attr("disabled", true);
         // ajax request begin
         var AjaxManualRequest = $.ajax({
             type: "POST",
@@ -503,27 +503,30 @@ function actionManulAjaxAPI(grid_manul_array_data, jqxgrid_manul_src_source, pos
             //request set
             contentType: "application/json",
             //data参数
-            data: JSON.stringify(PostData),
+            data: JSON.stringify(manual_ajax_param.postData),
             //server back data type
             dataType: "json"
         })
             .done(function(data){
-                // clear old data
-                GridData = [];
-                $itemGrid.jqxGrid("clear");
                 var getData = data;
                 if (getData.data.length==0){
                     if (getData.info.err){
                         //delete old alter
-                        alert_func($itemAlert,("Error："+getData.info.errinfo));
+                        alert_func(
+                            manual_ajax_param.item.manualAlertID,
+                            ("Error："+getData.info.errinfo)
+                        );
                     }
                     else{
-                        alert_func($itemAlert,("无查询结果!"));
+                        alert_func(manual_ajax_param.item.manualAlertID,
+                            ("无查询结果!")
+                        );
                     }
                 }
                 else{
+                    gridArray = [];
                     $.each( getData.data, function(i, item){
-                        GridData.push({
+                        gridArray.push({
                             imsi: item.imsi,
                             country_iso: item.country_iso,
                             country_cn: item.country_cn,
@@ -552,108 +555,36 @@ function actionManulAjaxAPI(grid_manul_array_data, jqxgrid_manul_src_source, pos
                         });
                     });//each函数完成
                     // set the new data
-                    jqxgrid_manul_src_source.localdata = GridData;
-                    $itemGrid.jqxGrid('updatebounddata');
+                    grid_src_array.localdata = gridArray;
+                    manual_ajax_param.item.gridManualID.jqxGrid('updatebounddata');
                 }
             })
             .fail(function(jqXHR, status){
                 // clear old data
-                GridData = [];
-                $itemGrid.jqxGrid("clear");
-                //
-                alert_func($itemAlert,("Servers False!"));
+                manual_ajax_param.item.gridManualID.jqxGrid("clear");
+                // alert model
+                alert_func(
+                    manual_ajax_param.item.manualAlertID,
+                    ("Servers False!")
+                );
             })
             .always(function() {
-                $itemQueryButton.attr("disabled", false);
+                gridArray = [];
+                manual_ajax_param.item.gridDataGetID.attr("disabled", false);
             });
     }
 }
-
-//------------------------------------------------------刷新虚拟机数据函数栏-----------------------------------
-$('#SrcVsimDataFlash').click(function () {
-    $('#jqxgrid').jqxGrid('updatebounddata');
-
-});
-//--------------------------------------------------------过滤菜单栏-----------------------------------------
-var OnSysjqxgrid_buildFilterPanel = function (filterPanel, datafield) {
-
-        var textInput = $("<input style='margin:5px;'/>");
-        var applyinput = $("<div class='filter' style='height: 25px; margin-left: 20px; margin-top: 7px;'></div>");
-        var filterbutton = $('<span tabindex="0" style="padding: 4px 12px; margin-left: 2px;">Filter</span>');
-        applyinput.append(filterbutton);
-        var filterclearbutton = $('<span tabindex="0" style="padding: 4px 12px; margin-left: 5px;">Clear</span>');
-        applyinput.append(filterclearbutton);
-        filterPanel.append(textInput);
-        filterPanel.append(applyinput);
-        filterbutton.jqxButton({ height: 20 });
-        filterclearbutton.jqxButton({  height: 20 });
-
-        var dataSource =
-         {
-         localdata: onSysSrcAdapter.records,
-         datatype: "json",
-         async: false
-         };
-        var dataadapter = new $.jqx.dataAdapter(dataSource,
-         {
-         autoBind: false,
-         autoSort: true,
-         autoSortField: datafield,
-         async: false,
-         uniqueDataFields: [datafield]
-         });
-
-        var column = $("#OnSysjqxgrid").jqxGrid('getcolumn', datafield);
-             textInput.jqxInput({ placeHolder: "Enter " + column.text, popupZIndex: 9999999, displayMember: datafield, source: dataadapter, height: 23, width: 175 });
-             textInput.keyup(function (event) {
-                 if (event.keyCode === 13) {
-                        filterbutton.trigger('click');
-                 }
-             });
-             filterbutton.click(function () {
-                    var filtergroup = new $.jqx.filter();
-                    var filter_or_operator = 1;
-                    var filtervalue = textInput.val();
-                    var filtercondition = 'contains';
-                    var filter1 = filtergroup.createfilter('stringfilter', filtervalue, filtercondition);
-                    filtergroup.addfilter(filter_or_operator, filter1);
-                    // add the filters.
-                    $("#OnSysjqxgrid").jqxGrid('addfilter', datafield, filtergroup);
-                    // apply the filters.
-                    $("#OnSysjqxgrid").jqxGrid('applyfilters');
-                    $("#OnSysjqxgrid").jqxGrid('closemenu');
-             });
-
-             filterbutton.keydown(function (event) {
-                  if (event.keyCode === 13) {
-                        filterbutton.trigger('click');
-                  }
-             });
-             filterclearbutton.click(function () {
-                    $("#OnSysjqxgrid").jqxGrid('removefilter', datafield);
-                    // apply the filters.
-                    $("#OnSysjqxgrid").jqxGrid('applyfilters');
-                    $("#OnSysjqxgrid").jqxGrid('closemenu');
-             });
-
-             filterclearbutton.keydown(function (event) {
-                    if (event.keyCode === 13) {
-                        filterclearbutton.trigger('click');
-                    }
-                    textInput.val("");
-             });
-};
-
-
-//---------------------------------------------------------现网表格数据初始化
-//存储后台返回数据
-var onSysgridArrayData = [];
-
-
+/**=========================================
+ *
+ * @param grid_id
+ *==========================================**/
+function flashManualGrid(grid_id) {
+    grid_id.jqxGrid('updatebounddata');
+}
 //初始化现网表格函数
-function initonSysjqxGrid(grid_item, grid_array){
+function initonSysjqxGrid(grid_item){
     var onSysSrcsource ={
-        localdata: grid_array,
+        localdata: [],
         datatype: "json",
         datafields: [
             {name: 'imsi', type: 'string' },
@@ -716,31 +647,36 @@ function initonSysjqxGrid(grid_item, grid_array){
                 },
                 columns: [
                     {
-                      text: 'num',
-                      datafield: '',
-                      sortable: true,
-                      filterable: false,
-                      editable: false,
-                      groupable: false,
-                      draggable: false,
-                      resizable: false,
-                      columntype: 'number',
-                      width: 50,
-                      cellsrenderer: function (row, column, value) {
-                          return "<div style='margin:4px;'>" + (value + 1) + "</div>";
-                      }
+                    text: 'num',
+                    datafield: '',
+                    sortable: true,
+                    filterable: false,
+                    editable: false,
+                    groupable: false,
+                    draggable: false,
+                    resizable: false,
+                    columntype: 'number',
+                    width: 50,
+                    cellsrenderer: function (row, column, value) {
+                        return "<div style='margin:4px;'>" + (value + 1) + "</div>";
+                    }
                     },
-                    { text: 'imsi', datafield: 'imsi',
-                      filtertype: "custom",
-                      createfilterpanel: function (datafield, filterPanel) {
-                          OnSysjqxgrid_buildFilterPanel(filterPanel, datafield);},
-                      width: 150
+                    {
+                        text: 'imsi',
+                        datafield: 'imsi',
+                        filtertype: "custom",
+                        createfilterpanel: function (datafield, filterPanel) {
+                            buildFilterPanel(filterPanel, datafield, grid_item, onSysSrcAdapter);
+                        },
+                        width: 150
                     },
-                    { text: '国家简码', datafield: 'country' ,
-                      filtertype: "custom",
-                      createfilterpanel: function (datafield, filterPanel) {
-                          OnSysjqxgrid_buildFilterPanel(filterPanel, datafield);},
-                      width: 70
+                    {
+                        text: '国家简码', datafield: 'country' ,
+                        filtertype: "custom",
+                        createfilterpanel: function (datafield, filterPanel) {
+                            buildFilterPanel(filterPanel, datafield, grid_item, onSysSrcAdapter);
+                        },
+                        width: 70
                     },
                     { text: '卡分组属性', datafield: 'org_name', filtertype: 'checkedlist', width: 80 },
                     { text: '套餐', datafield: 'package_type_name', filtertype: 'checkedlist' , width: 200  },
@@ -757,39 +693,82 @@ function initonSysjqxGrid(grid_item, grid_array){
                     { text: '是否多国卡', datafield: 'vsim_type', filtertype: 'checkedlist', width: 80 },
                     { text: '初始流量/MB', datafield: 'init_flow', filtertype: 'checkedlist', width: 80 },
                     { text: '累计使用流量/MB', datafield: 'total_use_flow', filtertype: 'checkedlist', width: 80 },
-                    { text: '剩余流量/MB', datafield: 'leave_flow', filtertype: 'checkedlist', width: 80 },
+                    { text: '剩余流量/MB', datafield: 'leave_flow', width: 80 },
                     { text: '激活日期', datafield: 'activate_time', filtertype: 'date', cellsformat: 'yyyy-MM-dd HH:mm:ss', width: 170 },
                     { text: '上次套餐更新时间', datafield: 'update_time', filtertype: 'date', cellsformat: 'yyyy-MM-dd HH:mm:ss', width: 170 },
                     { text: '下载套餐更新时间', datafield: 'next_update_time', filtertype: 'date', cellsformat: 'yyyy-MM-dd HH:mm:ss', width: 170 },
-                    { text: 'iccid', datafield: 'iccid',
-                      filtertype: "custom",
-                      createfilterpanel: function (datafield, filterPanel) {
-                          OnSysjqxgrid_buildFilterPanel(filterPanel, datafield);},
-                      width: 200 },
-                    { text: 'BAM编码', datafield: 'bam_code',
-                      filtertype: "custom",
-                      createfilterpanel: function (datafield, filterPanel) {
-                          OnSysjqxgrid_buildFilterPanel(filterPanel, datafield);},
-                      width: 80 },
-                    { text: '卡位', datafield: 'slot_num',
-                      filtertype: "custom",
-                      createfilterpanel: function (datafield, filterPanel) {
-                          OnSysjqxgrid_buildFilterPanel(filterPanel, datafield);},
-                      width: 80 },
-                    { text: '备注', datafield: 'remarks' ,
-                      filtertype: "custom",
-                      createfilterpanel: function (datafield, filterPanel) {
-                          OnSysjqxgrid_buildFilterPanel(filterPanel, datafield);},
-                      width: 100 }
+                    {text: 'iccid', datafield: 'iccid',width: 200},
+                    {text: 'BAM编码', datafield: 'bam_code',width: 80},
+                    {text: '卡位', datafield: 'slot_num',width: 80},
+                    {text: '备注', datafield: 'remarks', width: 200}
                 ]
     });
 
+    return onSysSrcsource;
 }
+//=======================================================================
+function sysGridExcelExport(grid_item, alert_item) {
+    var rows = grid_item.jqxGrid('getdisplayrows');
+    var alldatanum= rows.length;
+    var view_data=[];
+    var json_data={'data':view_data};
+    var paginginformation = grid_item.jqxGrid('getpaginginformation');
+    // The page's number.
+    var pagenum = paginginformation.pagenum;
+    // The page's size.
+    var pagesize = paginginformation.pagesize;
+    // The number of all pages.
+    var pagescount = paginginformation.pagescount;
+    if (alldatanum==0){
+        //delete old alter
+        alert_func(
+            alert_item,
+            '无输出数据!'
+        );
+    }
+    else{
+        for(var i = 0; i < rows.length; i++){
+            if (i==pagenum*pagesize){
+                for (var j = 0; j< pagesize; j++){
+                    if (i+j< alldatanum){
+                        view_data.push({
+                            imsi: rows[i+j].imsi,
+                            country: rows[i+j].country,
+                            卡分组属性: rows[i+j].org_name,
+                            套餐: rows[i+j].package_type_name,
+                            state: rows[i+j].state,
+                            占用状态: rows[i+j].occupy_status,
+                            卡位状态: rows[i+j].slot_status,
+                            激活状态: rows[i+j].activate_status,
+                            认证状态: rows[i+j].identify_status,
+                            业务状态: rows[i+j].business_status,
+                            BAM状态: rows[i+j].bam_status,
+                            套餐状态: rows[i+j].package_status,
+                            激活类型: rows[i+j].activate_type,
+                            本网可用: rows[i+j].use_locally,
+                            是否多国卡: rows[i+j].vsim_type,
+                            初始流量MB: rows[i+j].init_flow,
+                            累计使用流量MB: rows[i+j].total_use_flow,
+                            剩余流量MB: rows[i+j].leave_flow,
+                            激活日期: rows[i+j].activate_time,
+                            上次套餐更新日期: rows[i+j].update_time,
+                            下次套餐更新日期: rows[i+j].next_update_time,
+                            iccid: rows[i+j].iccid,
+                            BAM编码: rows[i+j].bam_code,
+                            卡位: rows[i+j].slot_num,
+                            备注: rows[i+j].remarks
+                        })
+                    }
 
-//--------------------------------------------------------现网表格数据初始化栏--end----------------------------
-
-//------------------------------------------------------------现网excel导出栏----------------------------
-$("#onSysSrcVsimexcelExport").click(function () {
+                }
+            }
+        }
+        excelExport(json_data, alert_item);
+    }
+    return false;
+}
+//现网excel导出栏
+$("#").click(function () {
      var rows = $('#OnSysjqxgrid').jqxGrid('getdisplayrows');
      var alldatanum= rows.length;
      var view_data=[];
@@ -861,7 +840,7 @@ $("#onSysSrcVsimexcelExport").click(function () {
          }
      else{
           var temp = document.createElement("form");
-          temp.action = $SCRIPT_ROOT +"/api/v1.0/export_OnSysInfo/"//"/test_exportExcel";
+          temp.action = $SCRIPT_ROOT +"/api/v1.0/export_OnSysInfo/";              //"/test_exportExcel";
           temp.method = "post";
           temp.style.display = "none";
           var opt = document.createElement("textarea");
@@ -874,10 +853,111 @@ $("#onSysSrcVsimexcelExport").click(function () {
       return false;
 }
 //------------------------------------------------------------现网excel导出栏--end--------------------------
-
-
-//--------------------------------------------------------现网ajax获取表格方法--------------------------
-$("#onSysSrcVsimDataGet").click(function () {
+function sysGridDataGetAjax(grid_src_array, sysArgs) {
+    var Country = sysArgs.sysCountry.val();
+    var queryPost = {};
+    if (Country=='' ){
+        //delete old alter
+        alert_func(
+            sysArgs.sysAlertID,
+            ("请设置查询国家!")
+        );
+    }
+    else {
+        sysArgs.sysAlertID.children().detach();
+        queryPost = {
+            country: Country
+        };
+        // clear old data
+        onSysgridArrayData = [];
+        sysArgs.sysGridID.jqxGrid("clear");
+        sysArgs.sysGridID.jqxGrid('showloadelement');
+        //disable querry button before Results return
+        sysArgs.sysGridDataGetID.attr("disabled", true);
+        var AjaxSysSrcRequest = $.ajax({
+            type: "POST",
+            //url地址
+            url: $SCRIPT_ROOT + '/api/v1.0/get_onSysSrc/',
+            //request set
+            contentType: "application/json",
+            //data参数
+            data: JSON.stringify(queryPost),
+            //server back data type
+            dataType: "json"
+        })
+            .done(function(data){
+                // clear old data
+                onSysgridArrayData = [];
+                sysArgs.sysGridID.jqxGrid("clear");
+                var getData = data;
+                if (getData.data.length==0){
+                    if (getData.info.err){
+                        //delete old alter
+                        alert_func(
+                            sysArgs.sysAlertID,
+                            ('Error：'+getData.info.errinfo)
+                        );
+                    }
+                    else{
+                        alert_func(
+                            sysArgs.sysAlertID,
+                            ('无查询结果!')
+                        );
+                    }
+                }
+                else{
+                    $.each( getData.data, function(i, item){
+                        onSysgridArrayData.push({
+                            imsi: item.imsi,
+                            country: item.country,
+                            package_type_name: item.package_type_name,
+                            state: item.state,
+                            occupy_status: item.occupy_status,
+                            slot_status: item.slot_status,
+                            activate_status: item.activate_status,
+                            identify_status: item.identify_status,
+                            business_status: item.business_status,
+                            bam_status: item.bam_status,
+                            package_status: item.package_status,
+                            activate_type: item.activate_type,
+                            use_locally: item.use_locally,
+                            vsim_type: item.vsim_type,
+                            init_flow: item.init_flow,
+                            total_use_flow: item.total_use_flow,
+                            leave_flow: item.leave_flow,
+                            activate_time: item.activate_time,
+                            update_time: item.update_time,
+                            next_update_time: item.next_update_time,
+                            iccid: item.iccid,
+                            bam_code: item.bam_code,
+                            slot_num: item.slot_num,
+                            org_name: item.org_name,
+                            remarks: item.remarks,
+                            sys: item.sys
+                        });
+                    });//each函数完成
+                    // set the new data
+                    grid_src_array.localdata = onSysgridArrayData;
+                    sysArgs.sysGridID.jqxGrid('updatebounddata');
+                }
+            })
+            .fail(function(jqXHR, status){
+                // clear old data
+                onSysgridArrayData = [];
+                sysArgs.sysGridID.jqxGrid("clear");
+                //
+                alert_func(
+                    sysArgs.sysAlertID,
+                    ('Servers False!')
+                );
+            })
+            .always(function() {
+                sysArgs.sysGridDataGetID.attr("disabled", false);
+            });
+    }
+}
+//现网ajax获取表格方法
+$("#").click(function () {
     // clear old data
     $("#onSysapp-growl").children().detach();
     // 获取国家参数
@@ -984,53 +1064,96 @@ $("#onSysSrcVsimDataGet").click(function () {
 });
 //--------------------------------------------------------现网ajax获取表格方法--end------------------------
 
-//------------------------------------------------------------刷新数据button模块--------------------------
-$('#onSysSrcVsimFlash').click(function () {
-    $('#OnSysjqxgrid').jqxGrid('updatebounddata');
-});
-//------------------------------------------------------------刷新数据button模块--end------------------------
-
-//------------------------------------------------------------3-iniMain函数初始化主模块------------------------------------
+//doc ready func
 $(function () {
-    //初始化虚拟机select
-    var $classCountry = $(".select-country");
-    var $classPerson = $(".select-person");
-    var initSelectClassList = {
-        country: $classCountry,
-        person: $classPerson
+    var simManualGlobalParam = {};
+    simManualGlobalParam = {
+        class:{
+            classCountry: $(".select-country"),
+            classPerson: $(".select-person")
+        },
+        item: {
+            manual: {
+                manualGridID: $("#jqxgrid"),
+                manualDropDownID: $("#jqxDropDownList"),
+                manualCountryID: $("#manual-form-country"),
+                manualPersonID: $("#manual-form-person"),
+                manualDataGetID: $("#SrcVsimDataGet"),
+                manualAlertID: $("#manual_alert"),
+                manualGridFlash: $('#manualGridFlash'),
+                manualExcelExport: $('#manual_excel_export')
+            },
+            sys:{
+                sysGridID: $('#sys_grid'),
+                sysDropDownID: $("#sys_drop_down_list"),
+                sysGridFlashID: $('#sysGridFlash'),
+                sysGridDataGetID: $('#sys_grid_data_get'),
+                sysAlertID: $('#sys_alert'),
+                sysCountry: $('#sys_form_country'),
+                sysExcelExport: $('#sys_excel_export')
+            }
+        }
     };
-    initSelectView(initSelectClassList);
-    var $itemManulJqgrid = $("#jqxgrid");
-    var $itemOnsysJqxgrid = $('#OnSysjqxgrid');
-    var $itemmanualDropDown = $("#jqxDropDownList");
-    var $itemOnsysDropDown = $("#OnSysjqxDropDownList");
-    //init manul dropdown list
-    initManulDropDownList($itemManulJqgrid, $itemmanualDropDown);
+    //===================================================
+    //select model init
+    initSelectView(simManualGlobalParam);
+    //======================================================
+    //manual drop down list init
+    initManulDropDownList(
+        simManualGlobalParam.item.manual.manualGridID,
+        simManualGlobalParam.item.manual.manualDropDownID
+    );
+    // =====================================================
     // init system drop down model
-    initonSysDropDownList($itemOnsysJqxgrid, $itemOnsysDropDown);
-    //初始虚拟机化表格
-    var gridManulArrayData = [];
-    var JqxGridManulSrcSource= initjqxGrid($itemManulJqgrid,gridManulArrayData);
-    //     -------ajax get anul imsi src data-------
-    var $queryMnualGridDataAction = $("#SrcVsimDataGet");
-    var $itemManulAlert = $("#app-growl");
-    $queryMnualGridDataAction.click(function (){
-        var Country=$("#AMZ-form-country").val();
-        var Person=$("#AMZ-form-person").val();
-        var postData = {
-            country: Country,
-            person: Person
+    initonSysDropDownList(
+        simManualGlobalParam.item.sys.sysGridID,
+        simManualGlobalParam.item.sys.sysDropDownID
+    );
+    //================================================
+    //初始manual表格
+    var JqxGridManulSrcSource = initjqxGrid(simManualGlobalParam.item.manual.manualGridID);
+    //=====================================================================================
+    //manual grid flash
+    simManualGlobalParam.item.manual.manualGridFlash.click(function () {
+        flashManualGrid(simManualGlobalParam.item.manual.manualGridID);
+    });
+    // manual ajax get src data
+    simManualGlobalParam.item.manual.manualDataGetID.click(function (){
+        var ajaxManualParam = {
+            item: {
+                gridManualID: simManualGlobalParam.item.manual.manualGridID,
+                gridDataGetID: simManualGlobalParam.item.manual.manualDataGetID,
+                manualAlertID: simManualGlobalParam.item.manual.manualAlertID
+            },
+            postData:{
+                country: simManualGlobalParam.item.manual.manualCountryID.val(),
+                person: simManualGlobalParam.item.manual.manualPersonID.val()
+            }
         };
-        actionManulAjaxAPI(
-            gridManulArrayData,
-            JqxGridManulSrcSource,
-            postData,
-            $itemManulJqgrid,
-            $queryMnualGridDataAction,
-            $itemManulAlert);
+        actionManulAjaxAPI(JqxGridManulSrcSource, ajaxManualParam);
         return false;
     });
+    //manual grid excel
+    simManualGlobalParam.item.manual.manualExcelExport.click(function () {
+        var exportUrl = $SCRIPT_ROOT +"/api/v1.0/export_ManualInfo/";
+        manualGridExcelExport(
+            simManualGlobalParam.item.manual.manualGridID,
+            simManualGlobalParam.item.manual.manualAlertID,
+            exportUrl
+        );
+    });
+    //================
     //初始化系统统计表单
-    var gridOnsysArrayData = [];
-    var GridOnsysSrcSource= initonSysjqxGrid($itemOnsysJqxgrid,gridOnsysArrayData);
+    var sysGridSrcSource= initonSysjqxGrid(
+        simManualGlobalParam.item.sys.sysGridID
+    );
+    //sys grid flash
+    simManualGlobalParam.item.sys.sysGridFlashID.click(function () {
+        flashManualGrid(simManualGlobalParam.item.sys.sysGridID);
+    });
+    //==================================================================
+    //sys grid data get
+    simManualGlobalParam.item.sys.sysGridDataGetID.click(function () {
+        sysGridDataGetAjax(sysGridSrcSource, simManualGlobalParam.item.sys);
+    });
 });

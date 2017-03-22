@@ -72,7 +72,7 @@
 {% block row %}
 <!-- 虚拟机手工表资源 -->
 <!--筛选告警栏-->
-<div class="anp" id="app-growl"></div>
+<div class="anp" id="manual_alert"></div>
 <div class="row">
     <div class="col-lg-12">
         <div class="ibox float-e-margins">
@@ -87,9 +87,13 @@
                         <i class="fa fa-wrench"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li align="center"><small><strong>表格显示设置</strong></small></li>
-                        <br/>
-                        <li align="center">
+                        <li style="text-align:center">
+                            <small><strong>表格显示设置</strong></small>
+                        </li>
+                        <li>
+                            <div><br/></div>
+                        </li>
+                        <li>
                             <div id='jqxDropDownList'>
                             </div>
                         </li>
@@ -102,50 +106,56 @@
             <div class="ibox-content">
                 <div class="row">
                     <div class="col-sm-5 m-b-xs">
-                        <select class="select-country" name="country" id="AMZ-form-country" style="width:120px;">
+                        <select class="select-country" title="country" id="manual-form-country" style="width:120px;">
                             <option ></option>
                         </select>
                         &nbsp;&nbsp;
-                        <select class="select-person" name="person" id="AMZ-form-person" style="width:120px;">
+                        <select class="select-person" title="person" id="manual-form-person" style="width:120px;">
                             <option ></option>
                         </select>
                         &nbsp;&nbsp;
                     </div>
-                    <div class="col-sm-4 m-b-xs">
-                        <div data-toggle="buttons" class="btn-group">
-                            <button id="SrcVsimDataGet" type="button" class="btn btn-sm btn-primary pull-right m-t-n-xs ">
-                                查询
-                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                            </button>
+                    <div class="col-sm-4">
+                        <div class="form-group" id="manual_imsi">
+                            <div class="input-group input-daterange">
+                                <span class="input-group-addon"><strong>imsi</strong></span>
+                                <input type="text" class="input-sm form-control" id="manual_input_imsi" title="manul_input"/>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div align="center" class="row">
-                        <div data-toggle="buttons" class="btn-group">
-                            <button id="SrcVsimDataFlash" type="button" class="btn btn-default ">
-                                刷新
-                                <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
-                            </button>
-                            <button id="excelExport" type="button" class="btn btn-default ">
-                                导出
-                                <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
-                            </button>
-                            <button id="manualDelete" type="button" class="btn btn-default ">
-                                批量删除
-                                <span class="glyphicon glyphicon-floppy-remove" aria-hidden="true"></span>
-                            </button>
-                            <button id="manualUpdate" type="button" class="btn btn-default ">
-                                批量更新
-                                <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
-                            </button>
-                            <button id="manualInsert" type="button" class="btn btn-default ">
-                                批量导入
-                                <span class="glyphicon glyphicon-import" aria-hidden="true"></span>
-                            </button>
-                        </div>
+                    <div style="text-align:center" class="col-sm-3 m-b-xs">
+                        <button id="SrcVsimDataGet" type="button" class="btn btn-sm btn-primary pull-right m-t-n-xs ">
+                            查询
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
+</div>
+<div align="center" class="row">
+    <div data-toggle="buttons" class="btn-group">
+        <button id="manualGridFlash" type="button" class="btn btn-sm btn-default ">
+            刷新
+            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+        </button>
+        <button id="manual_excel_export" type="button" class="btn btn-sm btn-default ">
+            导出
+            <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
+        </button>
+        <button id="manualDelete" type="button" class="btn btn-sm btn-default ">
+            批量删除
+            <span class="glyphicon glyphicon-floppy-remove" aria-hidden="true"></span>
+        </button>
+        <button id="manualUpdate" type="button" class="btn btn-sm btn-default ">
+            批量更新
+            <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+        </button>
+        <button id="manualInsert" type="button" class="btn btn-sm btn-default ">
+            批量导入
+            <span class="glyphicon glyphicon-import" aria-hidden="true"></span>
+        </button>
     </div>
 </div>
 <div class="table-responsive">
@@ -154,7 +164,7 @@
     </div>
 </div>
 <!--现网资源-->
-<div class="anp" id="onSysapp-growl"></div>
+<div class="anp" id="sys_alert"></div>
 <div class="row">
     <div class="col-lg-12">
         <div class="ibox float-e-margins">
@@ -169,10 +179,12 @@
                         <i class="fa fa-wrench"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li align="center"><small><strong>表格显示设置</strong></small></li>
-                        <br/>
-                        <li align="center">
-                            <div id='OnSysjqxDropDownList'>
+                        <li style="text-align:center"><small><strong>表格显示设置</strong></small></li>
+                        <li>
+                            <div><br/></div>
+                        </li>
+                        <li>
+                            <div id='sys_drop_down_list'>
                             </div>
                         </li>
                     </ul>
@@ -184,34 +196,44 @@
             <div class="ibox-content">
                 <div class="row">
                     <div class="col-sm-5 m-b-xs">
-                        <select class="select-country" name="country" id="onSys-form-country" style="width:120px;">
+                        <select class="select-country" title="country" id="sys_form_country" style="width:120px;">
                             <option ></option>
                         </select>
                     </div>
-                    <div class="col-sm-4 m-b-xs">
-                        <div data-toggle="buttons" class="btn-group">
-                            <button id="onSysSrcVsimDataGet" type="button" class="btn btn-primary ">
-                                查询
-                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                            </button>
-                            <button id="onSysSrcVsimFlash" type="button" class="btn btn-default ">
-                                刷新
-                                <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
-                            </button>
-                            <button id="onSysSrcVsimexcelExport" type="button" class="btn btn-default ">
-                                导出
-                                <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
-                            </button>
+                    <div class="col-sm-4">
+                        <div class="form-group" id="vsim_test_table_imsi">
+                            <div class="input-group input-daterange">
+                                <span class="input-group-addon"><strong>imsi</strong></span>
+                                <input type="text" class="input-sm form-control" title="sys_imsi" id="sys_input_imsi"/>
+                            </div>
                         </div>
+                    </div>
+                    <div style="text-align:center" class="col-sm-3 m-b-xs">
+                        <button id="sys_grid_data_get" type="button" class="btn btn-sm btn-primary pull-right m-t-n-xs ">
+                            查询
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<div align="center" class="row">
+    <div data-toggle="buttons" class="btn-group">
+        <button id="sysGridFlash" type="button" class="btn btn-sm btn-default ">
+            刷新
+            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+        </button>
+        <button id="sys_excel_export" type="button" class="btn btn-sm btn-default ">
+            导出
+            <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
+        </button>
+    </div>
+</div>
 <div class="table-responsive">
-    <div id='OnSysmygrid'>
-        <div id="OnSysjqxgrid"></div>
+    <div id='sys_grid_div'>
+        <div id="sys_grid"></div>
     </div>
 </div>
 {% endblock %}

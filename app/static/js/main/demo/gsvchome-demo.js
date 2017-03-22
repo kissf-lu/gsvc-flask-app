@@ -61,8 +61,7 @@ var buildFilterPanel = function (filterPanel, datafield,filterGrid,SrcAdapter) {
             async: false,
             uniqueDataFields: [datafield]
         });
-    var $jqgrid140country = filterGrid;
-    var column = $jqgrid140country.jqxGrid('getcolumn', datafield);
+    var column = filterGrid.jqxGrid('getcolumn', datafield);
     textInput.jqxInput({ placeHolder: "Enter " + column.text, popupZIndex: 9999999, displayMember: datafield, source: dataadapter, height: 23, width: 175 });
     textInput.keyup(function (event) {
         if (event.keyCode === 13) {
@@ -77,10 +76,10 @@ var buildFilterPanel = function (filterPanel, datafield,filterGrid,SrcAdapter) {
         var filter1 = filtergroup.createfilter('stringfilter', filtervalue, filtercondition);
         filtergroup.addfilter(filter_or_operator, filter1);
         // add the filters.
-        $jqgrid140country.jqxGrid('addfilter', datafield, filtergroup);
+        filterGrid.jqxGrid('addfilter', datafield, filtergroup);
         //apply the filters.
-        $jqgrid140country.jqxGrid('applyfilters');
-        $jqgrid140country.jqxGrid('closemenu');
+        filterGrid.jqxGrid('applyfilters');
+        filterGrid.jqxGrid('closemenu');
     });
     filterbutton.keydown(function (event) {
         if (event.keyCode === 13) {
@@ -88,10 +87,10 @@ var buildFilterPanel = function (filterPanel, datafield,filterGrid,SrcAdapter) {
         }
     });
     filterclearbutton.click(function () {
-        $jqgrid140country.jqxGrid('removefilter', datafield);
+        filterGrid.jqxGrid('removefilter', datafield);
         // apply the filters.
-        $jqgrid140country.jqxGrid('applyfilters');
-        $jqgrid140country.jqxGrid('closemenu');
+        filterGrid.jqxGrid('applyfilters');
+        filterGrid.jqxGrid('closemenu');
     });
     filterclearbutton.keydown(function (event) {
         if (event.keyCode === 13) {
@@ -200,7 +199,6 @@ function countrySrcConAjaxApi(options_param) {
     var queryPost = options_param.postData;
     var Country = queryPost.country;
     var Org = queryPost.org;
-    alert(Country+Org);
     options_param.queryAlert.alertID.children().detach();
     //以下获取数据
     //清空countrySrcConGridArrayData数据，并且清空前端显示数据
