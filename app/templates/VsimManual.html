@@ -106,11 +106,11 @@
             <div class="ibox-content">
                 <div class="row">
                     <div class="col-sm-5 m-b-xs">
-                        <select class="select-country" title="country" id="manual-form-country" style="width:120px;">
+                        <select class="select-country" id="manual-form-country" style="width:120px;">
                             <option ></option>
                         </select>
                         &nbsp;&nbsp;
-                        <select class="select-person" title="person" id="manual-form-person" style="width:120px;">
+                        <select class="select-person" id="manual-form-person" style="width:120px;">
                             <option ></option>
                         </select>
                         &nbsp;&nbsp;
@@ -119,7 +119,9 @@
                         <div class="form-group" id="manual_imsi">
                             <div class="input-group input-daterange">
                                 <span class="input-group-addon"><strong>imsi</strong></span>
-                                <input type="text" class="input-sm form-control" id="manual_input_imsi" title="manul_input"/>
+                                <input type="text" data-toggle="tooltip" class="input-sm form-control"
+                                       id="manual_input_imsi"
+                                       title='单imsi查询,支持开头模糊查询'/>
                             </div>
                         </div>
                     </div>
@@ -196,15 +198,20 @@
             <div class="ibox-content">
                 <div class="row">
                     <div class="col-sm-5 m-b-xs">
-                        <select class="select-country" title="country" id="sys_form_country" style="width:120px;">
+                        <select class="select-country" id="sys_form_country" style="width:120px;">
                             <option ></option>
+                        </select>
+                        <select class="form-org" title="org" id="org_select" style="width:120px;">
+                            <option value="GTBU" selected="selected">GTBU</option>
                         </select>
                     </div>
                     <div class="col-sm-4">
                         <div class="form-group" id="vsim_test_table_imsi">
                             <div class="input-group input-daterange">
                                 <span class="input-group-addon"><strong>imsi</strong></span>
-                                <input type="text" class="input-sm form-control" title="sys_imsi" id="sys_input_imsi"/>
+                                <input type="text" data-toggle="tooltip" class="input-sm form-control"
+                                       id="sys_input_imsi"
+                                       title='单imsi查询,支持开头模糊查询' />
                             </div>
                         </div>
                     </div>
@@ -213,6 +220,44 @@
                             查询
                             <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                         </button>
+                    </div>
+                </div>
+                <br/>
+                <div align="center" class="row">
+                    <div class="form-group" id="vsim_test">
+                        <div class="input-group input-daterange">
+                            <span class="input-group-addon"><strong>状态筛选： 可用状态</strong></span>
+                            <input type="text" value="0" data-toggle="tooltip" class="input-sm form-control"
+                                   id="sys_status"
+                                   title='支持多状态查询：
+                                   可用状态：0,2,4,8,16'/>
+                            <span class="input-group-addon"><strong>业务状态</strong></span>
+                            <input type="text" value="0" data-toggle="tooltip" class="input-sm form-control"
+                                   id="sys_business_status"
+                                   title='支持多状态查询：
+                                   0-卡未停用，1-卡已停用，2-卡预停用 （手工），3-流量不足，停用，
+                                   4 -卡pending， 5-待测试卡（只能定向分配），6-待下架卡，7-流量封顶停用'/>
+                            <span class="input-group-addon"><strong>套餐状态</strong></span>
+                            <input type="text" value="0,1" data-toggle="tooltip" class="input-sm form-control"
+                                   id="sys_package_status"
+                                   title='支持多状态查询：
+                                   0正常，1限速，2不可用，3套餐过期'/>
+                            <span class="input-group-addon"><strong>卡位状态</strong></span>
+                            <input type="text" value="0,1" data-toggle="tooltip" class="input-sm form-control"
+                                   id="sys_slot_status"
+                                   title='支持多状态查询：
+                                   0未拔出，1已拔出 ,2卡槽异常' />
+                            <span class="input-group-addon"><strong>bam状态</strong></span>
+                            <input type="text" value="0,1" data-toggle="tooltip" class="input-sm form-control"
+                                   id="sys_bam_status"
+                                   title='支持多状态查询：
+                                   0 BAM正常，1 BAM异常' />
+                            <span class="input-group-addon"><strong>占用状态</strong></span>
+                            <input type="text" value="0,1" data-toggle="tooltip" class="input-sm form-control"
+                                   id="sys_ocupy_status"
+                                   title='支持多状态查询：
+                                   0未占用，1已占用'/>
+                        </div>
                     </div>
                 </div>
             </div>

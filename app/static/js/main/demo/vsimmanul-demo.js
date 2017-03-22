@@ -29,6 +29,11 @@ function  alert_func(alert_button_item,alert_doc) {
     alert_button_item.children().detach();
     alert_button_item.append(alertStr);
 }
+function initSelect(select_class, select_data, select_options) {
+    select_class.select2(select_data);
+    select_class.select2(select_options);
+
+}
 /**===========================================================
  *
  *
@@ -40,29 +45,30 @@ function initSelectView(init_select_class_list){
     var country_data = [
         {text: 'AD'},{text: 'AE'},{text: 'AF'},{text: 'AG'},{text: 'AI'},{text: 'AL'},{text: 'AM'},{text: 'AO'},{text: 'AQ'},{text: 'AR'},{text: 'AS'},{text: 'AT'},{text: 'AU'},{text: 'AW'},{text: 'AX'},{text: 'AZ'},{text: 'BA'},{text: 'BB'},{text: 'BD'},{text: 'BE'},{text: 'BF'},{text: 'BG'},{text: 'BH'},{text: 'BI'},{text: 'BJ'},{text: 'BL'},{text: 'BM'},{text: 'BN'},{text: 'BO'},{text: 'BQ'},{text: 'BR'},{text: 'BS'},{text: 'BT'},{text: 'BV'},{text: 'BW'},{text: 'BY'},{text: 'BZ'},{text: 'CA'},{text: 'CC'},{text: 'CD'},{text: 'CF'},{text: 'CG'},{text: 'CH'},{text: 'CI'},{text: 'CK'},{text: 'CL'},{text: 'CM'},{text: 'CN'},{text: 'CO'},{text: 'CR'},{text: 'CU'},{text: 'CV'},{text: 'CW'},{text: 'CX'},{text: 'CY'},{text: 'CZ'},{text: 'DE'},{text: 'DJ'},{text: 'DK'},{text: 'DM'},{text: 'DO'},{text: 'DZ'},{text: 'EC'},{text: 'EE'},{text: 'EG'},{text: 'EH'},{text: 'ER'},{text: 'ES'},{text: 'ET'},{text: 'FI'},{text: 'FJ'},{text: 'FK'},{text: 'FM'},{text: 'FO'},{text: 'FR'},{text: 'GA'},{text: 'GB'},{text: 'GD'},{text: 'GE'},{text: 'GF'},{text: 'GG'},{text: 'GH'},{text: 'GI'},{text: 'GL'},{text: 'GM'},{text: 'GN'},{text: 'GP'},{text: 'GQ'},{text: 'GR'},{text: 'GS'},{text: 'GT'},{text: 'GU'},{text: 'GW'},{text: 'GY'},{text: 'HK'},{text: 'HM'},{text: 'HN'},{text: 'HR'},{text: 'HT'},{text: 'HU'},{text: 'ID'},{text: 'IE'},{text: 'IL'},{text: 'IM'},{text: 'IN'},{text: 'IO'},{text: 'IQ'},{text: 'IR'},{text: 'IS'},{text: 'IT'},{text: 'JE'},{text: 'JM'},{text: 'JO'},{text: 'JP'},{text: 'KE'},{text: 'KG'},{text: 'KH'},{text: 'KI'},{text: 'KM'},{text: 'KN'},{text: 'KP'},{text: 'KR'},{text: 'KW'},{text: 'KY'},{text: 'KZ'},{text: 'LA'},{text: 'LB'},{text: 'LC'},{text: 'LI'},{text: 'LK'},{text: 'LR'},{text: 'LS'},{text: 'LT'},{text: 'LU'},{text: 'LV'},{text: 'LY'},{text: 'MA'},{text: 'MC'},{text: 'MD'},{text: 'ME'},{text: 'MF'},{text: 'MG'},{text: 'MH'},{text: 'MK'},{text: 'ML'},{text: 'MM'},{text: 'MN'},{text: 'MO'},{text: 'MP'},{text: 'MQ'},{text: 'MR'},{text: 'MS'},{text: 'MT'},{text: 'MU'},{text: 'MV'},{text: 'MW'},{text: 'MX'},{text: 'MY'},{text: 'MZ'},{text: 'NA'},{text: 'NC'},{text: 'NE'},{text: 'NF'},{text: 'NG'},{text: 'NI'},{text: 'NL'},{text: 'NO'},{text: 'NP'},{text: 'NR'},{text: 'NU'},{text: 'NZ'},{text: 'OM'},{text: 'PA'},{text: 'PC'},{text: 'PE'},{text: 'PF'},{text: 'PG'},{text: 'PH'},{text: 'PK'},{text: 'PL'},{text: 'PM'},{text: 'PN'},{text: 'PR'},{text: 'PS'},{text: 'PT'},{text: 'PW'},{text: 'PY'},{text: 'QA'},{text: 'RE'},{text: 'RO'},{text: 'RS'},{text: 'RU'},{text: 'RW'},{text: 'SA'},{text: 'SB'},{text: 'SC'},{text: 'SD'},{text: 'SE'},{text: 'SG'},{text: 'SH'},{text: 'SI'},{text: 'SJ'},{text: 'SK'},{text: 'SL'},{text: 'SM'},{text: 'SN'},{text: 'SO'},{text: 'SR'},{text: 'ST'},{text: 'SV'},{text: 'SX'},{text: 'SY'},{text: 'SZ'},{text: 'TC'},{text: 'TD'},{text: 'TF'},{text: 'TG'},{text: 'TH'},{text: 'TJ'},{text: 'TK'},{text: 'TL'},{text: 'TM'},{text: 'TN'},{text: 'TO'},{text: 'TR'},{text: 'TT'},{text: 'TV'},{text: 'TW'},{text: 'TZ'},{text: 'UA'},{text: 'UG'},{text: 'UM'},{text: 'US'},{text: 'UY'},{text: 'UZ'},{text: 'VA'},{text: 'VC'},{text: 'VE'},{text: 'VG'},{text: 'VI'},{text: 'VN'},{text: 'VU'},{text: 'WF'},{text: 'WS'},{text: 'YE'},{text: 'YT'},{text: 'ZA'},{text: 'ZM'},{text: 'ZW'},{text: 'noCountry'}
         ];
+    //org set
+    var org_name = [{text:'35ORG'}, {text:'a2network'}, {text:'CelloMobile'}, {text:'GFC_simbank'}, {text:'GLOBALWIFI'},
+        {text:'北京信威'}, {text:'GWIFI'}, {text:'JETFI桔豐科技'}, {text:'LianLian'}, {text:'POCWIFI'}, {text:'TestMvno'},
+        {text:'VisonData-ORG'}, {text:'YROAM'}, {text:'all'}
+    ];
     //select person：
     var person_data = [
         {text: '刘超'}, {text: '叶慧玲'}, {text: '郑天琴'}, {text: '曲薇'}, {text: '黄柳青'},
         {text: '凌刚'}, {text: '李红伟'}, {text: '王成'}, {text: '尚晨晨'}
         ];
-    // select views
-    init_select_class_list.class.classCountry.select2({
-        data: country_data
-
-    });
-    init_select_class_list.class.classCountry.select2({
-        placeholder: "国家",
-        allowClear: true
-
-    });
-    //select 模块
-    init_select_class_list.class.classPerson.select2({
-        data: person_data
-    });
-    init_select_class_list.class.classPerson.select2({
-        placeholder: "负责人",
-        allowClear: true
-    });
+    // select country
+    initSelect(
+        init_select_class_list.classCountry,
+        {data: country_data},
+        {placeholder: "国家简码", allowClear: true}
+    );
+    //select person
+    initSelect(
+        init_select_class_list.classPerson,
+        {data: person_data},
+        {placeholder: "负责人", allowClear: true}
+        );
+    //org
+    initSelect(init_select_class_list.classOrg, {data: org_name}, {allowClear: false});
 }
 /**==================================================
  *  -------虚拟机下拉选选择菜单显示设置函数
@@ -134,7 +140,7 @@ function initonSysDropDownList(item_related_grid, item_jqx_drop_down){
         { label: '剩余流量/MB ', value: 'leave_flow',checked: true },
         { label: '激活日期', value: 'activate_time',checked: true },
         { label: '上次套餐更新时间', value: 'update_time',checked: true },
-        { label: '下载套餐更新时间', value: 'next_update_time',checked: true },
+        { label: '下次套餐更新时间', value: 'next_update_time',checked: true },
         { label: 'iccid', value: 'iccid',checked: true },
         { label: 'BAM', value: 'bam_code',checked: true },
         { label: '卡位', value: 'slot_num',checked: true },
@@ -387,7 +393,7 @@ function initjqxGrid(initGrid){
 
     return Srcsource;
 }
-function manualGridExcelExport(grid_item, alert_item, url) {
+function manualGridExcelExport(grid_item, alert_item, url_query) {
     var rows = grid_item.jqxGrid('getdisplayrows');
     var alldatanum= rows.length;
     var view_data=[];
@@ -443,7 +449,7 @@ function manualGridExcelExport(grid_item, alert_item, url) {
                 }
             }
         }
-        excelExport(json_data, alert_item, url);
+        excelExport(json_data, alert_item, url_query);
     }
     return false;
 }
@@ -455,7 +461,7 @@ function manualGridExcelExport(grid_item, alert_item, url) {
  * @param item_alert: jquery type warn DOC ID ;
  * @return {boolean} return false to forbid DOC fresh;
  *==============================================================================**/
-function excelExport(data,item_alert, url) {
+function excelExport(data,item_alert, url_query) {
     var exportdata=data;
     if (exportdata.data==[]){
         // alter
@@ -463,7 +469,7 @@ function excelExport(data,item_alert, url) {
     }
     else{
         var temp = document.createElement("form");
-        temp.action = url;
+        temp.action = url_query;
         temp.method = "post";
         temp.style.display = "none";
         var opt = document.createElement("textarea");
@@ -475,35 +481,35 @@ function excelExport(data,item_alert, url) {
     }
     return false;
 }
-
-function actionManulAjaxAPI(grid_src_array, manual_ajax_param) {
+//
+function actionManulAjaxAPI(grid_src_array, manual_item_param, manual_post_arg) {
     // clear old data
-    var Country = manual_ajax_param.postData.country;
-    var Person = manual_ajax_param.postData.person;
+    var Country = manual_post_arg.postData.country;
+    var imsi = manual_post_arg.postData.imsi;
+    var gridArray = [];
     if (Country==''){
         //
         alert_func(
-            manual_ajax_param.item.manualAlertID,
+            manual_item_param.manualAlertID,
             "请设置查询国家!"
         );
-    } else{
-        var gridArray = [];
+    } else {
         // clear old data
-        manual_ajax_param.item.gridManualID.jqxGrid("clear");
+        manual_item_param.manualGridID.jqxGrid("clear");
+        manual_item_param.manualGridID.jqxGrid('showloadelement');
         //清空遗留告警
-        manual_ajax_param.item.manualAlertID.children().detach();
-        manual_ajax_param.item.gridManualID.jqxGrid('showloadelement');
+        manual_item_param.manualAlertID.children().detach();
         //disable query button before return data
-        manual_ajax_param.item.gridDataGetID.attr("disabled", true);
+        manual_item_param.manualDataGetID.attr("disabled", true);
         // ajax request begin
         var AjaxManualRequest = $.ajax({
-            type: "POST",
+            type: manual_post_arg.postMethod,
             //url地址
-            url: $SCRIPT_ROOT + '/api/v1.0/get_srcVsimManulInfor/',
+            url: manual_post_arg.url,
             //request set
             contentType: "application/json",
             //data参数
-            data: JSON.stringify(manual_ajax_param.postData),
+            data: JSON.stringify(manual_post_arg.postData),
             //server back data type
             dataType: "json"
         })
@@ -513,12 +519,13 @@ function actionManulAjaxAPI(grid_src_array, manual_ajax_param) {
                     if (getData.info.err){
                         //delete old alter
                         alert_func(
-                            manual_ajax_param.item.manualAlertID,
+                            manual_item_param.manualAlertID,
                             ("Error："+getData.info.errinfo)
                         );
                     }
                     else{
-                        alert_func(manual_ajax_param.item.manualAlertID,
+                        alert_func(
+                            manual_item_param.manualAlertID,
                             ("无查询结果!")
                         );
                     }
@@ -556,21 +563,21 @@ function actionManulAjaxAPI(grid_src_array, manual_ajax_param) {
                     });//each函数完成
                     // set the new data
                     grid_src_array.localdata = gridArray;
-                    manual_ajax_param.item.gridManualID.jqxGrid('updatebounddata');
+                    manual_item_param.manualGridID.jqxGrid('updatebounddata');
                 }
             })
             .fail(function(jqXHR, status){
                 // clear old data
-                manual_ajax_param.item.gridManualID.jqxGrid("clear");
+                manual_item_param.manualGridID.jqxGrid("clear");
                 // alert model
                 alert_func(
-                    manual_ajax_param.item.manualAlertID,
+                    manual_item_param.manualAlertID,
                     ("Servers False!")
                 );
             })
             .always(function() {
-                gridArray = [];
-                manual_ajax_param.item.gridDataGetID.attr("disabled", false);
+                manual_item_param.manualGridID.jqxGrid('hideloadelement');
+                manual_item_param.manualDataGetID.attr("disabled", false);
             });
     }
 }
@@ -578,11 +585,11 @@ function actionManulAjaxAPI(grid_src_array, manual_ajax_param) {
  *
  * @param grid_id
  *==========================================**/
-function flashManualGrid(grid_id) {
+function flashGrid(grid_id) {
     grid_id.jqxGrid('updatebounddata');
 }
 //初始化现网表格函数
-function initonSysjqxGrid(grid_item){
+function initSysjqxGrid(grid_item){
     var onSysSrcsource ={
         localdata: [],
         datatype: "json",
@@ -696,7 +703,7 @@ function initonSysjqxGrid(grid_item){
                     { text: '剩余流量/MB', datafield: 'leave_flow', width: 80 },
                     { text: '激活日期', datafield: 'activate_time', filtertype: 'date', cellsformat: 'yyyy-MM-dd HH:mm:ss', width: 170 },
                     { text: '上次套餐更新时间', datafield: 'update_time', filtertype: 'date', cellsformat: 'yyyy-MM-dd HH:mm:ss', width: 170 },
-                    { text: '下载套餐更新时间', datafield: 'next_update_time', filtertype: 'date', cellsformat: 'yyyy-MM-dd HH:mm:ss', width: 170 },
+                    { text: '下次套餐更新时间', datafield: 'next_update_time', filtertype: 'date', cellsformat: 'yyyy-MM-dd HH:mm:ss', width: 170 },
                     {text: 'iccid', datafield: 'iccid',width: 200},
                     {text: 'BAM编码', datafield: 'bam_code',width: 80},
                     {text: '卡位', datafield: 'slot_num',width: 80},
@@ -707,7 +714,7 @@ function initonSysjqxGrid(grid_item){
     return onSysSrcsource;
 }
 //=======================================================================
-function sysGridExcelExport(grid_item, alert_item) {
+function sysGridExcelExport(grid_item, alert_item, url_query) {
     var rows = grid_item.jqxGrid('getdisplayrows');
     var alldatanum= rows.length;
     var view_data=[];
@@ -759,103 +766,17 @@ function sysGridExcelExport(grid_item, alert_item) {
                             备注: rows[i+j].remarks
                         })
                     }
-
                 }
             }
         }
-        excelExport(json_data, alert_item);
+        excelExport(json_data, alert_item, url_query);
     }
     return false;
 }
-//现网excel导出栏
-$("#").click(function () {
-     var rows = $('#OnSysjqxgrid').jqxGrid('getdisplayrows');
-     var alldatanum= rows.length;
-     var view_data=[];
-     var json_data={'data':view_data};
-     var paginginformation =
-     $('#OnSysjqxgrid').jqxGrid('getpaginginformation');
-     // The page's number.
-     var pagenum = paginginformation.pagenum;
-     // The page's size.
-     var pagesize = paginginformation.pagesize;
-     // The number of all pages.
-     var pagescount = paginginformation.pagescount;
-     if (alldatanum==0){
-         //delete old alter
-        $("#onSysapp-growl").children().detach();
-        $("#onSysappapp-growl").append((alertStr+'<p>无输出数据！</p></div>'));
-     }
-     else{
-         for(var i = 0; i < rows.length; i++){
-             if (i==pagenum*pagesize){
-                 for (var j = 0; j< pagesize; j++){
-                     if (i+j< alldatanum){
-                         view_data.push({
-                         imsi: rows[i+j].imsi,
-                         country: rows[i+j].country,
-                         卡分组属性: rows[i+j].org_name,
-                         套餐: rows[i+j].package_type_name,
-                         state: rows[i+j].state,
-                         占用状态: rows[i+j].occupy_status,
-                         卡位状态: rows[i+j].slot_status,
-                         激活状态: rows[i+j].activate_status,
-                         认证状态: rows[i+j].identify_status,
-                         业务状态: rows[i+j].business_status,
-                         BAM状态: rows[i+j].bam_status,
-                         套餐状态: rows[i+j].package_status,
-                         激活类型: rows[i+j].activate_type,
-                         本网可用: rows[i+j].use_locally,
-                         是否多国卡: rows[i+j].vsim_type,
-                         初始流量MB: rows[i+j].init_flow,
-                         累计使用流量MB: rows[i+j].total_use_flow,
-                         剩余流量MB: rows[i+j].leave_flow,
-                         激活日期: rows[i+j].activate_time,
-                         上次套餐更新日期: rows[i+j].update_time,
-                         下次套餐更新日期: rows[i+j].next_update_time,
-                         iccid: rows[i+j].iccid,
-                         BAM编码: rows[i+j].bam_code,
-                         卡位: rows[i+j].slot_num,
-                         备注: rows[i+j].remarks
-                         })
-                     }
-
-                 }
-             }
-         }
-         //$("#OnSysjqxgrid").jqxGrid('exportdata', 'xls', 'onSys-SRCVsimInfo', true, view_data);
-         excelExportOnSys(json_data);
-     }
-     return false;
-
- });
-
- function excelExportOnSys(data) {
-     var exportdata=data;
-
-     if (exportdata.data==[]){
-         //delete old alter
-         $("#app-growl").children().detach();
-         $("#app-growl").append((alertStr+'<p>无输出数据！</p></div>'));
-         }
-     else{
-          var temp = document.createElement("form");
-          temp.action = $SCRIPT_ROOT +"/api/v1.0/export_OnSysInfo/";              //"/test_exportExcel";
-          temp.method = "post";
-          temp.style.display = "none";
-          var opt = document.createElement("textarea");
-          opt.name = "data";
-          opt.value = JSON.stringify(exportdata.data);
-          temp.appendChild(opt);
-          document.body.appendChild(temp);
-          temp.submit();
-      }
-      return false;
-}
 //------------------------------------------------------------现网excel导出栏--end--------------------------
-function sysGridDataGetAjax(grid_src_array, sysArgs) {
-    var Country = sysArgs.sysCountry.val();
-    var queryPost = {};
+function sysGridDataGetAjax(grid_src_array, sysArgs, postArg) {
+    var Country = postArg.postData.country;
+    var onSysgridArrayData = [];
     if (Country=='' ){
         //delete old alter
         alert_func(
@@ -865,29 +786,23 @@ function sysGridDataGetAjax(grid_src_array, sysArgs) {
     }
     else {
         sysArgs.sysAlertID.children().detach();
-        queryPost = {
-            country: Country
-        };
         // clear old data
-        onSysgridArrayData = [];
         sysArgs.sysGridID.jqxGrid("clear");
         sysArgs.sysGridID.jqxGrid('showloadelement');
         //disable querry button before Results return
         sysArgs.sysGridDataGetID.attr("disabled", true);
         var AjaxSysSrcRequest = $.ajax({
-            type: "POST",
+            type: postArg.postMethod,
             //url地址
-            url: $SCRIPT_ROOT + '/api/v1.0/get_onSysSrc/',
+            url: postArg.url,
             //request set
             contentType: "application/json",
             //data参数
-            data: JSON.stringify(queryPost),
+            data: JSON.stringify(postArg.postData),
             //server back data type
             dataType: "json"
         })
             .done(function(data){
-                // clear old data
-                onSysgridArrayData = [];
                 sysArgs.sysGridID.jqxGrid("clear");
                 var getData = data;
                 if (getData.data.length==0){
@@ -906,6 +821,8 @@ function sysGridDataGetAjax(grid_src_array, sysArgs) {
                     }
                 }
                 else{
+                    // clear old data
+                    onSysgridArrayData = [];
                     $.each( getData.data, function(i, item){
                         onSysgridArrayData.push({
                             imsi: item.imsi,
@@ -952,151 +869,70 @@ function sysGridDataGetAjax(grid_src_array, sysArgs) {
                 );
             })
             .always(function() {
+                sysArgs.sysGridID.jqxGrid('hideloadelement');
                 sysArgs.sysGridDataGetID.attr("disabled", false);
             });
     }
 }
-//现网ajax获取表格方法
-$("#").click(function () {
-    // clear old data
-    $("#onSysapp-growl").children().detach();
-    // 获取国家参数
-    var Country=$("#onSys-form-country").val();
-    // post data
-    var queryPost = {};
-    if (Country=='' ){
-        //delete old alter
-        $("#onSysapp-growl").children().detach();
-        $("#onSysapp-growl").append((alertStr+'<p>请设置查询国家!</p></div>'));
+//------------------------------------------------------------验证imsi格式
+function checkImsiReg(str){
+    var stringTest = str;
+    var RegExp1 = /^([0-9]+)$/;
+    var RegExp2 = /^([0-9]+[,])*([0-9]+)$/;
+    //plmn非空时监测输入格式是否合法
+    if (str !=='') {
+        if (RegExp1.exec(stringTest)) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
     }
-    else{
-        queryPost = {
-                country: Country
-                };
-        // clear old data
-        onSysgridArrayData = [];
-        $("#OnSysjqxgrid").jqxGrid("clear");
-        $('#OnSysjqxgrid').jqxGrid('showloadelement');
-        //disable querry button before Results return
-        $("#onSysSrcVsimDataGet").attr("disabled", true);
-        // ajax request begin
-        var AjaxSysSrcRequest = $.ajax({
-            type: "POST",
-            //url地址
-            url: $SCRIPT_ROOT + '/api/v1.0/get_onSysSrc/',
-            //request set
-            contentType: "application/json",
-            //data参数
-            data: JSON.stringify(queryPost),
-            //server back data type
-            dataType: "json"
-        })
-        .done(function(data){
-            // clear old data
-            onSysgridArrayData = [];
-			$("#OnSysjqxgrid").jqxGrid("clear");
-            var getData = data;
-            if (getData.data.length==0){
-                if (getData.info.err){
-                    //delete old alter
-				    $("#onSysapp-growl").append(
-						                alertStr +
-						                '<p>Error：'+ getData.info.errinfo +'</p></div>'
-					);
-                }
-                else{
-					 $("#onSysapp-growl").append(
-						                 alertStr +
-						                 '<p>无查询结果!</p></div>'
-					 );
-                }
-            }
-            else{
-                $.each( getData.data, function(i, item){
-                                      onSysgridArrayData.push({
-                                                   imsi: item.imsi,
-                                                   country: item.country,
-                                                   package_type_name: item.package_type_name,
-                                                   state: item.state,
-                                                   occupy_status: item.occupy_status,
-                                                   slot_status: item.slot_status,
-                                                   activate_status: item.activate_status,
-                                                   identify_status: item.identify_status,
-                                                   business_status: item.business_status,
-                                                   bam_status: item.bam_status,
-                                                   package_status: item.package_status,
-                                                   activate_type: item.activate_type,
-                                                   use_locally: item.use_locally,
-                                                   vsim_type: item.vsim_type,
-                                                   init_flow: item.init_flow,
-                                                   total_use_flow: item.total_use_flow,
-                                                   leave_flow: item.leave_flow,
-                                                   activate_time: item.activate_time,
-                                                   update_time: item.update_time,
-                                                   next_update_time: item.next_update_time,
-                                                   iccid: item.iccid,
-                                                   bam_code: item.bam_code,
-                                                   slot_num: item.slot_num,
-                                                   org_name: item.org_name,
-                                                   remarks: item.remarks,
-                                                   sys: item.sys
-                                       });
-                });//each函数完成
-                // set the new data
-                onSysSrcsource.localdata = onSysgridArrayData;
-				$('#OnSysjqxgrid').jqxGrid('updatebounddata');
-			}
-        })
-        .fail(function(jqXHR, status){
-            // clear old data
-            onSysgridArrayData = [];
-			$("#OnSysjqxgrid").jqxGrid("clear");
-			//
-            $("#onSysapp-growl").append(
-                                     alertStr + status +
-						             '<p>Servers False!</p></div>'
-			);
-        })
-        .always(function() {
-            $("#onSysSrcVsimDataGet").attr("disabled", false);
-        });
-    }
-});
-//--------------------------------------------------------现网ajax获取表格方法--end------------------------
-
+}
 //doc ready func
 $(function () {
     var simManualGlobalParam = {};
     simManualGlobalParam = {
         class:{
             classCountry: $(".select-country"),
-            classPerson: $(".select-person")
+            classPerson: $(".select-person"),
+            classOrg: $('.form-org')
         },
         item: {
             manual: {
-                manualGridID: $("#jqxgrid"),
-                manualDropDownID: $("#jqxDropDownList"),
-                manualCountryID: $("#manual-form-country"),
-                manualPersonID: $("#manual-form-person"),
-                manualDataGetID: $("#SrcVsimDataGet"),
-                manualAlertID: $("#manual_alert"),
+                manualGridID: $('#jqxgrid'),
+                manualDropDownID: $('#jqxDropDownList'),
+                manualCountryID: $('#manual-form-country'),
+                manualPersonID: $('#manual-form-person'),
+                manualImsiID: $('#manual_input_imsi'),
+                manualDataGetID: $('#SrcVsimDataGet'),
+                manualAlertID: $('#manual_alert'),
                 manualGridFlash: $('#manualGridFlash'),
                 manualExcelExport: $('#manual_excel_export')
             },
             sys:{
                 sysGridID: $('#sys_grid'),
-                sysDropDownID: $("#sys_drop_down_list"),
+                sysDropDownID: $('#sys_drop_down_list'),
                 sysGridFlashID: $('#sysGridFlash'),
                 sysGridDataGetID: $('#sys_grid_data_get'),
                 sysAlertID: $('#sys_alert'),
                 sysCountry: $('#sys_form_country'),
-                sysExcelExport: $('#sys_excel_export')
+                sysOrgID: $('#org_select'),
+                sysImsiID: $('#sys_input_imsi'),
+                sysExcelExportID: $('#sys_excel_export'),
+                sysStatus: $('#sys_status'),
+                sysBusinessStatus: $('#sys_business_status'),
+                sysSlotStatus: $('#sys_slot_status'),
+                sysBamStatus: $('#sys_bam_status'),
+                sysOcupyStatus: $('#sys_ocupy_status'),
+                sysPackageStatus: $('#sys_package_status')
             }
         }
     };
     //===================================================
     //select model init
-    initSelectView(simManualGlobalParam);
+    initSelectView(simManualGlobalParam.class);
     //======================================================
     //manual drop down list init
     initManulDropDownList(
@@ -1115,24 +951,35 @@ $(function () {
     //=====================================================================================
     //manual grid flash
     simManualGlobalParam.item.manual.manualGridFlash.click(function () {
-        flashManualGrid(simManualGlobalParam.item.manual.manualGridID);
+        flashGrid(simManualGlobalParam.item.manual.manualGridID);
     });
+    //========================================================================================
     // manual ajax get src data
     simManualGlobalParam.item.manual.manualDataGetID.click(function (){
-        var ajaxManualParam = {
-            item: {
-                gridManualID: simManualGlobalParam.item.manual.manualGridID,
-                gridDataGetID: simManualGlobalParam.item.manual.manualDataGetID,
-                manualAlertID: simManualGlobalParam.item.manual.manualAlertID
-            },
+        var PostArg = {
             postData:{
                 country: simManualGlobalParam.item.manual.manualCountryID.val(),
-                person: simManualGlobalParam.item.manual.manualPersonID.val()
-            }
+                person: simManualGlobalParam.item.manual.manualPersonID.val(),
+                imsi: simManualGlobalParam.item.manual.manualImsiID.val()
+            },
+            url: $SCRIPT_ROOT + '/api/v1.0/get_srcVsimManulInfor/',
+            postMethod: 'POST'
         };
-        actionManulAjaxAPI(JqxGridManulSrcSource, ajaxManualParam);
-        return false;
+        if (PostArg.postData.imsi !== ''){
+            if (checkImsiReg(PostArg.postData.imsi)) {
+                actionManulAjaxAPI(JqxGridManulSrcSource, simManualGlobalParam.item.manual, PostArg);
+                return false;
+            } else {
+                alert_func(simManualGlobalParam.item.manual.manualAlertID, '输入imsi不合法！');
+                return false;
+            }
+        } else {
+            actionManulAjaxAPI(JqxGridManulSrcSource, simManualGlobalParam.item.manual, PostArg);
+            return false;
+        }
+
     });
+    //====================================================================================
     //manual grid excel
     simManualGlobalParam.item.manual.manualExcelExport.click(function () {
         var exportUrl = $SCRIPT_ROOT +"/api/v1.0/export_ManualInfo/";
@@ -1142,18 +989,54 @@ $(function () {
             exportUrl
         );
     });
-    //================
+    //====================================================================
     //初始化系统统计表单
-    var sysGridSrcSource= initonSysjqxGrid(
+    var sysGridSrcSource= initSysjqxGrid(
         simManualGlobalParam.item.sys.sysGridID
     );
+    //====================================================================
     //sys grid flash
     simManualGlobalParam.item.sys.sysGridFlashID.click(function () {
-        flashManualGrid(simManualGlobalParam.item.sys.sysGridID);
+        flashGrid(simManualGlobalParam.item.sys.sysGridID);
     });
-    //==================================================================
+    //=====================================================================
     //sys grid data get
     simManualGlobalParam.item.sys.sysGridDataGetID.click(function () {
-        sysGridDataGetAjax(sysGridSrcSource, simManualGlobalParam.item.sys);
+        var PostArg = {
+            postData:{
+                country: simManualGlobalParam.item.sys.sysCountry.val(),
+                imsi: simManualGlobalParam.item.sys.sysImsiID.val(),
+                status: simManualGlobalParam.item.sys.sysStatus.val(),
+                business_status: simManualGlobalParam.item.sys.sysBusinessStatus.val(),
+                slot_status: simManualGlobalParam.item.sys.sysSlotStatus.val(),
+                bam_status: simManualGlobalParam.item.sys.sysBamStatus.val(),
+                occupy_status: simManualGlobalParam.item.sys.sysOcupyStatus.val(),
+                org: simManualGlobalParam.item.sys.sysOrgID.val(),
+                package_status: simManualGlobalParam.item.sys.sysPackageStatus.val()
+            },
+            url: $SCRIPT_ROOT + '/api/v1.0/get_onSysSrc/',
+            postMethod: 'POST'
+        };
+        if (PostArg.postData.imsi !== ''){
+            if (checkImsiReg(PostArg.postData.imsi)) {
+                sysGridDataGetAjax(sysGridSrcSource, simManualGlobalParam.item.sys, PostArg);
+                return false;
+            } else {
+                alert_func(simManualGlobalParam.item.sys.sysAlertID, '输入imsi不合法！');
+                return false;
+            }
+        } else {
+            sysGridDataGetAjax(sysGridSrcSource, simManualGlobalParam.item.sys, PostArg);
+            return false;
+        }
     });
+    simManualGlobalParam.item.sys.sysExcelExportID.click(function () {
+        var exportUrl = $SCRIPT_ROOT +"/api/v1.0/export_OnSysInfo/";
+        sysGridExcelExport(
+            simManualGlobalParam.item.sys.sysGridID,
+            simManualGlobalParam.item.sys.sysAlertID,
+            exportUrl
+        );
+    });
+    $('[data-toggle="tooltip"]').tooltip();
 });

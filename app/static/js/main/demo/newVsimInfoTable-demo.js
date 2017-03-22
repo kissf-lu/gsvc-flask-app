@@ -425,6 +425,7 @@ function newVsimTestInfoTableGetAjaxAPI(option) {
                 alert_func(globeVarNewVsimTestinfo.ID.alertModelID,("Servers False!"));
             })
             .always(function() {
+                globeVarNewVsimTestinfo.ID.newVsimTestInfoJqgridID.jqxGrid('hideloadelement');
                 globeVarNewVsimTestinfo.ID.DataGetID.attr("disabled", false);
             });
     }
@@ -589,4 +590,5 @@ $(function () {
             globeVarNewVsimTestinfo.ID.alertModelID);
     });
     //=================================================================
+    $('[data-toggle="tooltip"]').tooltip();
 });

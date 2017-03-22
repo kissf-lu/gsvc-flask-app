@@ -45,7 +45,7 @@ def get_new_vsim_info(person, country, imsi):
     else:
         person_str = ""
     if query_imsi:
-        imsi_str = " AND `imsi` REGEXP " + "'" + query_imsi + "' "
+        imsi_str = " AND `imsi` LIKE " + "'" + query_imsi + "%' "
     else:
         imsi_str = ""
     try:

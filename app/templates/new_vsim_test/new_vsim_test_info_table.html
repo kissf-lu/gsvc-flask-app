@@ -102,21 +102,23 @@
             </div>
             <div class="ibox-content">
                 <div class="row">
-                    <div class="col-sm-4">
-                        <div class="form-group" id="vsim_test_table_imsi">
-                            <div class="input-group input-daterange" id="datepicker">
-                                <span class="input-group-addon"><strong>imsi</strong></span>
-                                <input type="text" class="input-sm form-control" name="start" id="input-imsi"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-5">
                         <select class="select-person" name="person" id="select2-form-person" style="width:120px;">
                             <option ></option>
                         </select>
                         <select class="select-country" name="country" id="select2-form-country" style="width:120px;">
                             <option ></option>
                         </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group" id="vsim_test_table_imsi">
+                            <div class="input-group input-daterange">
+                                <span class="input-group-addon"><strong>imsi</strong></span>
+                                <input type="text" data-toggle="tooltip" class="input-sm form-control"
+                                       id="input-imsi"
+                                       title='单imsi查询,支持开头模糊查询'/>
+                            </div>
+                        </div>
                     </div>
                     <div style="text-align:center" class="col-sm-3 m-b-xs">
                         <button id="newVsimTestInfoDataGet" type="button" class="btn btn-sm btn-primary pull-right m-t-n-xs">

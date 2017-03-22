@@ -32,8 +32,9 @@ def get_Country():
         Dic_data = request.get_json()
         country = str(Dic_data['country'])
         person = str(Dic_data['person'])
+        imsi = str(Dic_data['imsi'])
 
-        return getVsimManulInfor(country, person=person)
+        return getVsimManulInfor(country, person=person, imsi=imsi)
 
     return False
 
@@ -47,7 +48,23 @@ def get_onSysSrc():
     if request.method == 'POST':
         Dic_data = request.get_json()
         country = str(Dic_data['country'])
-        return quryonSysSrc(country)
+        imsi = str(Dic_data['imsi'])
+        status = str(Dic_data['status'])
+        business_status = str(Dic_data['business_status'])
+        slot_status = str(Dic_data['slot_status'])
+        bam_status = str(Dic_data['bam_status'])
+        occupy_status = str(Dic_data['occupy_status'])
+        org = str(Dic_data['org'])
+        package_status = str(Dic_data['package_status'])
+        return quryonSysSrc(country,
+                            imsi=imsi,
+                            status=status,
+                            business_status=business_status,
+                            slot_status=slot_status,
+                            bam_status=bam_status,
+                            occupy_status=occupy_status,
+                            org=org,
+                            package_status=package_status)
 
     return False
 
