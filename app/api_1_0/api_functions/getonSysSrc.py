@@ -47,7 +47,7 @@ def getVsimManulInfor(country, **kwargs):
         errInfo = '请设置查询国家'
     else:
         if queryPerson:
-            personWhere = "AND `person_gsvc`=" + "'" + queryCoutry + "' "
+            personWhere = "AND `person_gsvc`=" + "'" + queryPerson + "' "
         if queryImsi:
             imsiWhere = "AND `imsi` LIKE '" + queryImsi + "%' "
         where = "WHERE `country_iso`=" + "'" + queryCoutry + "' " + personWhere + imsiWhere

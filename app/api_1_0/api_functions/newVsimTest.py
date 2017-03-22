@@ -41,7 +41,7 @@ def get_new_vsim_info(person, country, imsi):
     errInfo = ""
     country_str = " `country_iso`='" + query_country + "' "
     if query_person:
-        person_str = " AND `person_test`= '" + query_person + "*' "
+        person_str = " AND `person_test`= '" + query_person + "' "
     else:
         person_str = ""
     if query_imsi:
@@ -92,7 +92,7 @@ def get_new_vsim_info(person, country, imsi):
             "`fail_reason`, "
             "`remark` as 'remark' "
             "FROM `vsim_test_info` as i "
-            "WHERE " + person_str + country_str + imsi_str
+            "WHERE " + country_str + person_str + imsi_str
         )
         #print query_str
         db = Sql_Info['db']
