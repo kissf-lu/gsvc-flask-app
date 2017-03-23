@@ -1,5 +1,4 @@
-#coding=utf-8
-#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
@@ -8,16 +7,16 @@ from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_pagedown import PageDown
-#cache 模块
+# cache 模块
 from flask_cache import Cache
-#css,js打包器
+# css,js打包器
 from flask_assets import Environment
 from assetsBundle import (
     login_css,
     main_css,
     main_js,
-    gsvchome_css,
-    gsvchome_js,
+    home_css,
+    home_js,
     vsimFlowerQuery_css,
     vsimFlowerQuery_js,
     probVsimFirstDict_css,
@@ -32,7 +31,7 @@ from assetsBundle import (
     new_vsim_test_info_css,
     new_vsim_test_info_js
 )
-#app config
+# app config
 from config import config
 
 
@@ -57,9 +56,9 @@ def create_app(config_name):
     :return: 返回app上下文
     """
     app = Flask(__name__)
-    #config app from config.py
+    # config app from config.py
     app.config.from_object(config[config_name])
-    #app ext init
+    # app ext init
     config[config_name].init_app(app)
     pagedown.init_app(app)
     bootstrap.init_app(app)
@@ -68,27 +67,27 @@ def create_app(config_name):
     db.init_app(app)
     login_manager.init_app(app)
     cache.init_app(app)
-    #各个模块打包模块路径声明
+    # 各个模块打包模块路径声明
     assets_env.init_app(app)
-    #jqwidgets-plus
+    # jqwidgets-plus
     assets_env.register("jqwidgets_globle_js", jqwidgets_globle_js)
-    #login -statics
-    assets_env.register("login_css",login_css)
+    # login -statics
+    assets_env.register("login_css", login_css)
     assets_env.register("main_css", main_css)
     assets_env.register("main_js", main_js)
-    #gsvchome-statics
-    assets_env.register("gsvchome_css", gsvchome_css)
-    assets_env.register("gsvchome_js", gsvchome_js)
-    #vsimFlowerQuery-statics
+    # gsvchome-statics
+    assets_env.register("home_css", home_css)
+    assets_env.register("home_js", home_js)
+    # vsimFlowerQuery-statics
     assets_env.register("vsimFlowerQuery_css", vsimFlowerQuery_css)
     assets_env.register("vsimFlowerQuery_js", vsimFlowerQuery_js)
-    #probVsimFirstDict-statics
+    # probVsimFirstDict-statics
     assets_env.register("probVsimFirstDict_css", probVsimFirstDict_css)
     assets_env.register("probVsimFirstDict_js", probVsimFirstDict_js)
-    #vsimmanual-statics
+    # vsimmanual-statics
     assets_env.register("vsimmanual_css", vsimmanual_css)
     assets_env.register("vsimmanual_js", vsimmanual_js)
-    #140country-statics
+    # 140country-statics
     assets_env.register("muticountry140_css", muticountry140_css)
     assets_env.register("muticountry140_js", muticountry140_js)
     # new vsim infor table
@@ -106,7 +105,5 @@ def create_app(config_name):
 
     from .api_1_0 import api as api_1_0_blueprint
     app.register_blueprint(api_1_0_blueprint, url_prefix='/api/v1.0')
-
-
 
     return app

@@ -23,7 +23,7 @@ main_js = Bundle(
     filters='jsmin',
     output='js/gsvc_main.js'
 )
-gsvchome_css = Bundle(
+home_css = Bundle(
     # ("-- select2 css--")
     'css/main/plugins/selectForm/select2.min.css',
     # ("-- jqx css --")
@@ -32,9 +32,9 @@ gsvchome_css = Bundle(
     'css/main/plugins/datepicker/datepicker3.css',
     'css/main/plugins/datepicker/daterangepicker.css',
     filters='cssmin',
-    output='css/gsvc_gsvchome.css'
+    output='css/gsvc_home.css'
 )
-gsvchome_js = Bundle(
+home_js = Bundle(
     'js/main/plugins/Chart/Chart.min.js',
     'js/main/plugins/fullcalendar/moment.min.js',
     'js/main/plugins/daterangepicker/daterangepicker.js',
@@ -43,15 +43,9 @@ gsvchome_js = Bundle(
     # ("-- select2 js --")
     'js/main/plugins/select2/select2.min.js',
     # ("-- customer js --")
-    'js/main/demo/gsvchome-demo.js',
-
+    'js/main/demo/home-demo.js',
     filters='jsmin',
-    output='js/gsvc_gsvchome.js'
-)
-gsvchome_globle_js = Bundle(
-    'js/main/plugins/jqwidgets/localization.zh-CN.js',
-    filters='jsmin',
-    output='js/gsvc_gsvchome_globle.js'
+    output='js/gsvc_home.js'
 )
 vsimFlowerQuery_css = Bundle(
     'css/main/plugins/switchery/switchery.min.css',
