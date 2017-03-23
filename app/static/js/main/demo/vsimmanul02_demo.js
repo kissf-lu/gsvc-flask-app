@@ -597,7 +597,7 @@ function initSysjqxGrid(grid_item){
             {name: 'imsi', type: 'string' },
             {name: 'country', type: 'string' },
             {name: 'package_type_name', type: 'string' },
-            {name: 'state', type: 'string' },
+            {name: 'state', type: 'number' },
             {name: 'occupy_status', type: 'string' },
             {name: 'slot_status', type: 'string' },
             {name: 'activate_status', type: 'string' },

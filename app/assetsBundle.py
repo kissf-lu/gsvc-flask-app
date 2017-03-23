@@ -124,7 +124,7 @@ vsimmanual_css = Bundle(
 
 vsimmanual_js = Bundle(
     # ("--vsimmanul-demo js--")
-    'js/main/demo/vsimmanul-demo.js',
+    'js/main/demo/vsimmanul02_demo.js',
     'js/main/demo/ManualDataBaseUpdate-demo.js',
     # ("-- 下拉筛选扩展 --")
     'js/main/plugins/select2/select2.min.js',

@@ -395,12 +395,12 @@ def getProbFisrtDic(querySort, queryPram, queryPlmn, begintime, endtime, Timezon
             else:
                 try:
                     getFlowerDicData = getCountryFlower(Dicdata=DicData,
-                                                        Begintime=queryBegintime,
-                                                        Endtime=queryendtime,
+                                                        Begintime=queryGMTOBeginTime,
+                                                        Endtime=queryGMTOEndTime,
                                                         FlowerThreshold=queryFlowerThreshold)
                     getErrDicData = getErr(queryData=getFlowerDicData,
-                                           beginTime=queryBegintime,
-                                           endTime=queryendtime)
+                                           beginTime=queryGMTOBeginTime,
+                                           endTime=queryGMTOEndTime)
                 except pymongo.errors.OperationFailure:
                     errInfo = "MongoDataBase Authentication failed!"
                 except pymongo.errors.NetworkTimeout:
@@ -436,12 +436,12 @@ def getProbFisrtDic(querySort, queryPram, queryPlmn, begintime, endtime, Timezon
             else:
                 try:
                     getFlowerDicData = getImsiFlower(Dicdata=DicData,
-                                                     Begintime=queryBegintime,
-                                                     Endtime=queryendtime)
+                                                     Begintime=queryGMTOBeginTime,
+                                                     Endtime=queryGMTOEndTime)
 
                     getErrDicData = getErr(queryData=getFlowerDicData,
-                                           beginTime=queryBegintime,
-                                           endTime=queryendtime)
+                                           beginTime=queryGMTOBeginTime,
+                                           endTime=queryGMTOEndTime)
                 except pymongo.errors.OperationFailure:
                     errInfo = "MongoDataBase Authentication failed!"
                 except pymongo.errors.NetworkTimeout:
