@@ -4,7 +4,7 @@
 
 {% block head %}
 {{ super() }}
-    {% assets "gsvchome_css" %}
+    {% assets "home_css" %}
     <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
     {% endassets %}
     <script type="text/javascript">
@@ -236,7 +236,7 @@
     {% assets "jqwidgets_globle_js" %}
     <script src="{{ ASSET_URL }}" type="text/javascript"></script>
     {% endassets %}
-    {% assets "gsvchome_js" %}
+    {% assets "home_js" %}
     <script src="{{ ASSET_URL }}" type="text/javascript"></script>
     {% endassets %}
 {% endblock %}
