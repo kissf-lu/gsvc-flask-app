@@ -13,3 +13,6 @@ app/api_1_0/api_functions/SqlPack/
 
 # 剔除.idea文件夹的跟踪
 .idea/
+
+#剔除flaskenv
+flaskenv/
