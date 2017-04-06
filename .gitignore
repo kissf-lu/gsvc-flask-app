@@ -1,4 +1,4 @@
-﻿# 以# 开头为注释行，被忽略
+# 以# 开头为注释行，被忽略
 
 # 为git忽略跟踪配置文件
 
@@ -13,6 +13,3 @@ app/api_1_0/api_functions/SqlPack/
 
 # 剔除.idea文件夹的跟踪
 .idea/
-
-# 剔除flaskenv文件夹的跟踪
-flaskenv/
