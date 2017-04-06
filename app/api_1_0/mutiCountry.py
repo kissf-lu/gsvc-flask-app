@@ -1,5 +1,4 @@
-#! /usr/bin/env python
-#coding=utf-8
+# -*- coding: utf-8 -*-
 
 from flask import request
 from . import api
@@ -11,7 +10,6 @@ def get_140countryFlowerStatics():
     本API140国卡统计页面统计数据接口
     :return:
     """
-
     if request.method == 'POST':
         Dic_data = request.get_json()
         begintime = str(Dic_data['beginTime'])

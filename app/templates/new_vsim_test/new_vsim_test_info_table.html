@@ -85,9 +85,11 @@
                         <i class="fa fa-wrench"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li><small><strong>表格显示设置</strong></small>
+                        <li style="text-align:center"><small><strong>表格显示设置</strong></small>
                         </li>
-                        <br/>
+                        <li>
+                            <div><br/></div>
+                        </li>
                         <li>
                             <div id='jqxDropDownList'>
                             </div>
@@ -100,15 +102,7 @@
             </div>
             <div class="ibox-content">
                 <div class="row">
-                    <div class="col-sm-4">
-                        <div class="form-group" id="vsim_test_table_imsi">
-                            <div class="input-group input-daterange" id="datepicker">
-                                <span class="input-group-addon"><strong>imsi</strong></span>
-                                <input type="text" class="input-sm form-control" name="start" id="input-imsi"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-5">
                         <select class="select-person" name="person" id="select2-form-person" style="width:120px;">
                             <option ></option>
                         </select>
@@ -116,39 +110,49 @@
                             <option ></option>
                         </select>
                     </div>
-                    <div align="center" class="col-sm-3">
+                    <div class="col-sm-4">
+                        <div class="form-group" id="vsim_test_table_imsi">
+                            <div class="input-group input-daterange">
+                                <span class="input-group-addon"><strong>imsi</strong></span>
+                                <input type="text" data-toggle="tooltip" class="input-sm form-control"
+                                       id="input-imsi"
+                                       title='单imsi查询,支持开头模糊查询'/>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align:center" class="col-sm-3 m-b-xs">
                         <button id="newVsimTestInfoDataGet" type="button" class="btn btn-sm btn-primary pull-right m-t-n-xs">
                             查询
                             <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                         </button>
                     </div>
                 </div>
-                <div align="center" class="row">
-                    <div data-toggle="buttons" class="btn-group">
-                        <button id="Flash" type="button" class="btn btn-default ">
-                            刷新
-                            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
-                        </button>
-                        <button id="Export" type="button" class="btn btn-default ">
-                            导出
-                            <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
-                        </button>
-                        <button id="Delete" type="button" class="btn btn-default ">
-                            批量删除
-                            <span class="glyphicon glyphicon-floppy-remove" aria-hidden="true"></span>
-                        </button>
-                        <button id="Update" type="button" class="btn btn-default ">
-                            批量更新
-                            <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
-                        </button>
-                        <button id="Insert" type="button" class="btn btn-default ">
-                            批量导入
-                            <span class="glyphicon glyphicon-import" aria-hidden="true"></span>
-                        </button>
-                    </div>
-                </div>
             </div>
         </div>
+    </div>
+</div>
+<div align="center" class="row">
+    <div data-toggle="buttons" class="btn-group">
+        <button id="Flash" type="button" class="btn btn-sm btn-default ">
+            刷新
+            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+        </button>
+        <button id="Export" type="button" class="btn btn-sm btn-default ">
+            导出
+            <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
+        </button>
+        <button id="Delete" type="button" class="btn btn-sm btn-default ">
+            批量删除
+            <span class="glyphicon glyphicon-floppy-remove" aria-hidden="true"></span>
+        </button>
+        <button id="Update" type="button" class="btn btn-sm btn-default ">
+            批量更新
+            <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+        </button>
+        <button id="Insert" type="button" class="btn btn-sm btn-default ">
+            批量导入
+            <span class="glyphicon glyphicon-import" aria-hidden="true"></span>
+        </button>
     </div>
 </div>
 <div class="table-responsive">

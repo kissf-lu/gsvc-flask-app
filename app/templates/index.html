@@ -21,7 +21,6 @@
 {% block row %}
 <div class="row">
 <div id="alert"></div>
-
     <div class="col-lg-4">
                             <div class="ibox float-e-margins">
                                 <div class="ibox-title">
@@ -89,7 +88,7 @@
                                     <small><i class="fa fa-map-marker"></i> 您的当前位置为顶级页面.</small>
                                 </div>
                                 <div class="ibox-content inspinia-timeline">
-                                    {% if  current_user.username != "TechSupport"%}
+
                                     <div class="timeline-item">
                                         <div class="row">
                                             <div class="col-xs-3 date">
@@ -107,16 +106,18 @@
                                                 </a>
                                                 <p><small>页面内容：国家维度卡资源数据统计包含现网卡数及状态统计、套餐统计、用户统计</small></p>
                                                 <br/>
+                                                {% if  current_user.username != "TechSupport"%}
                                                 <a href="{{ url_for('main.srcimsi', username=current_user.username) }}">
                                                 <p class="m-b-xs"><i class="fa fa-map-marker"></i><strong>卡资源手工维护表</strong></p>
                                                 </a>
                                                 <p><small>页面内容：现网及虚拟机国家维度卡资源数据</small></p>
                                                 <br/>
                                                 <p></p>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>
-                                    {% endif %}
+
                                     <div class="timeline-item">
                                         <div class="row">
                                             <div class="col-xs-3 date">
@@ -163,15 +164,12 @@
                                                 <p><small>2、根据不同设置条件，统计卡的流量信息；</small></p>
                                                 <p><small>3、支持天、小时维度查询。</small></p>
                                                 <br/>
-                                                {% if  current_user.username != "TechSupport"%}
                                                 <a href="{{ url_for('main.newVsimInfoTable') }}">
                                                 <p class="m-b-xs"><i class="fa fa-map-marker"></i><strong>  新卡测试信息表  </strong></p>
                                                 </a>
                                                 <p><small>页面内容：</small></p>
                                                 <p><small>1、新卡测试信息记录表单；</small></p>
                                                 <br/>
-                                                {% endif %}
-
                                             </div>
                                         </div>
                                     </div>

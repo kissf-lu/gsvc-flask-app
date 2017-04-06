@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 from flask import request
 from flask import json
 from bson import json_util
@@ -14,8 +15,11 @@ from api_functions.getCountrySrcConIndexGrid import qurycountrySrcCon
 from api_functions.getCountryProbDic import getProbFisrtDic
 # Python get Flower Model
 from api_functions.get_FlowerQueryFunction import getFlowers
-#
-from api_functions.newVsimTest import get_new_vsim_test_infor
+# new vsim test model
+from api_functions.newVsimTest import get_new_vsim_test_info
+# org ajax model
+from api_functions.selectAjax.getSelectData import get_org
+
 
 # ("以下为资源页面API接口-------------------------------------------------------------------------------------------------")
 @api.route('/get_srcVsimManulInfor/', methods=['POST'])
@@ -28,8 +32,9 @@ def get_Country():
         Dic_data = request.get_json()
         country = str(Dic_data['country'])
         person = str(Dic_data['person'])
+        imsi = str(Dic_data['imsi'])
 
-        return getVsimManulInfor(country, person=person)
+        return getVsimManulInfor(country, person=person, imsi=imsi)
 
     return False
 
@@ -43,13 +48,29 @@ def get_onSysSrc():
     if request.method == 'POST':
         Dic_data = request.get_json()
         country = str(Dic_data['country'])
-        return quryonSysSrc(country)
+        imsi = str(Dic_data['imsi'])
+        status = str(Dic_data['status'])
+        business_status = str(Dic_data['business_status'])
+        slot_status = str(Dic_data['slot_status'])
+        bam_status = str(Dic_data['bam_status'])
+        occupy_status = str(Dic_data['occupy_status'])
+        org = str(Dic_data['org'])
+        package_status = str(Dic_data['package_status'])
+        return quryonSysSrc(country,
+                            imsi=imsi,
+                            status=status,
+                            business_status=business_status,
+                            slot_status=slot_status,
+                            bam_status=bam_status,
+                            occupy_status=occupy_status,
+                            org=org,
+                            package_status=package_status)
 
     return False
 
 
 # ("以下为主页页面API接口-------------------------------------------------------------------------------------------------")
-@api.route('/get_CountryAvailableVsim/')
+@api.route('/get_country_flower_static/')
 def get_chart_country():
     """
     本api用于获取主页国家维度画板统计图数据：本国卡状态统计、老系统/新架构本国可用卡套餐流量统计
@@ -60,19 +81,21 @@ def get_chart_country():
     return getVsimCountryStatic(country)
 
 
-@api.route('/get_mutiLine_maxUser/')
+@api.route('/get_mutiLine_maxUser/', methods=['POST'])
 def get_mutiLine_maxUser():
     """
     本api为绘制index主页峰值用户、卡数曲线接口
     :return: 峰值用户、在板卡数、可用卡数JSON数据
     """
-    country = request.args.get('country', '', type=str)
-    begintime = request.args.get('begintime', '', type=str)
-    endtime = request.args.get('endtime', '', type=str)
-    butype = request.args.get('butype', '', type=str)
-    timedim = request.args.get('timedim', '', type=str)
+    if request.method == 'POST':
+        DicData = request.get_json()
+        country = str(DicData['country'])
+        begintime = str(DicData['begintime'])
+        endtime = str(DicData['endtime'])
+        butype = str(DicData['butype'])
+        timedim = str(DicData['timedim'])
 
-    return getindexHtmlMutiLineData(country, begintime, endtime, butype=butype, timedim=timedim)
+        return getindexHtmlMutiLineData(country, begintime, endtime, butype=butype, timedim=timedim)
 
 
 @api.route('/get_countrySrcCon/', methods=['POST'])
@@ -82,10 +105,11 @@ def get_countrySrcCon():
     :return:
     """
     if request.method == 'POST':
-        Dic_data = request.get_json()
-        country = str(Dic_data['country'])
+        DicData = request.get_json()
+        country = str(DicData['country'])
+        orgName = str(DicData['org'])
 
-        return qurycountrySrcCon(country)
+        return qurycountrySrcCon(country, orgName)
 
     return False
 
@@ -154,7 +178,6 @@ def get_FlowerQuery():
                       TimezoneOffset=TimezoneOffset)
 
 
-# ("以下为资源页面API接口-------------------------------------------------------------------------------------------------")
 @api.route('/get_newVsimTestInforTable/', methods=['POST'])
 def get_newVsimTestInforTable():
     """
@@ -167,6 +190,15 @@ def get_newVsimTestInforTable():
         country = str(Dic_data['country'])
         person = str(Dic_data['person'])
 
-        return get_new_vsim_test_infor(person, country=country, imsi=imsi)
+        return get_new_vsim_test_info(person, country, imsi)
 
     return False
+
+
+@api.route('/get_select2_orgdata/')
+def get_select2_orgdata():
+    """
+    本api为资源页获取手工维护表数据
+    :return:
+    """
+    return get_org()

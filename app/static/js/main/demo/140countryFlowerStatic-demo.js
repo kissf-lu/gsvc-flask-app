@@ -26,14 +26,15 @@ function  alert_func(alert_button_item,alert_doc) {
     $alertItem.children().detach();
     $alertItem.append(alertStr);
 }
+
 /**
  *  -------FilterPanel set func-------
  *======================================================
  *JqxGrid columns FilterPanel setting;
  * @param filterPanel panel to init;
- * @param datafield : jqxgrid column datafield param;
+ * @param datafield : grid column datafield param;
  * @param filterGrid : jquery type of grid DOC ID;
- * @param SrcAdapter : jqxgrid SrcAdapter param ;
+ * @param SrcAdapter : grid SrcAdapter param ;
  *=============================================================*/
 var buildFilterPanel = function (filterPanel, datafield,filterGrid,SrcAdapter) {
     var textInput = $("<input style='margin:5px;'/>");
@@ -119,6 +120,7 @@ function initjqxGrid(initGrid, array){
             { name: 'package_type', type: 'string' },
             { name: 'groupname', type: 'string' },
             { name: 'org', type: 'string' },
+            { name: 'occupy_status', type: 'string' },
             { name: 'state', type: 'number' }
         ]
     };
@@ -174,14 +176,15 @@ function initjqxGrid(initGrid, array){
                           buildFilterPanel(filterPanel, datafield, $jqGridItem,SrcAdapter);
                       }
                     },
-                    { text: '国际流量', datafield: 'externalflower' ,width: 100},
-                    { text: '国内流量', datafield: 'internalflower',width: 100},
-                    { text: '总计流量', datafield: 'all', width: 100 },
-                    { text: '国际流量占比', datafield: 'percentage', width: 100 },
-                    { text: '套餐类型', datafield: 'package_type', filtertype: 'checkedlist', width: 300 },
-                    { text: '网络集名', datafield: 'groupname', filtertype: 'checkedlist', width: 180 },
-                    { text: 'ORG', datafield: 'org', filtertype: 'checkedlist', width: 180 },
-                    { text: 'state', datafield: 'state', filtertype: 'checkedlist', width: 100 }
+                    { text: '国际流量', datafield: 'externalflower' ,width: 70},
+                    { text: '国内流量', datafield: 'internalflower',width: 70},
+                    { text: '总计流量', datafield: 'all', width: 70},
+                    { text: '国际流量占比', datafield: 'percentage', width: 100},
+                    { text: '套餐类型', datafield: 'package_type', filtertype: 'checkedlist', width: 280},
+                    { text: '网络集名', datafield: 'groupname', filtertype: 'checkedlist', width: 180},
+                    { text: 'ORG', datafield: 'org', filtertype: 'checkedlist', width: 80},
+                    { text: '占用状态', datafield: 'occupy_status', filtertype: 'checkedlist', width: 80},
+                    { text: 'state', datafield: 'state', filtertype: 'checkedlist', width: 80}
                 ]
     });
     return Srcsource;
@@ -201,6 +204,7 @@ function init140DropDownList(item_drop_down_list){
         { label: '套餐类型', value: 'package_type', checked: true },
         { label: '网络集名', value: 'groupname', checked: true },
         { label: 'ORG', value: 'org', checked: true },
+        { label: '占用状态', value: 'occupy_status', checked: true },
         { label: 'state', value: 'state', checked: true }
     ];
     // drop down model set
@@ -213,7 +217,6 @@ function init140DropDownList(item_drop_down_list){
         dropDownHeight: 300,
         Width:150
     });
-
 }
 /**     -------check if show or hide of jqxgrid column func-------
  *
@@ -270,6 +273,7 @@ function excelExportAPI(item_jqxgrid,item_app_growl) {
                             套餐类型: rows[i+j].package_type,
                             网络集名: rows[i+j].groupname,
                             ORG: rows[i+j].org,
+                            占用状态: rows[i+j].occupy_status,
                             state: rows[i+j].state
                         })
                     }
@@ -288,11 +292,10 @@ function excelExportAPI(item_jqxgrid,item_app_growl) {
  * @return {boolean} return false to forbid DOC fresh;
  */
 function excelExport(data,item_app_growl) {
-     var exportdata=data;
-     var $appAlertItem=item_app_growl;
-     if (exportdata.data==[]){
+     var exportData = data;
+     if (exportData.data==[]){
          // alter
-         alert_func($appAlertItem, '无输出数据！');
+         alert_func(item_app_growl, '无输出数据！');
          }
      else{
           var temp = document.createElement("form");
@@ -301,7 +304,7 @@ function excelExport(data,item_app_growl) {
           temp.style.display = "none";
           var opt = document.createElement("textarea");
           opt.name = "data";
-          opt.value = JSON.stringify(exportdata.data);
+          opt.value = JSON.stringify(exportData.data);
           temp.appendChild(opt);
           document.body.appendChild(temp);
           temp.submit();
@@ -376,6 +379,7 @@ function action140StaticAjaxAPI(jqxgrid_data, JqxGridSrcSource, post_data,item_g
                             percentage: item.percentage,
                             org: item.org,
                             state: item.state,
+                            occupy_status: item.occupy_status,
                             package_type: item.package_type,
                             groupname: item.groupname
                         });
@@ -417,7 +421,9 @@ function getStartTime(set_package_update_time){
     //set last package update time
     var setPackageUpdateTime = set_package_update_time;
     var beginTime = nowTime.set(setPackageUpdateTime);
-    if ((nowDay >=11)&&( nowHour>=16)){
+    if (nowDay >11){
+        return (beginTime);
+    }else if ((nowDay ==11)&&( nowHour>=16)){
         return (beginTime);
     }else{
        beginTime.subtract(1, 'months');
@@ -443,7 +449,7 @@ function daterange_init(start_time_item,end_time_item,day_set){
     var endTime = moment().subtract(day_set, 'h').set({'minute': 0,'second': 0});
     var beginTimeSet = {'date': 11,'hour': 16,'minute': 0, 'second': 0};
     var beginTime = getStartTime(beginTimeSet);
-    //                             ------------start time init-------------------------
+    // start time init
     $startTimeItem.daterangepicker({
         showDropdowns: true,
         timePicker: true,
@@ -477,31 +483,44 @@ function daterange_init(start_time_item,end_time_item,day_set){
         }
     });
 }
+
+
 $(function () {
     /**
      * main func, run after DOC loaded.
      * @type {*}
      */
-    //jquery var initialize from obtained DOC ID
-    var $140Jqxgrid = $("#140countryFlowerStaticsJqxgrid");
-    var $queryStaticDataAction = $("#140countryFlowerStaticsDataGet");
-    var $exportExcel = $("#140countryFlowerStaticsExcelExport");
-    var $app_growl = $("#app-growl");
-    var $itemDropDownList = $("#140countryFlowerStaticsJqxDropDownList");
-    var $inputDaterangeStart = $('#input-daterange-start');
-    var $inputDaterangeEnd = $('#input-daterange-end');
-    // jqxgrid data initialize
-    var arrayGrid = [];
+    var globeVar140country = {
+        'alertWinStr':'',                               //alert() function use alertWinStr value to show alert
+        'gridArray': [],
+        'ID':{
+            'gridID' : $("#140countryFlowerStaticsJqxgrid"),
+            'FlowerStaticsDataGetID' : $("#140countryFlowerStaticsDataGet"),
+            'FlowerStaticsExcelExportID' : $("#140countryFlowerStaticsExcelExport"),
+            'alertID' : $("#app-growl"),              //warn bar model use this id to set warn content
+            'FlowerStaticsJqxDropDownListID' : $("#140countryFlowerStaticsJqxDropDownList"),
+            'dateRangeStartID' : $('#input-daterange-start'),
+            'dateRangeEndID' : $('#input-daterange-end'),
+            'flashID': $('#140countryFlowerStaticsDataFlash')
+        },
+        'set': function (strAlert) {
+            this.alertWinStr = strAlert;
+        },
+        'setGridArrayData': function (arrayData) {
+
+            this.gridArray=arrayData;
+        }
+    };
     //                         ----------------------init date range model-------------------------
-    daterange_init($inputDaterangeStart,$inputDaterangeEnd,0);
+    daterange_init(globeVar140country.ID.dateRangeStartID,globeVar140country.ID.dateRangeEndID,0);
     //                         ----------------------init drop down list model-----------------------
-    init140DropDownList($itemDropDownList);
+    init140DropDownList(globeVar140country.ID.FlowerStaticsJqxDropDownListID);
     //                         ----------------------init grid tab of 140 country con--------------------
-    var JqxGridSrcSource=initjqxGrid($140Jqxgrid, arrayGrid);
+    var JqxGridSrcSource=initjqxGrid(globeVar140country.ID.gridID, globeVar140country.gridArray);
     //                         ----------------------ajax get data-------------------------
-    $queryStaticDataAction.click(function (){
-        var EndTime = $inputDaterangeEnd.val();
-        var BeginTime = $inputDaterangeStart.val();
+    globeVar140country.ID.FlowerStaticsDataGetID.click(function (){
+        var EndTime = globeVar140country.ID.dateRangeEndID.val();
+        var BeginTime = globeVar140country.ID.dateRangeStartID.val();
         var TimezoneOffset = moment().utcOffset();
         var postData = {
             beginTime: BeginTime,
@@ -509,24 +528,25 @@ $(function () {
             TimezoneOffset: TimezoneOffset
         };
         action140StaticAjaxAPI(
-            arrayGrid,
+            globeVar140country.gridArray,
             JqxGridSrcSource,
             postData,
-            $140Jqxgrid,
-            $queryStaticDataAction,
-            $app_growl);
+            globeVar140country.ID.gridID,
+            globeVar140country.ID.FlowerStaticsDataGetID,
+            globeVar140country.ID.alertID);
 
         return false;
     });
     //                          --------------------------excel files output-------------------------------
-    $exportExcel.click(function () {
-        excelExportAPI($140Jqxgrid,$app_growl);
+    globeVar140country.ID.FlowerStaticsExcelExportID.click(function () {
+        excelExportAPI(globeVar140country.ID.gridID, globeVar140country.ID.alertID);
     });
     //                           ---------------------------flash grid tab-------------------------
-    $('#140countryFlowerStaticsDataFlash').click(function () {
-        $140Jqxgrid.jqxGrid('updatebounddata');
+    globeVar140country.ID.flashID.click(function () {
+        globeVar140country.ID.gridID.jqxGrid('updatebounddata');
     });
-    $itemDropDownList.on('checkChange', function (event) {
-        onCheckChange140countryShowHiden($140Jqxgrid, event);
+    //
+    globeVar140country.ID.FlowerStaticsJqxDropDownListID.on('checkChange', function (event) {
+        onCheckChange140countryShowHiden(globeVar140country.ID.gridID, event);
     });
 });
