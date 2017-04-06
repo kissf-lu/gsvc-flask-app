@@ -88,7 +88,7 @@
                  loadtext: "加载数据...",
                  clearstring: "清除",
                  todaystring: "今天"
-             }
+             };
             break;
         case "en":
         default:
@@ -200,8 +200,8 @@
                 loadtext: "Loading...",
                 clearstring: "Clear",
                 todaystring: "Today"
-            }
+            };
             break;
     }
     return localization;
-}
+};

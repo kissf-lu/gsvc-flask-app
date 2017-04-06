@@ -51,23 +51,23 @@
                         G+
                     </div>
                 </li>
-                {% if  current_user.username != "TechSupport"%}
+
                 <li >
                     <a href="#">
                             <i class="fa fa-bar-chart-o"></i>
                             <span class="nav-label">卡资源数据</span><span class="fa arrow"></span>
                     </a>
                     <ul class="nav nav-second-level">
-
                         <li >
                             <a href="/gsvchome">国家维度卡资源概述</a>
                         </li>
+                        {% if  current_user.username != "TechSupport"%}
                         <li>
                             <a href="{{ url_for('main.srcimsi', username=current_user.username) }}">卡资源手工维护表</a>
                         </li>
+                        {% endif %}
                     </ul>
                 </li>
-                {% endif %}
                 <li >
                     <a href="#">
                         <i class="fa fa-sitemap"></i>
@@ -98,7 +98,6 @@
                             </ul>
                         </li>
                         <li><a href="/vsimFlowerQuery">流查询专项</a></li>
-                        {% if  current_user.username != "TechSupport"%}
                         <li>
                             <a href="#">新卡测试专项<span class="fa arrow"></span></a>
                             <ul class="nav nav-third-level">
@@ -110,7 +109,6 @@
                                 </li>
                             </ul>
                         </li>
-                        {% endif %}
                     </ul>
                 </li>
                 {% if  current_user.username == "lujian" %}
